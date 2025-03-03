@@ -1,0 +1,117 @@
+﻿{
+   "CodeGenerationMode": 5,
+   "ContextClassName": "WayMatcherContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "WayMatcherBL",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[WayMatcher].[Address]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Audit]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Chat_Message]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[ConfirmationStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Event]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Event_Member]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[EventMemberType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[EventType]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Invite]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Notification]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Rating]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Role]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Schedule]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Status]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Stop]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[User]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Vehicle]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[Vehicle_Mapping]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": true,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}

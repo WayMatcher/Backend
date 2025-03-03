@@ -5,15 +5,11 @@ using System.Collections.Generic;
 
 namespace WayMatcherBL.Models;
 
-public partial class Schedule
+public partial class EventType
 {
-    public int ScheduleId { get; set; }
+    public int EventTypeId { get; set; }
 
-    public string CronSchedule { get; set; }
-
-    public int? UserId { get; set; }
+    public string Name { get; set; }
 
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();
-
-    public virtual User User { get; set; }
 }
