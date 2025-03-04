@@ -20,7 +20,7 @@ namespace WayMatcherBL.Services
         public List<AddressDto> GetActiveAddresses()
         {
             var addressList = new List<AddressDto>();
-            foreach (var address in _dbContext.Addresses.Where(a => a.Status.StatusDescription.Equals(State.Active)).ToList())
+            foreach (var address in _dbContext.Addresses.Where(a => a.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 addressList.Add(_mapper.ConvertAddressToDto(address));
             }
@@ -31,7 +31,7 @@ namespace WayMatcherBL.Services
         public List<EventDto> GetActiveEvents()
         {
             var eventList = new List<EventDto>();
-            foreach (var eventItem in _dbContext.Events.Where(e => e.Status.StatusDescription.Equals(State.Active)).ToList())
+            foreach (var eventItem in _dbContext.Events.Where(e => e.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 eventList.Add(_mapper.ConvertEventToDto(eventItem));
             }
@@ -54,7 +54,7 @@ namespace WayMatcherBL.Services
         public List<UserDto> GetActiveUsers()
         {
             var userList = new List<UserDto>();
-            foreach (var user in _dbContext.Users.Where(u => u.Status.StatusDescription.Equals(State.Active)).ToList())
+            foreach (var user in _dbContext.Users.Where(u => u.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 userList.Add(_mapper.ConvertUserToDto(user));
             }
@@ -65,7 +65,7 @@ namespace WayMatcherBL.Services
         public List<VehicleDto> GetActiveVehicles()
         {
             var vehicleList = new List<VehicleDto>();
-            foreach (var vehicle in _dbContext.Vehicles.Where(v => v.Status.StatusDescription.Equals(State.Active)).ToList())
+            foreach (var vehicle in _dbContext.Vehicles.Where(v => v.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 vehicleList.Add(_mapper.ConvertVehicleToDto(vehicle));
             }
@@ -176,6 +176,10 @@ namespace WayMatcherBL.Services
         public bool InsertAddress(AddressDto addressModel)
         {
             var addressEntity = _mapper.ConvertAddressDtoToEntity(addressModel);
+            
+            addressEntity.Status = new Status();
+            addressEntity.Status.StatusDescription = State.Active.GetDescription();
+
             _dbContext.Addresses.Add(addressEntity);
             return _dbContext.SaveChanges() > 0;
         }
@@ -183,6 +187,10 @@ namespace WayMatcherBL.Services
         public bool InsertEvent(EventDto eventModel)
         {
             var eventEntity = _mapper.ConvertEventDtoToEntity(eventModel);
+
+            eventEntity.Status = new Status();
+            eventEntity.Status.StatusDescription = State.Active.GetDescription();
+
             _dbContext.Events.Add(eventEntity);
             return _dbContext.SaveChanges() > 0;
         }
@@ -197,6 +205,10 @@ namespace WayMatcherBL.Services
         public bool InsertUser(UserDto userModel)
         {
             var userEntity = _mapper.ConvertUserDtoToEntity(userModel);
+
+            userEntity.Status = new Status();
+            userEntity.Status.StatusDescription = State.Active.GetDescription();
+
             _dbContext.Users.Add(userEntity);
             return _dbContext.SaveChanges() > 0;
         }
@@ -204,6 +216,10 @@ namespace WayMatcherBL.Services
         public bool InsertVehicle(VehicleDto vehicleModel)
         {
             var vehicleEntity = _mapper.ConvertVehicleDtoToEntity(vehicleModel);
+
+            vehicleEntity.Status = new Status();
+            vehicleEntity.Status.StatusDescription = State.Active.GetDescription();
+
             _dbContext.Vehicles.Add(vehicleEntity);
             return _dbContext.SaveChanges() > 0;
         }
