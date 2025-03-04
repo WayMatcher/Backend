@@ -8,9 +8,9 @@ namespace WayMatcherBL.Models;
 
 public partial class WayMatcherContext : DbContext
 {
-    public WayMatcherContext(DbContextOptions<WayMatcherContext> options)
-        : base(options)
+    public WayMatcherContext(DbContextOptions<WayMatcherContext> options) : base(options)
     {
+
     }
 
     public virtual DbSet<Address> Addresses { get; set; }

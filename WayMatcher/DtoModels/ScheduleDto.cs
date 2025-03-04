@@ -1,6 +1,6 @@
 ﻿namespace WayMatcherBL.LogicModels
 {
-    public class VehicleModel
+    public class ScheduleDto
     {
     }
 }
