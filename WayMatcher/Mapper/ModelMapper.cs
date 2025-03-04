@@ -14,18 +14,66 @@ namespace WayMatcherBL.Mapper
             {
                 cfg.CreateMap<Address, AddressDto>();
                 cfg.CreateMap<AddressDto, Address>();
+                cfg.CreateMap<Event, EventDto>();
+                cfg.CreateMap<EventDto, Event>();
+                cfg.CreateMap<Schedule, ScheduleDto>();
+                cfg.CreateMap<ScheduleDto, Schedule>();
+                cfg.CreateMap<User, UserDto>();
+                cfg.CreateMap<UserDto, User>();
+                cfg.CreateMap<Vehicle, VehicleDto>();
+                cfg.CreateMap<VehicleDto, Vehicle>();
             });
             _mapper = config.CreateMapper();
         }
 
-        public AddressDto ConvertToDto(Address address)
+        public AddressDto ConvertAddressToDto(Address address)
         {
             return _mapper.Map<AddressDto>(address);
         }
 
-        public Address ConvertToEntity(AddressDto addressDto)
+        public Address ConvertAddressDtoToEntity(AddressDto addressDto)
         {
             return _mapper.Map<Address>(addressDto);
+        }
+
+        public EventDto ConvertEventToDto(Event eventItem)
+        {
+            return _mapper.Map<EventDto>(eventItem);
+        }
+
+        public Event ConvertEventDtoToEntity(EventDto eventDto)
+        {
+            return _mapper.Map<Event>(eventDto);
+        }
+
+        public ScheduleDto ConvertScheduleToDto(Schedule schedule)
+        {
+            return _mapper.Map<ScheduleDto>(schedule);
+        }
+
+        public Schedule ConvertScheduleDtoToEntity(ScheduleDto scheduleDto)
+        {
+            return _mapper.Map<Schedule>(scheduleDto);
+        }
+
+        public UserDto ConvertUserToDto(User user)
+        {
+            return _mapper.Map<UserDto>(user);
+        }
+
+        public User ConvertUserDtoToEntity(UserDto userDto)
+        {
+            return _mapper.Map<User>(userDto);
+        }
+
+        public VehicleDto ConvertVehicleToDto(Vehicle vehicle)
+        {
+            return _mapper.Map<VehicleDto>(vehicle);
+        }
+
+        public Vehicle ConvertVehicleDtoToEntity(VehicleDto vehicleDto)
+        {
+            return _mapper.Map<Vehicle>(vehicleDto);
         }
     }
 }
