@@ -1,4 +1,5 @@
-﻿using WayMatcherBL.LogicModels;
+﻿using WayMatcherBL.DtoModels;
+using WayMatcherBL.LogicModels;
 
 namespace WayMatcherBL.Interfaces
 {
@@ -33,5 +34,8 @@ namespace WayMatcherBL.Interfaces
         public EventDto GetEventById(int id);
         public List<EventDto> GetActiveEvents();
         public int GetEventId(EventDto eventModel);
+
+        public List<VehicleDto> GetUserVehicles(int userId);
+        public bool InsertVehicleMapping(VehicleMappingDto vehicleMapping);
     }
 }

@@ -21,7 +21,15 @@
         public bool? LicenseVerified { get; set; }
 
         public byte[] ProfilePicture { get; set; }
+
         public DateTime? CreationDate { get; set; }
-        public string MfAToken { get; set; }
+
+        public int? AddressId { get; set; }
+
+        public int? RoleId { get; set; }
+
+        public int? StatusId { get; set; }
+
+        public string MfAtoken { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using WayMatcherBL.Enums;
+﻿using WayMatcherBL.DtoModels;
+using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 using WayMatcherBL.Mapper;
@@ -123,6 +124,19 @@ namespace WayMatcherBL.Services
             return _mapper.ConvertVehicleToDto(vehicle);
         }
 
+        public List<VehicleDto> GetUserVehicles(int userId)
+        {
+            var vehicleList = new List<VehicleDto>();
+            var vehicles = _dbContext.VehicleMappings.Where(vm => vm.UserId == userId).Select(vm => vm.Vehicle).ToList();
+
+            foreach (var vehicle in vehicles)
+            {
+                vehicleList.Add(_mapper.ConvertVehicleToDto(vehicle));
+            }
+
+            return vehicleList;
+        }
+
         public int GetAddressId(AddressDto addressModel)
         {
             var address = _dbContext.Addresses.FirstOrDefault(a => a.Longitude == addressModel.Longitude && a.Latitude == addressModel.Latitude && a.City == addressModel.City && a.PostalCode == addressModel.PostalCode && a.Country == addressModel.Country);
@@ -221,6 +235,17 @@ namespace WayMatcherBL.Services
             vehicleEntity.Status.StatusDescription = State.Active.GetDescription();
 
             _dbContext.Vehicles.Add(vehicleEntity);
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public bool InsertVehicleMapping(VehicleMappingDto vehicleMapping)
+        {
+            var vehicleMappingEntity = _mapper.ConvertVehicleMappingDtoToEntity(vehicleMapping);
+
+            vehicleMappingEntity.Status = new Status();
+            vehicleMappingEntity.Status.StatusDescription = State.Active.GetDescription();
+
+            _dbContext.VehicleMappings.Add(vehicleMappingEntity);
             return _dbContext.SaveChanges() > 0;
         }
 
@@ -338,8 +363,8 @@ namespace WayMatcherBL.Services
             if (userModel.CreationDate.HasValue)
                 userEntity.CreationDate = userModel.CreationDate;
 
-            if (!string.IsNullOrEmpty(userModel.MfAToken))
-                userEntity.MfAtoken = userModel.MfAToken;
+            if (!string.IsNullOrEmpty(userModel.MfAtoken))
+                userEntity.MfAtoken = userModel.MfAtoken;
 
             return _dbContext.SaveChanges() > 0;
         }

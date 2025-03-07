@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using WayMatcherBL.Models;
 using WayMatcherBL.LogicModels;
+using WayMatcherBL.DtoModels;
 
 namespace WayMatcherBL.Mapper
 {
@@ -22,6 +23,8 @@ namespace WayMatcherBL.Mapper
                 cfg.CreateMap<UserDto, User>();
                 cfg.CreateMap<Vehicle, VehicleDto>();
                 cfg.CreateMap<VehicleDto, Vehicle>();
+                cfg.CreateMap<VehicleMapping, VehicleMappingDto>();
+                cfg.CreateMap<VehicleMappingDto, VehicleMapping>();
             });
             _mapper = config.CreateMapper();
         }
@@ -74,6 +77,16 @@ namespace WayMatcherBL.Mapper
         public Vehicle ConvertVehicleDtoToEntity(VehicleDto vehicleDto)
         {
             return _mapper.Map<Vehicle>(vehicleDto);
+        }
+
+        public VehicleMappingDto ConvertVehicleMappingToDto(VehicleMapping vehicle)
+        {
+            return _mapper.Map<VehicleMappingDto>(vehicle);
+        }
+
+        public VehicleMapping ConvertVehicleMappingDtoToEntity(VehicleMappingDto vehicleDto)
+        {
+            return _mapper.Map<VehicleMapping>(vehicleDto);
         }
     }
 }
