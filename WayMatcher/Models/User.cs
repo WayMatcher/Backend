@@ -35,6 +35,8 @@ public partial class User
 
     public int? StatusId { get; set; }
 
+    public string MfAtoken { get; set; }
+
     public virtual Address Address { get; set; }
 
     public virtual ICollection<Audit> Audits { get; set; } = new List<Audit>();

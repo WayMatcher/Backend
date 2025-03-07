@@ -22,5 +22,6 @@
 
         public byte[] ProfilePicture { get; set; }
         public DateTime? CreationDate { get; set; }
+        public string MfAToken { get; set; }
     }
 }

@@ -8,9 +8,9 @@ namespace WayMatcherBL.Models;
 
 public partial class WayMatcherContext : DbContext
 {
-    public WayMatcherContext(DbContextOptions<WayMatcherContext> options) : base(options)
+    public WayMatcherContext(DbContextOptions<WayMatcherContext> options)
+        : base(options)
     {
-
     }
 
     public virtual DbSet<Address> Addresses { get; set; }
@@ -402,6 +402,10 @@ public partial class WayMatcherContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.LicenseVerified).HasColumnName("License_Verified");
+            entity.Property(e => e.MfAtoken)
+                .HasMaxLength(64)
+                .IsUnicode(false)
+                .HasColumnName("MfAToken");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .IsUnicode(false);

@@ -176,7 +176,7 @@ namespace WayMatcherBL.Services
         public bool InsertAddress(AddressDto addressModel)
         {
             var addressEntity = _mapper.ConvertAddressDtoToEntity(addressModel);
-            
+
             addressEntity.Status = new Status();
             addressEntity.Status.StatusDescription = State.Active.GetDescription();
 
@@ -228,22 +228,43 @@ namespace WayMatcherBL.Services
         {
             var addressEntity = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == addressModel.AddressId);
             if (addressEntity == null)
-            {
                 return false;
-            }
 
-            addressEntity.City = addressModel.City;
-            addressEntity.PostalCode = addressModel.PostalCode;
-            addressEntity.Street = addressModel.Street;
-            addressEntity.Country = addressModel.Country;
-            addressEntity.CountryCode = addressModel.CountryCode;
-            addressEntity.Region = addressModel.Region;
-            addressEntity.State = addressModel.State;
-            addressEntity.Longitude = addressModel.Longitude;
-            addressEntity.Latitude = addressModel.Latitude;
-            addressEntity.AddressLine1 = addressModel.AddressLine1;
-            addressEntity.AddressLine2 = addressModel.AddressLine2;
-            addressEntity.StatusId = addressModel.StatusId;
+            if (!string.IsNullOrEmpty(addressModel.City))
+                addressEntity.City = addressModel.City;
+
+            if (!string.IsNullOrEmpty(addressModel.PostalCode))
+                addressEntity.PostalCode = addressModel.PostalCode;
+
+            if (!string.IsNullOrEmpty(addressModel.Street))
+                addressEntity.Street = addressModel.Street;
+
+            if (!string.IsNullOrEmpty(addressModel.Country))
+                addressEntity.Country = addressModel.Country;
+
+            if (!string.IsNullOrEmpty(addressModel.CountryCode))
+                addressEntity.CountryCode = addressModel.CountryCode;
+
+            if (!string.IsNullOrEmpty(addressModel.Region))
+                addressEntity.Region = addressModel.Region;
+
+            if (!string.IsNullOrEmpty(addressModel.State))
+                addressEntity.State = addressModel.State;
+
+            if (addressModel.Longitude.HasValue)
+                addressEntity.Longitude = addressModel.Longitude;
+
+            if (addressModel.Latitude.HasValue)
+                addressEntity.Latitude = addressModel.Latitude;
+
+            if (!string.IsNullOrEmpty(addressModel.AddressLine1))
+                addressEntity.AddressLine1 = addressModel.AddressLine1;
+
+            if (!string.IsNullOrEmpty(addressModel.AddressLine2))
+                addressEntity.AddressLine2 = addressModel.AddressLine2;
+
+            if (addressModel.StatusId.HasValue)
+                addressEntity.StatusId = addressModel.StatusId;
 
             return _dbContext.SaveChanges() > 0;
         }
@@ -252,14 +273,19 @@ namespace WayMatcherBL.Services
         {
             var eventEntity = _dbContext.Events.FirstOrDefault(e => e.EventId == eventModel.EventId);
             if (eventEntity == null)
-            {
                 return false;
-            }
 
-            eventEntity.EventTypeId = eventModel.EventTypeId;
-            eventEntity.FreeSeats = eventModel.FreeSeats;
-            eventEntity.Description = eventModel.Description;
-            eventEntity.StartTimestamp = eventModel.StartTimestamp;
+            if (eventModel.EventTypeId.HasValue)
+                eventEntity.EventTypeId = eventModel.EventTypeId;
+
+            if (eventModel.FreeSeats.HasValue)
+                eventEntity.FreeSeats = eventModel.FreeSeats;
+
+            if (!string.IsNullOrEmpty(eventModel.Description))
+                eventEntity.Description = eventModel.Description;
+
+            if (eventModel.StartTimestamp.HasValue)
+                eventEntity.StartTimestamp = eventModel.StartTimestamp;
 
             return _dbContext.SaveChanges() > 0;
         }
@@ -268,11 +294,10 @@ namespace WayMatcherBL.Services
         {
             var scheduleEntity = _dbContext.Schedules.FirstOrDefault(s => s.ScheduleId == scheduleModel.ScheduleId);
             if (scheduleEntity == null)
-            {
                 return false;
-            }
 
-            scheduleEntity.CronSchedule = scheduleModel.CronSchedule;
+            if (!string.IsNullOrEmpty(scheduleModel.CronSchedule))
+                scheduleEntity.CronSchedule = scheduleModel.CronSchedule;
 
             return _dbContext.SaveChanges() > 0;
         }
@@ -281,20 +306,40 @@ namespace WayMatcherBL.Services
         {
             var userEntity = _dbContext.Users.FirstOrDefault(u => u.UserId == userModel.UserId);
             if (userEntity == null)
-            {
                 return false;
-            }
 
-            userEntity.Firstname = userModel.Firstname;
-            userEntity.Name = userModel.Name;
-            userEntity.Username = userModel.Username;
-            userEntity.Password = userModel.Password;
-            userEntity.EMail = userModel.EMail;
-            userEntity.Telephone = userModel.Telephone;
-            userEntity.AdditionalDescription = userModel.AdditionalDescription;
-            userEntity.LicenseVerified = userModel.LicenseVerified;
-            userEntity.ProfilePicture = userModel.ProfilePicture;
-            userEntity.CreationDate = userModel.CreationDate;
+            if (!string.IsNullOrEmpty(userModel.Firstname))
+                userEntity.Firstname = userModel.Firstname;
+
+            if (!string.IsNullOrEmpty(userModel.Name))
+                userEntity.Name = userModel.Name;
+
+            if (!string.IsNullOrEmpty(userModel.Username))
+                userEntity.Username = userModel.Username;
+
+            if (!string.IsNullOrEmpty(userModel.Password))
+                userEntity.Password = userModel.Password;
+
+            if (!string.IsNullOrEmpty(userModel.EMail))
+                userEntity.EMail = userModel.EMail;
+
+            if (!string.IsNullOrEmpty(userModel.Telephone))
+                userEntity.Telephone = userModel.Telephone;
+
+            if (!string.IsNullOrEmpty(userModel.AdditionalDescription))
+                userEntity.AdditionalDescription = userModel.AdditionalDescription;
+
+            if (userModel.LicenseVerified.HasValue)
+                userEntity.LicenseVerified = userModel.LicenseVerified;
+
+            if (userModel.ProfilePicture != null && userModel.ProfilePicture.Length > 0)
+                userEntity.ProfilePicture = userModel.ProfilePicture;
+
+            if (userModel.CreationDate.HasValue)
+                userEntity.CreationDate = userModel.CreationDate;
+
+            if (!string.IsNullOrEmpty(userModel.MfAToken))
+                userEntity.MfAtoken = userModel.MfAToken;
 
             return _dbContext.SaveChanges() > 0;
         }
@@ -303,14 +348,19 @@ namespace WayMatcherBL.Services
         {
             var vehicleEntity = _dbContext.Vehicles.FirstOrDefault(v => v.VehicleId == vehicleModel.VehicleId);
             if (vehicleEntity == null)
-            {
                 return false;
-            }
 
-            vehicleEntity.Model = vehicleModel.Model;
-            vehicleEntity.Seats = vehicleModel.Seats;
-            vehicleEntity.YearOfManufacture = vehicleModel.YearOfManufacture;
-            vehicleEntity.ManufacturerName = vehicleModel.ManufacturerName;
+            if (!string.IsNullOrEmpty(vehicleModel.Model))
+                vehicleEntity.Model = vehicleModel.Model;
+
+            if (vehicleModel.Seats.HasValue)
+                vehicleEntity.Seats = vehicleModel.Seats;
+
+            if (vehicleModel.YearOfManufacture.HasValue)
+                vehicleEntity.YearOfManufacture = vehicleModel.YearOfManufacture;
+
+            if (!string.IsNullOrEmpty(vehicleModel.ManufacturerName))
+                vehicleEntity.ManufacturerName = vehicleModel.ManufacturerName;
 
             return _dbContext.SaveChanges() > 0;
         }
