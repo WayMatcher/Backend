@@ -6,10 +6,16 @@ namespace WayMatcherBL.Enums
     public enum State
     {
         [Description("Active")]
-        Active,
+        Active = 1,
         [Description("Inactive")]
-        Inactive,
-        [Description("Pending")]
-        Pending
+        Inactive = 14,
+        [Description("Banned")]
+        Banned = 15,
+        [Description("Expired")]
+        Expired = 16,
+        [Description("Completed")]
+        Completed = 17,
+        [Description("Cancelled")]
+        Cancelled = 18
     }
 }

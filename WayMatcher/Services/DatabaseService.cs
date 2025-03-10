@@ -366,6 +366,9 @@ namespace WayMatcherBL.Services
             if (!string.IsNullOrEmpty(userModel.MfAtoken))
                 userEntity.MfAtoken = userModel.MfAtoken;
 
+            if (userModel.StatusId.HasValue)
+                userEntity.StatusId = userModel.StatusId;
+
             return _dbContext.SaveChanges() > 0;
         }
 

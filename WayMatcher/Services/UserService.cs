@@ -1,7 +1,9 @@
-﻿using WayMatcherBL.DtoModels;
+﻿using System.Security.Cryptography;
+using System.Text;
+using WayMatcherBL.DtoModels;
+using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
-using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -13,6 +15,20 @@ namespace WayMatcherBL.Services
         {
             _databaseService = databaseService;
             _emailService = emailService;
+        }
+        private string GenerateAndHashRandomNumber()
+        {
+            Random random = new Random();
+            int randomNumber = random.Next(1000, 10000); //4 digit number
+            byte[] numberBytes = Encoding.UTF8.GetBytes(randomNumber.ToString());
+
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashBytes = sha256.ComputeHash(numberBytes);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            }
+
+            //_emailService.SendEmail(email); with the 4digit number for the user
         }
         public void SendChangePasswordMail(UserDto user)
         {
@@ -77,12 +93,18 @@ namespace WayMatcherBL.Services
                 vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
             }
 
-            foreach (var v in _databaseService.GetUserVehicles(user.UserId)) //list of users vehicles GETUserVehicles
+            foreach (var v in _databaseService.GetUserVehicles(user.UserId))
             {
                 //check if user already has this vehicle
                 if (v.VehicleId != vehicle.VehicleId)
                 {
-                    _databaseService.InsertVehicleMapping(); //insert new vehicle into the user
+                    VehicleMappingDto vehicleMapping = new VehicleMappingDto()
+                    {
+                        UserId = user.UserId,
+                        VehicleId = vehicle.VehicleId
+                    };
+
+                    _databaseService.InsertVehicleMapping(vehicleMapping);
                 }
             }
 
@@ -91,27 +113,45 @@ namespace WayMatcherBL.Services
 
         public bool DeleteUser(UserDto user)
         {
-            throw new NotImplementedException();
+            user.StatusId = (int)State.Inactive;
+            return _databaseService.UpdateUser(user);
         }
 
         public List<UserDto> GetActiveUsers()
         {
-            throw new NotImplementedException();
+            return _databaseService.GetActiveUsers();
         }
 
         public UserDto GetUser(int id)
         {
-            throw new NotImplementedException();
+            return _databaseService.GetUserById(id);
         }
 
         public bool LoginUser(UserDto user)
         {
-            throw new NotImplementedException();
+            if (user == null)
+                return false;
+
+            var dbUser = _databaseService.GetUserById(user.UserId);
+
+            if (dbUser == null)
+                return false;
+
+            if (dbUser.Password == user.Password)
+            {
+                var hashedMfA = GenerateAndHashRandomNumber();
+
+                dbUser.MfAtoken = hashedMfA;
+                _databaseService.UpdateUser(dbUser);
+
+                return true;
+            }
+            return false;
         }
 
         public bool RegisterUser(UserDto user)
         {
-            throw new NotImplementedException();
+            return _databaseService.InsertUser(user);
         }
 
 
