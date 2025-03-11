@@ -16,28 +16,36 @@ namespace WayMatcherBL.Services
             _databaseService = databaseService;
             _emailService = emailService;
         }
-        private string GenerateAndHashRandomNumber()
+        private string GenerateAndHashRandomNumber(string userMail)
         {
             Random random = new Random();
             int randomNumber = random.Next(1000, 10000); //4 digit number
             byte[] numberBytes = Encoding.UTF8.GetBytes(randomNumber.ToString());
+
+            EmailDto email = new EmailDto()
+            {
+                Subject = "MFA Code",
+                Body = "Your MFA code is: " + randomNumber,
+                To = userMail,
+                IsHtml = false
+            };
+
+            _emailService.SendEmail(email); //with the 4digit number for the user
 
             using (SHA256 sha256 = SHA256.Create())
             {
                 byte[] hashBytes = sha256.ComputeHash(numberBytes);
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
-
-            //_emailService.SendEmail(email); with the 4digit number for the user
         }
         public void SendChangePasswordMail(UserDto user)
         {
             //send change password email -> get new Password from user -> update user
             var email = new EmailDto()
             {
-                To = user.EMail,
                 Subject = "Change Password",
-                Body = "Please click the link(https://deimama) to change your password",
+                Body = "Please click the link(https://deimama) to change your password", //with user information / id / token
+                To = user.EMail,
                 IsHtml = true
             };
 
@@ -95,7 +103,6 @@ namespace WayMatcherBL.Services
 
             foreach (var v in _databaseService.GetUserVehicles(user.UserId))
             {
-                //check if user already has this vehicle
                 if (v.VehicleId != vehicle.VehicleId)
                 {
                     VehicleMappingDto vehicleMapping = new VehicleMappingDto()
@@ -139,7 +146,7 @@ namespace WayMatcherBL.Services
 
             if (dbUser.Password == user.Password)
             {
-                var hashedMfA = GenerateAndHashRandomNumber();
+                var hashedMfA = GenerateAndHashRandomNumber(dbUser.EMail);
 
                 dbUser.MfAtoken = hashedMfA;
                 _databaseService.UpdateUser(dbUser);
@@ -153,7 +160,5 @@ namespace WayMatcherBL.Services
         {
             return _databaseService.InsertUser(user);
         }
-
-
     }
 }
