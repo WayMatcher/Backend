@@ -1,7 +1,9 @@
 ﻿using System.Net;
-using System.Net.Mail;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Interfaces;
+using MailKit;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace WayMatcherBL.Services
 {
@@ -13,25 +15,25 @@ namespace WayMatcherBL.Services
         public EmailService(EmailServerDto emailServerDto)
         {
             _emailServer = emailServerDto;
-            _smtpClient = new SmtpClient(_emailServer.Host)
+
+            using (_smtpClient = new SmtpClient())
             {
-                Port = _emailServer.Port,
-                Credentials = new NetworkCredential(_emailServer.Username, _emailServer.Password),
-                EnableSsl = true,
-            };
+                _smtpClient.Connect(_emailServer.Host, _emailServer.Port, MailKit.Security.SecureSocketOptions.StartTls);
+                _smtpClient.Authenticate(_emailServer.Username, _emailServer.Password);
+            }
         }
 
         public void SendEmail(EmailDto email)
         {
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(_emailServer.Username),
-                Subject = email.Subject,
-                Body = email.Body,
-                IsBodyHtml = email.IsHtml,
-            };
+            var mailMessage = new MimeMessage();
 
-            mailMessage.To.Add(email.To);
+            mailMessage.From.Add(new MailboxAddress("WayMatcher", "NoReply@hobedere.com"));
+            mailMessage.To.Add(new MailboxAddress(email.Username, email.To));
+            mailMessage.Subject = email.Subject;
+            mailMessage.Body = new TextPart("plain")
+            {
+                Text = email.Body
+            };
 
             _smtpClient.Send(mailMessage);
         }

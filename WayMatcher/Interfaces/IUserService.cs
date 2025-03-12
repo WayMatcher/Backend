@@ -13,6 +13,7 @@ namespace WayMatcherBL.Interfaces
         public bool ConfigurateVehicle(UserDto user, VehicleDto vehicle);
         public bool ConfigurateAddress(UserDto user, AddressDto address);
         public UserDto GetUser(int id);
+        public UserDto GetUser(string email);
         public List<UserDto> GetActiveUsers();
 
     }
