@@ -31,5 +31,6 @@
         public int? StatusId { get; set; }
 
         public string MfAtoken { get; set; }
+        public string JWT { get; set; }
     }
 }

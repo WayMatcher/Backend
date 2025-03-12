@@ -7,8 +7,7 @@ namespace WayMatcherBL.Interfaces
     {
         public bool InsertUser(UserDto userModel);
         public bool UpdateUser(UserDto userModel);
-        public UserDto GetUser(int id);
-        public UserDto GetUser(string email);
+        public UserDto GetUser(UserDto user);
         public List<UserDto> GetActiveUsers();
         public int GetUserId(string username);
 

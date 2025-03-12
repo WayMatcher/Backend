@@ -104,18 +104,9 @@ namespace WayMatcherBL.Services
             return _mapper.ConvertScheduleToDto(schedule);
         }
 
-        public UserDto GetUser(int id)
+        public UserDto GetUser(UserDto userDto)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.UserId == id);
-            if (user == null)
-            {
-                return null;
-            }
-            return _mapper.ConvertUserToDto(user);
-        }
-        public UserDto GetUser(string email)
-        {
-            var user = _dbContext.Users.FirstOrDefault(u => u.EMail == email);
+            var user = _dbContext.Users.FirstOrDefault(u => u.EMail == userDto.EMail || u.Username == userDto.Username || u.UserId == userDto.UserId);
             if (user == null)
             {
                 return null;
