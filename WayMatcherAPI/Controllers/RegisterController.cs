@@ -5,7 +5,7 @@ using WayMatcherBL.LogicModels;
 namespace WayMatcherAPI.Controllers
 {
     [ApiController]
-    [Route("Register")]
+    [Route("api/Register")]
     public class RegisterController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -18,16 +18,12 @@ namespace WayMatcherAPI.Controllers
         [HttpPost("NewUser")]
         public IActionResult NewUser([FromBody] UserDto newUser)
         {
-            bool result = _userService.RegisterUser(newUser);
+            var result = _userService.RegisterUser(newUser);
 
             if (result)
-            {
-                return Ok("User registered successfully.");
-            }
+                return Ok(result);
             else
-            {
                 return StatusCode(500, "An error occurred while registering the user.");
-            }
         }
     }
 }
