@@ -9,16 +9,29 @@ namespace WayMatcherBL.Services
 
         public ConfigurationService()
         {
+            string solutionPath = GetSolutionPath();
+            string basePath = Path.Combine(solutionPath, "WayMatcher");
             _configuration = new ConfigurationBuilder()
-                .SetBasePath("C:\\Users\\christian.rudigier\\source\\repos\\WayMatcher\\Backend\\WayMatcher")
+                .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json")
                 .Build();
+        }
+
+        private string GetSolutionPath()
+        {
+            string directory = AppContext.BaseDirectory;
+            while (!Directory.GetFiles(directory, "*.sln").Any())
+            {
+                directory = Directory.GetParent(directory).FullName;
+            }
+            return directory;
         }
 
         public string GetConnectionString(string name)
         {
             return _configuration.GetConnectionString(name);
         }
+
         public EmailServerDto GetEmailServer()
         {
             return new EmailServerDto
