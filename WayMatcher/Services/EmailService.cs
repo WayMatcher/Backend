@@ -1,9 +1,7 @@
-﻿using System.Net;
+﻿using MailKit.Net.Smtp;
+using MimeKit;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Interfaces;
-using MailKit;
-using MimeKit;
-using MailKit.Net.Smtp;
 
 namespace WayMatcherBL.Services
 {

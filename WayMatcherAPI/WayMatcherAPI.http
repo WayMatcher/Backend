@@ -1,0 +1,25 @@
+@WayMatcherAPI_HostAddress = http://localhost:5197
+
+### Register a new user
+POST {{WayMatcherAPI_HostAddress}}/Register/NewUser
+Content-Type: application/json
+Accept: application/json
+
+{
+  "UserId": 0,
+  "Firstname": "John",
+  "Name": "Doe",
+  "Username": "johndoe",
+  "Password": "password123",
+  "EMail": "johndoe@example.com",
+  "Telephone": "123-456-7890",
+  "AdditionalDescription": "Sample user",
+  "LicenseVerified": false,
+  "ProfilePicture": null,
+  "CreationDate": "2025-03-12T00:00:00",
+  "AddressId": null,
+  "RoleId": null,
+  "StatusId": null,
+  "MfAtoken": null,
+  "JWT": null
+}
