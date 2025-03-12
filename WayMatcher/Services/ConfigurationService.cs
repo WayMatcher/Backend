@@ -42,5 +42,10 @@ namespace WayMatcherBL.Services
                 Password = _configuration["EmailServer:Password"]
             };
         }
+
+        public string GetSecretKey()
+        {
+            return _configuration["Jwt:JwtKey"];
+        }
     }
 }   

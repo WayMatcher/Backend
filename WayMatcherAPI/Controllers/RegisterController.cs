@@ -4,8 +4,8 @@ using WayMatcherBL.LogicModels;
 
 namespace WayMatcherAPI.Controllers
 {
-    [ApiController]
     [Route("api/Register")]
+    [ApiController]
     public class RegisterController : ControllerBase
     {
         private readonly IUserService _userService;

@@ -25,5 +25,12 @@ namespace WayMatcherAPI.Controllers
             else
                 return StatusCode(500, "An error occurred while logging in.");
         }
+
+        [HttpPost("ForgotPassword")]
+        public IActionResult ForgotPassword([FromBody] UserDto user)
+        {
+            _userService.SendChangePasswordMail(user);
+            return Ok();
+        }
     }
 }

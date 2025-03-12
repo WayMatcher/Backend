@@ -1,6 +1,8 @@
-﻿using System.Net.Http.Headers;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
@@ -12,10 +14,12 @@ namespace WayMatcherBL.Services
     {
         IDatabaseService _databaseService;
         IEmailService _emailService;
-        public UserService(IDatabaseService databaseService, IEmailService emailService)
+        ConfigurationService _configuration;
+        public UserService(IDatabaseService databaseService, IEmailService emailService, ConfigurationService configuration)
         {
             _databaseService = databaseService;
             _emailService = emailService;
+            _configuration = configuration;
         }
         private string GenerateMfA(UserDto user)
         {
@@ -41,14 +45,31 @@ namespace WayMatcherBL.Services
         }
         private string GenerateJWT(UserDto user)
         {
-            return "super cooler token"; //#TODO
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSecretKey()));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim(JwtRegisteredClaimNames.Email, user.EMail),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: "yourdomain.com",
+                audience: "yourdomain.com",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
         public void SendChangePasswordMail(UserDto user)
         {
             var email = new EmailDto()
             {
                 Subject = "Change Password",
-                Body = "Please click the link(https://deimama) to change your password", //with user information / id / token #TODO
+                Body = "Please click the link(https://deimama) to change your password", //send https with hashedUser/jwttoken? and create template for email #TODO
                 To = user.EMail,
                 IsHtml = true
             };

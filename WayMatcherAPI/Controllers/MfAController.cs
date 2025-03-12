@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 
@@ -9,7 +8,7 @@ namespace WayMatcherAPI.Controllers
     [ApiController]
     public class MfAController : ControllerBase
     {
-        IUserService _userService;
+        private readonly IUserService _userService;
 
         public MfAController(IUserService userService)
         {
