@@ -7,7 +7,7 @@ using MailKit.Net.Smtp;
 
 namespace WayMatcherBL.Services
 {
-    public class EmailService : IEmailService
+    public class EmailService : IEmailService, IDisposable
     {
         private readonly SmtpClient _smtpClient;
         private readonly EmailServerDto _emailServer;
@@ -15,12 +15,9 @@ namespace WayMatcherBL.Services
         public EmailService(EmailServerDto emailServerDto)
         {
             _emailServer = emailServerDto;
-
-            using (_smtpClient = new SmtpClient())
-            {
-                _smtpClient.Connect(_emailServer.Host, _emailServer.Port, MailKit.Security.SecureSocketOptions.StartTls);
-                _smtpClient.Authenticate(_emailServer.Username, _emailServer.Password);
-            }
+            _smtpClient = new SmtpClient();
+            _smtpClient.Connect(_emailServer.Host, _emailServer.Port, MailKit.Security.SecureSocketOptions.StartTls);
+            _smtpClient.Authenticate(_emailServer.Username, _emailServer.Password);
         }
 
         public void SendEmail(EmailDto email)
@@ -36,6 +33,11 @@ namespace WayMatcherBL.Services
             };
 
             _smtpClient.Send(mailMessage);
+        }
+
+        public void Dispose()
+        {
+            _smtpClient.Dispose();
         }
     }
 }
