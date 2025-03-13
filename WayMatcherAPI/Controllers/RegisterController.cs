@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WayMatcherAPI.Models;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 
@@ -16,12 +17,17 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpPost("NewUser")]
-        public IActionResult NewUser([FromBody] UserDto newUser)
+        public IActionResult NewUser([FromBody] UserEditModel user)
         {
-            var result = _userService.RegisterUser(newUser);
+            var result = _userService.RegisterUser(user.User);
 
             if (result)
+            {
+                _userService.ConfigurateAddress(user.User, user.Address);
+                _userService.ConfigurateVehicle(user.User, user.Vehicle);
+
                 return Ok(result);
+            }
             else
                 return StatusCode(500, "An error occurred while registering the user.");
         }

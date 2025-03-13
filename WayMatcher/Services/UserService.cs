@@ -69,7 +69,7 @@ namespace WayMatcherBL.Services
             var email = new EmailDto()
             {
                 Subject = "Change Password",
-                Body = "Please click the link(https://deimama) to change your password", //send https with hashedUser/jwttoken? and create template for email #TODO
+                Body = "<html>\r\n  <head>\r\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n    <style>\r\n      body {\r\n        font-family: Arial, sans-serif;\r\n        background-color: #f4f4f4;\r\n        margin: 0;\r\n        padding: 0;\r\n      }\r\n      .container {\r\n        max-width: 600px;\r\n        margin: 20px auto;\r\n        background: #ffffff;\r\n        padding: 20px;\r\n        border-radius: 8px;\r\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\r\n      }\r\n      .header {\r\n        text-align: center;\r\n        font-size: 24px;\r\n        font-weight: bold;\r\n        color: #333;\r\n      }\r\n      .content {\r\n        font-size: 16px;\r\n        color: #555;\r\n        line-height: 1.6;\r\n      }\r\n      .button {\r\n        display: inline-block;\r\n        padding: 12px 20px;\r\n        margin-top: 20px;\r\n        background: #007bff;\r\n        color: #ffffff;\r\n        text-decoration: none;\r\n        border-radius: 5px;\r\n        font-weight: bold;\r\n      }\r\n      .footer {\r\n        margin-top: 20px;\r\n        font-size: 14px;\r\n        color: #888;\r\n        text-align: center;\r\n      }\r\n    </style>\r\n  </head>\r\n  <body>\r\n    <div class=\"container\">\r\n      <div class=\"header\">Reset Your Password</div>\r\n      <hr>\r\n      <div class=\"content\">\r\n        <p>Hello,</p>\r\n        <p>We received a request to reset your password. Click the button below to proceed:</p>\r\n        <p style=\"text-align: center;\">\r\n          <a href=\"{{ RESET_LINK }}\" class=\"button\">Reset Password</a>\r\n        </p>\r\n        <br>\r\n        <p>If you did not request this, please ignore this email.</p>\r\n      </div>\r\n      <hr>\r\n    </div>\r\n  </body>\r\n</html>\r\n", //send https with hashedUser/jwttoken? and create template for email #TODO
                 To = user.EMail,
                 IsHtml = true
             };
@@ -125,14 +125,16 @@ namespace WayMatcherBL.Services
                 _databaseService.InsertVehicle(vehicle);
                 vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
             }
+            
+            var userId = GetUser(user).UserId;
 
-            foreach (var v in _databaseService.GetUserVehicles(user.UserId))
+            foreach (var v in _databaseService.GetUserVehicles(userId))
             {
                 if (v.VehicleId != vehicle.VehicleId)
                 {
                     VehicleMappingDto vehicleMapping = new VehicleMappingDto()
                     {
-                        UserId = user.UserId,
+                        UserId = userId,
                         VehicleId = vehicle.VehicleId
                     };
 
@@ -180,7 +182,7 @@ namespace WayMatcherBL.Services
             }
             return false;
         }
-        public string AcceptMfA(UserDto user) //#TODO
+        public string AcceptMfA(UserDto user)
         {
             if (user == null)
                 return string.Empty;

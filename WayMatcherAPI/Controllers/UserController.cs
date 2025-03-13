@@ -15,6 +15,10 @@ namespace WayMatcherAPI.Controllers
         {
             _userService = userService;
         }
+        private bool UpdateUserDetails(UserEditModel userEdit)
+        {
+            return _userService.ConfigurateAddress(userEdit.User, userEdit.Address) && _userService.ConfigurateVehicle(userEdit.User, userEdit.Vehicle) && _userService.ConfigurateUser(userEdit.User);
+        }
 
         [HttpPost("EditUser")]
         public IActionResult EditUser([FromBody] UserEditModel userEdit)
@@ -46,11 +50,6 @@ namespace WayMatcherAPI.Controllers
                 return Ok(result);
             else
                 return StatusCode(500, "An error occurred while deleting the user.");
-        }
-
-        private bool UpdateUserDetails(UserEditModel userEdit)
-        {
-            return _userService.ConfigurateAddress(userEdit.user, userEdit.address) && _userService.ConfigurateVehicle(userEdit.user, userEdit.vehicle) && _userService.ConfigurateUser(userEdit.user);
         }
     }
 }

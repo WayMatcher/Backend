@@ -4,8 +4,8 @@ namespace WayMatcherAPI.Models
 {
     public class UserEditModel
     {
-        public UserDto user { get; set; }
-        public AddressDto address { get; set; }
-        public VehicleDto vehicle { get; set; }
+        public UserDto User { get; set; }
+        public AddressDto Address { get; set; }
+        public VehicleDto Vehicle { get; set; }
     }
 }
