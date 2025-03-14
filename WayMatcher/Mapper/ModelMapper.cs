@@ -25,6 +25,12 @@ namespace WayMatcherBL.Mapper
                 cfg.CreateMap<VehicleDto, Vehicle>();
                 cfg.CreateMap<VehicleMapping, VehicleMappingDto>();
                 cfg.CreateMap<VehicleMappingDto, VehicleMapping>();
+                cfg.CreateMap<Stop, StopDto>();
+                cfg.CreateMap<StopDto, Stop>();
+                cfg.CreateMap<Invite, InviteDto>();
+                cfg.CreateMap<InviteDto, Invite>();
+                cfg.CreateMap<EventMember, EventMemberDto>();
+                cfg.CreateMap<EventMemberDto, EventMember>();
             });
             _mapper = config.CreateMapper();
         }
@@ -87,6 +93,36 @@ namespace WayMatcherBL.Mapper
         public VehicleMapping ConvertVehicleMappingDtoToEntity(VehicleMappingDto vehicleDto)
         {
             return _mapper.Map<VehicleMapping>(vehicleDto);
+        }
+
+        public StopDto ConvertStopToDto(Stop stop)
+        {
+            return _mapper.Map<StopDto>(stop);
+        }
+
+        public Stop ConvertStopDtoToEntity(StopDto stopDto)
+        {
+            return _mapper.Map<Stop>(stopDto);
+        }
+
+
+        public InviteDto ConvertInviteToDto(Invite invite)
+        {
+            return _mapper.Map<InviteDto>(invite);
+        }
+        public Invite ConvertStopDtoToEntity(InviteDto inviteDto)
+        {
+            return _mapper.Map<Invite>(inviteDto);
+        }
+
+        public EventMemberDto ConvertEventMemberToDto(EventMember eventMember)
+        {
+            return _mapper.Map<EventMemberDto>(eventMember);
+        }
+
+        public EventMember ConvertStopDtoToEntity(EventMemberDto eventMemberDto)
+        {
+            return _mapper.Map<EventMember>(eventMemberDto);
         }
     }
 }

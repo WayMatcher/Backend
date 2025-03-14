@@ -31,11 +31,21 @@ namespace WayMatcherBL.Interfaces
 
         public bool InsertEvent(EventDto eventModel);
         public bool UpdateEvent(EventDto eventModel);
-        public EventDto GetEventById(int id);
+        public EventDto GetEvent(EventDto eventDto);
         public List<EventDto> GetActiveEvents();
+        public List<EventDto> GetFilteredEventList();
         public int GetEventId(EventDto eventModel);
 
         public List<VehicleDto> GetUserVehicles(int userId);
         public bool InsertVehicleMapping(VehicleMappingDto vehicleMapping);
+
+        public bool InsertStop(StopDto stop);
+        public bool DeleteStop(StopDto stop);
+        public List<StopDto> GetStopList(EventDto eventDto);
+
+        public bool InsertToInvite(InviteDto invite);
+
+        public bool InsertToEventMember(EventMemberDto eventMember);
+        public bool DeleteEventMember(EventMemberDto eventMember);
     }
 }

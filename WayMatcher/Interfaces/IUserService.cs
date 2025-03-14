@@ -15,6 +15,6 @@ namespace WayMatcherBL.Interfaces
         public bool ConfigurateAddress(UserDto user, AddressDto address);
         public UserDto GetUser(UserDto user);
         public List<UserDto> GetActiveUsers();
-
+        //public bool RateUser();
     }
 }

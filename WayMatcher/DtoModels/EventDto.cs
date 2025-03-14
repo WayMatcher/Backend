@@ -11,5 +11,9 @@
         public string Description { get; set; }
 
         public DateTime? StartTimestamp { get; set; }
+
+        public int? ScheduleId { get; set; }
+
+        public int? StatusId { get; set; }
     }
 }

@@ -73,7 +73,12 @@ namespace WayMatcherBL.Services
 
             return vehicleList;
         }
-
+        public List<EventDto> GetFilteredEventList() //wird mithilfe von Views gefiltert #TODO
+        {
+            //var filteredEventList = new List<EventDto>();
+            //foreach(var eventEntity in _dbContext.Events.Where(e => e.Schedule == )))
+            return null;
+        }
         public AddressDto GetAddressById(int id)
         {
             var address = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == id);
@@ -84,9 +89,9 @@ namespace WayMatcherBL.Services
             return _mapper.ConvertAddressToDto(address);
         }
 
-        public EventDto GetEventById(int id)
+        public EventDto GetEvent(EventDto eventDto)
         {
-            var eventItem = _dbContext.Events.FirstOrDefault(e => e.EventId == id);
+            var eventItem = _dbContext.Events.FirstOrDefault(e => e.EventId == eventDto.EventId);
             if (eventItem == null)
             {
                 return null;
@@ -186,6 +191,19 @@ namespace WayMatcherBL.Services
             }
             return vehicle.VehicleId;
         }
+        
+        public List<StopDto> GetStopList(EventDto eventDto)
+        {
+            var stopList = new List<StopDto>();
+            var stops = _dbContext.Stops.Where(s => s.EventId == eventDto.EventId).ToList(); 
+
+            foreach (var stop in stops)
+            {
+                stopList.Add(_mapper.ConvertStopToDto(stop));
+            }
+
+            return stopList;
+        }
 
         public bool InsertAddress(AddressDto addressModel)
         {
@@ -247,6 +265,25 @@ namespace WayMatcherBL.Services
 
             _dbContext.VehicleMappings.Add(vehicleMappingEntity);
             return _dbContext.SaveChanges() > 0;
+        }
+        public bool InsertStop(StopDto stop)
+        {
+            var stopEntity = _mapper.ConvertStopDtoToEntity(stop);
+
+            _dbContext.Stops.Add(stopEntity);
+
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public bool InsertToInvite(InviteDto invite)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool InsertToEventMember(EventMemberDto eventMember)
+        {
+
+            throw new NotImplementedException();
         }
 
         public bool UpdateAddress(AddressDto addressModel)
@@ -391,6 +428,23 @@ namespace WayMatcherBL.Services
                 vehicleEntity.ManufacturerName = vehicleModel.ManufacturerName;
 
             return _dbContext.SaveChanges() > 0;
+        }
+
+        public bool DeleteStop(StopDto stop)
+        {
+            var stopEntity = _dbContext.Stops.FirstOrDefault(s => s.StopId == stop.StopId);
+
+            if(stopEntity == null)
+                return false;
+
+            _dbContext.Stops.Remove(stopEntity);
+
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public bool DeleteEventMember(EventMemberDto eventMember)
+        {
+            throw new NotImplementedException();
         }
     }
 }
