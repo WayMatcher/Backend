@@ -105,8 +105,6 @@ namespace WayMatcherBL.Services
 
         public bool ConfigurateUser(UserDto user)
         {
-            user = _databaseService.GetUser(user);
-
             if (user == null)
                 return false;
 

@@ -6,7 +6,7 @@ namespace WayMatcherBL.Interfaces
     public interface IEventService
     {
         public bool CreateEvent(EventDto eventDto);
-        public void UpdateEvent(EventDto eventDto);
+        public bool UpdateEvent(EventDto eventDto);
         public void CancelEvent(EventDto eventDto);
         public bool PlanSchedule(ScheduleDto schedule);
         public bool EventInvite(InviteDto invite); //using database invite user table -> to Event Member when accepted

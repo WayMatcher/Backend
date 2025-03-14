@@ -53,10 +53,11 @@ namespace WayMatcherBL.Services
             foreach (var stop in _databaseService.GetStopList(eventDto))
             {
                 _databaseService.DeleteStop(stop);
-            }
+
             //#TODO
             //foreach member in event
             //schedule in event
+            }
 
             _databaseService.UpdateEvent(eventDto);
         }
@@ -134,9 +135,12 @@ namespace WayMatcherBL.Services
             return _databaseService.DeleteStop(stop);
         }
 
-        public void UpdateEvent(EventDto eventDto)
+        public bool UpdateEvent(EventDto eventDto)
         {
-            throw new NotImplementedException();
+            if (eventDto == null)
+                return false;
+
+            return _databaseService.UpdateEvent(eventDto);
         }
     }
 }
