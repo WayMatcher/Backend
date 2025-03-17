@@ -1,4 +1,6 @@
-﻿namespace WayMatcherBL.DtoModels
+﻿using WayMatcherBL.LogicModels;
+
+namespace WayMatcherBL.DtoModels
 {
     public class StopDto
     {
@@ -6,8 +8,7 @@
 
         public int StopSequenceNumber { get; set; }
 
-        public int AddressId { get; set; }
-
+        public AddressDto Address { get; set; }
         public int EventId { get; set; }
     }
 }

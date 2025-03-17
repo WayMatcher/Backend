@@ -201,6 +201,7 @@ namespace WayMatcherBL.Services
 
         public bool RegisterUser(UserDto user)
         {
+            //database and vehicle #TODO
             return _databaseService.InsertUser(user);
         }
     }

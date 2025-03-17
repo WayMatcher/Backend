@@ -1,7 +1,10 @@
-﻿using WayMatcherBL.DtoModels;
+﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
+using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
+using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -18,12 +21,10 @@ namespace WayMatcherBL.Services
         {
             var eventDto = new EventDto()
             {
-                EventId = stop.EventId
+                EventId = stop.EventId,
             };
 
             var stopList = _databaseService.GetStopList(eventDto);
-
-            //if address does not exist, create new one #TODO
 
             if (stopList.Contains(stop))
                 return _databaseService.InsertStop(stop);
@@ -54,20 +55,37 @@ namespace WayMatcherBL.Services
             {
                 _databaseService.DeleteStop(stop);
 
-            //#TODO
-            //foreach member in event
-            //schedule in event
+                //#TODO
+                //foreach member in event
+                //schedule in event
             }
 
             _databaseService.UpdateEvent(eventDto);
         }
 
-        public bool CreateEvent(EventDto eventDto)
+        public bool CreateEvent(EventDto eventDto, List<StopDto> stopList)
         {
-            if (eventDto == null)
+            if (eventDto == null || stopList.IsNullOrEmpty())
                 return false;
 
-            return _databaseService.InsertEvent(eventDto);
+            if (_databaseService.InsertEvent(eventDto))
+            {
+                foreach (var stop in stopList)
+                {
+                    stop.Address.AddressId = _databaseService.GetAddressId(stop.Address);
+
+                    if (stop.Address.AddressId == -1)
+                    {
+                        _databaseService.InsertAddress(stop.Address);
+                        stop.Address.AddressId = _databaseService.GetAddressId(stop.Address);
+                    }
+
+                    stop.EventId = _databaseService.GetEvent(eventDto).EventId;
+                    AddStop(stop);
+                }
+                return true;
+            }
+            return false;
         }
 
         public EventDto GetEvent(EventDto eventDto)
