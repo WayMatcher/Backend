@@ -2,11 +2,13 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
+using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -199,10 +201,41 @@ namespace WayMatcherBL.Services
             return string.Empty;
         }
 
-        public bool RegisterUser(UserDto user)
+        public bool RegisterUser(UserDto user, AddressDto address, VehicleDto vehicle)
         {
-            //database and vehicle #TODO
-            return _databaseService.InsertUser(user);
+            // add vehicle #TODO
+
+            address.AddressId = _databaseService.GetAddressId(address);
+
+            if (address.AddressId == -1)
+            {
+                _databaseService.InsertAddress(address);
+                address.AddressId = _databaseService.GetAddressId(address);
+            }
+
+            vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
+
+            if (vehicle.VehicleId == -1)
+            {
+                _databaseService.InsertVehicle(vehicle);
+                vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
+            }
+
+            user.AddressId = address.AddressId;
+            
+            if(_databaseService.InsertUser(user))
+            {
+                var userId = GetUser(user).UserId;
+                VehicleMappingDto vehicleMapping = new VehicleMappingDto()
+                {
+                    UserId = userId,
+                    VehicleId = vehicle.VehicleId
+                };
+                _databaseService.InsertVehicleMapping(vehicleMapping);
+                return true;
+            }
+
+            return false;
         }
     }
 }
