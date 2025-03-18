@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WayMatcherAPI.Models;
+using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 
@@ -28,10 +29,14 @@ namespace WayMatcherAPI.Controllers
 
             var result = _userService.LoginUser(user);
 
-            if (result)
-                return Ok(new { Success = result, Message = "Login successful" });   
+            if (result.Equals(RESTCode.Ok))
+                return Ok(result);
+            else if (result.Equals(RESTCode.DbObjectNotFound))
+                return NotFound(result);
+            else if (result.Equals(RESTCode.ObjectNull))
+                return NotFound(result);
             else
-                return StatusCode(500, new { Success = result, Message = "An error occurred while logging in." });
+                return BadRequest(result);
         }
 
         [HttpPost("ForgotPassword")]

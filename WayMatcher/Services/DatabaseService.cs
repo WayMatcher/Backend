@@ -277,13 +277,18 @@ namespace WayMatcherBL.Services
 
         public bool InsertToInvite(InviteDto invite)
         {
-            throw new NotImplementedException();
+            var inviteEntity = _mapper.ConvertDtoToInvite(invite);
+
+            _dbContext.Invites.Add(inviteEntity);
+            return _dbContext.SaveChanges() > 0;
         }
 
         public bool InsertToEventMember(EventMemberDto eventMember)
         {
+            var eventMemberEntity = _mapper.ConvertEventMemberDtoToEntity(eventMember);
 
-            throw new NotImplementedException();
+            _dbContext.EventMembers.Add(eventMemberEntity);
+            return _dbContext.SaveChanges() > 0;
         }
 
         public bool UpdateAddress(AddressDto addressModel)
@@ -445,6 +450,19 @@ namespace WayMatcherBL.Services
         public bool DeleteEventMember(EventMemberDto eventMember)
         {
             throw new NotImplementedException();
+        }
+
+        public List<EventMemberDto> GetEventMemberList(EventDto eventDto)
+        {
+            var eventMemberList = new List<EventMemberDto>();
+            var eventMembers = _dbContext.EventMembers.Where(em => em.EventId == eventDto.EventId).ToList();
+
+            foreach(var eventMember in eventMembers)
+            {
+                eventMemberList.Add(_mapper.ConvertEventMemberToDto(eventMember));
+            }
+
+            return eventMemberList;
         }
     }
 }

@@ -1,14 +1,12 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.IdentityModel.Tokens;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
-using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -124,7 +122,7 @@ namespace WayMatcherBL.Services
                 _databaseService.InsertVehicle(vehicle);
                 vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
             }
-            
+
             var userId = GetUser(user).UserId;
 
             foreach (var v in _databaseService.GetUserVehicles(userId))
@@ -160,15 +158,15 @@ namespace WayMatcherBL.Services
             return _databaseService.GetUser(user);
         }
 
-        public bool LoginUser(UserDto user)
+        public RESTCode LoginUser(UserDto user)
         {
             if (user == null)
-                return false;
+                return RESTCode.ObjectNull;
 
             var dbUser = _databaseService.GetUser(user);
 
             if (dbUser == null)
-                return false;
+                return RESTCode.DbObjectNotFound;
 
             if ((dbUser.Username == user.Username || dbUser.Email == user.Email) && dbUser.Password == user.Password)
             {
@@ -177,9 +175,9 @@ namespace WayMatcherBL.Services
                 dbUser.MfAtoken = hashedMfA;
                 _databaseService.UpdateUser(dbUser);
 
-                return true;
+                return RESTCode.Ok;
             }
-            return false;
+            return RESTCode.InternalServerError;
         }
         public string AcceptMfA(UserDto user)
         {
@@ -218,7 +216,7 @@ namespace WayMatcherBL.Services
                 vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
             }
 
-            if(_databaseService.InsertUser(user))
+            if (_databaseService.InsertUser(user))
             {
                 var userId = GetUser(user).UserId;
                 VehicleMappingDto vehicleMapping = new VehicleMappingDto()

@@ -47,5 +47,6 @@ namespace WayMatcherBL.Interfaces
 
         public bool InsertToEventMember(EventMemberDto eventMember);
         public bool DeleteEventMember(EventMemberDto eventMember);
+        public List<EventMemberDto> GetEventMemberList(EventDto eventDto);
     }
 }

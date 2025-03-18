@@ -1,11 +1,12 @@
-﻿using WayMatcherBL.LogicModels;
+﻿using WayMatcherBL.Enums;
+using WayMatcherBL.LogicModels;
 
 namespace WayMatcherBL.Interfaces
 {
     public interface IUserService
     {
         public bool RegisterUser(UserDto user, VehicleDto vehicle); //sends email #TODO
-        public bool LoginUser(UserDto user); //sends email #TODO
+        public RESTCode LoginUser(UserDto user); //sends email #TODO
         public string AcceptMfA(UserDto user);
         public bool DeleteUser(UserDto user);
         public bool ConfigurateUser(UserDto user);
