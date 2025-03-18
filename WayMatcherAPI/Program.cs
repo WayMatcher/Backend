@@ -30,6 +30,7 @@ namespace WayMatcherAPI
             builder.Services.AddSingleton<ModelMapper>();
 
             builder.Services.AddScoped<EmailServerDto>();
+            builder.Services.AddScoped<ConfigurationService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
