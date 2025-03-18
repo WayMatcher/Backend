@@ -1,6 +1,6 @@
 ﻿namespace WayMatcherAPI.Models
 {
-    public class UserLoginModel
+    public class RequestUserLoginModel
     {
         public string? Username { get; set; }
         public string? Email { get; set; }

@@ -11,10 +11,14 @@ namespace WayMatcherBL.Services
         {
             string solutionPath = GetSolutionPath();
             string basePath = Path.Combine(solutionPath, "WayMatcher");
+            
+            Console.WriteLine($"Base path: {basePath}");  //log
+
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json")
                 .Build();
+            Console.WriteLine($"Configuration loaded: {_configuration != null}"); //log
         }
 
         private string GetSolutionPath()
@@ -29,6 +33,7 @@ namespace WayMatcherBL.Services
 
         public string GetConnectionString(string name)
         {
+            Console.WriteLine($"Retrieving connection string for: {name}"); //log
             return _configuration.GetConnectionString(name);
         }
 

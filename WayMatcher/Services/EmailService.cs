@@ -10,8 +10,15 @@ namespace WayMatcherBL.Services
         private readonly SmtpClient _smtpClient;
         private readonly EmailServerDto _emailServer;
 
-        public EmailService(EmailServerDto emailServerDto)
+        public EmailService(ConfigurationService configurationService)
         {
+            var emailServerDto = configurationService.GetEmailServer();
+
+            if (emailServerDto == null)
+                throw new ArgumentNullException(nameof(emailServerDto));
+            if (string.IsNullOrEmpty(emailServerDto.Host))
+                throw new ArgumentException("Host cannot be null or empty", nameof(emailServerDto.Host));
+
             _emailServer = emailServerDto;
             _smtpClient = new SmtpClient();
             _smtpClient.Connect(_emailServer.Host, _emailServer.Port, MailKit.Security.SecureSocketOptions.StartTls);

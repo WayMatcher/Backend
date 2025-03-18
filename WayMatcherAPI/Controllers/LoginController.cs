@@ -17,7 +17,7 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpPost("LoginUser")]
-        public IActionResult Login([FromBody] UserLoginModel userLogin)
+        public IActionResult Login([FromBody] RequestUserLoginModel userLogin)
         {
             var user = new UserDto
             {
@@ -29,9 +29,9 @@ namespace WayMatcherAPI.Controllers
             var result = _userService.LoginUser(user);
 
             if (result)
-                return Ok(result);
+                return Ok(new { Success = result, Message = "Login successful" });   
             else
-                return StatusCode(500, "An error occurred while logging in.");
+                return StatusCode(500, new { Success = result, Message = "An error occurred while logging in." });
         }
 
         [HttpPost("ForgotPassword")]

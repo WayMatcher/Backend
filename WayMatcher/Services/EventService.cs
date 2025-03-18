@@ -56,6 +56,7 @@ namespace WayMatcherBL.Services
                 _databaseService.DeleteStop(stop);
 
                 //#TODO
+                //my head is a compiler, i am one with the compiler
                 //foreach member in event
                 //schedule in event
             }

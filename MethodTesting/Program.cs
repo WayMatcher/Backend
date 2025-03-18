@@ -18,14 +18,13 @@ class Program
         var modelMapper = new ModelMapper();
 
         IDatabaseService databaseService = new DatabaseService(dbContext, modelMapper);
-        IEmailService emailService = new EmailService(configService.GetEmailServer());
-        IUserService userService = new UserService(databaseService, emailService);
+        IEmailService emailService = new EmailService(configService);
+        IUserService userService = new UserService(databaseService, emailService, configService);
 
         var user = new UserDto
         {
-            UserId = 1,
             Username = "TestUser",
-            Email = "TestEmail@gmail.com",
+            Email = "",
             Password = "TestPassword",
         };
 
