@@ -19,7 +19,7 @@ namespace WayMatcherAPI.Controllers
         [HttpPost("NewUser")]
         public IActionResult NewUser([FromBody] UserEditModel user)
         {
-            var result = _userService.RegisterUser(user.User);
+            var result = _userService.RegisterUser(user.User, user.Vehicle);
 
             if (result)
             {
