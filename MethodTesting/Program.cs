@@ -25,7 +25,7 @@ class Program
         {
             UserId = 1,
             Username = "TestUser",
-            EMail = "TestEmail@gmail.com",
+            Email = "TestEmail@gmail.com",
             Password = "TestPassword",
         };
 

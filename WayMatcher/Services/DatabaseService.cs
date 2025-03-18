@@ -111,7 +111,7 @@ namespace WayMatcherBL.Services
 
         public UserDto GetUser(UserDto userDto)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.EMail == userDto.EMail || u.Username == userDto.Username || u.UserId == userDto.UserId);
+            var user = _dbContext.Users.FirstOrDefault(u => u.EMail == userDto.Email || u.Username == userDto.Username || u.UserId == userDto.UserId);
             if (user == null)
             {
                 return null;
@@ -382,8 +382,8 @@ namespace WayMatcherBL.Services
             if (!string.IsNullOrEmpty(userModel.Password))
                 userEntity.Password = userModel.Password;
 
-            if (!string.IsNullOrEmpty(userModel.EMail))
-                userEntity.EMail = userModel.EMail;
+            if (!string.IsNullOrEmpty(userModel.Email))
+                userEntity.EMail = userModel.Email;
 
             if (!string.IsNullOrEmpty(userModel.Telephone))
                 userEntity.Telephone = userModel.Telephone;

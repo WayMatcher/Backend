@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WayMatcherAPI.Models;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 
@@ -16,8 +17,15 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpPost("LoginUser")]
-        public IActionResult Login([FromBody] UserDto user)
+        public IActionResult Login([FromBody] UserLoginModel userLogin)
         {
+            var user = new UserDto
+            {
+                Username = userLogin.Username,
+                Email = userLogin.Email,
+                Password = userLogin.Password
+            };
+
             var result = _userService.LoginUser(user);
 
             if (result)

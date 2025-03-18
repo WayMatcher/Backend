@@ -17,7 +17,7 @@ namespace WayMatcherAPI.Controllers
         }
         private bool UpdateUserDetails(UserEditModel userEdit)
         {
-            return _userService.ConfigurateAddress(userEdit.User, userEdit.Address) && _userService.ConfigurateVehicle(userEdit.User, userEdit.Vehicle) && _userService.ConfigurateUser(userEdit.User);
+            return _userService.ConfigurateAddress(userEdit.User) && _userService.ConfigurateVehicle(userEdit.User, userEdit.Vehicle) && _userService.ConfigurateUser(userEdit.User);
         }
 
         [HttpPost("EditUser")]

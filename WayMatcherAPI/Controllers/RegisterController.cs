@@ -23,7 +23,7 @@ namespace WayMatcherAPI.Controllers
 
             if (result)
             {
-                _userService.ConfigurateAddress(user.User, user.Address);
+                _userService.ConfigurateAddress(user.User);
                 _userService.ConfigurateVehicle(user.User, user.Vehicle);
 
                 return Ok(result);

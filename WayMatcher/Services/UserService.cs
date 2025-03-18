@@ -33,7 +33,7 @@ namespace WayMatcherBL.Services
             {
                 Subject = "WayMatcher | MFA Code for User: " + GetUser(user),
                 Body = "<html>\r\n  <head>\r\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n    <style>\r\n      /* Add custom classes and styles that you want inlined here */\r\n    </style>\r\n  </head>\r\n  <body class=\"bg-light\">\r\n    <div class=\"container\">\r\n      <div class=\"card my-10\">\r\n        <div class=\"card-body\">\r\n          <h1 class=\"h3 mb-2\">Multi-Factor Authentication (MFA) Code</h1>\r\n          <h5 class=\"text-teal-700\">Your security code is below</h5>\r\n          <hr>\r\n          <div class=\"space-y-3\">\r\n            <p class=\"text-gray-700\">Use the following code to complete your sign-in process:</p>\r\n            <div class=\"text-center p-3 bg-gray-200 rounded text-xl font-bold\">" + randomNumber + " </div>\r\n            <p class=\"text-gray-700\">This code will expire in 10 minutes. Do not share this code with anyone.</p>\r\n            <p class=\"text-gray-700\">If you did not request this code, please ignore this email.</p>\r\n          </div>\r\n          <hr>\r\n          <p class=\"text-gray-700\">Need help? <a href=\"https://support.example.com\" target=\"_blank\">Contact Support</a></p>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </body>\r\n</html>",
-                To = user.EMail,
+                To = user.Email,
                 IsHtml = true
             };
 
@@ -53,7 +53,7 @@ namespace WayMatcherBL.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(JwtRegisteredClaimNames.Email, user.EMail),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -72,7 +72,7 @@ namespace WayMatcherBL.Services
             {
                 Subject = "Change Password",
                 Body = "<html>\r\n  <head>\r\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n    <style>\r\n      body {\r\n        font-family: Arial, sans-serif;\r\n        background-color: #f4f4f4;\r\n        margin: 0;\r\n        padding: 0;\r\n      }\r\n      .container {\r\n        max-width: 600px;\r\n        margin: 20px auto;\r\n        background: #ffffff;\r\n        padding: 20px;\r\n        border-radius: 8px;\r\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\r\n      }\r\n      .header {\r\n        text-align: center;\r\n        font-size: 24px;\r\n        font-weight: bold;\r\n        color: #333;\r\n      }\r\n      .content {\r\n        font-size: 16px;\r\n        color: #555;\r\n        line-height: 1.6;\r\n      }\r\n      .button {\r\n        display: inline-block;\r\n        padding: 12px 20px;\r\n        margin-top: 20px;\r\n        background: #007bff;\r\n        color: #ffffff;\r\n        text-decoration: none;\r\n        border-radius: 5px;\r\n        font-weight: bold;\r\n      }\r\n      .footer {\r\n        margin-top: 20px;\r\n        font-size: 14px;\r\n        color: #888;\r\n        text-align: center;\r\n      }\r\n    </style>\r\n  </head>\r\n  <body>\r\n    <div class=\"container\">\r\n      <div class=\"header\">Reset Your Password</div>\r\n      <hr>\r\n      <div class=\"content\">\r\n        <p>Hello,</p>\r\n        <p>We received a request to reset your password. Click the button below to proceed:</p>\r\n        <p style=\"text-align: center;\">\r\n          <a href=\"{{ RESET_LINK }}\" class=\"button\">Reset Password</a>\r\n        </p>\r\n        <br>\r\n        <p>If you did not request this, please ignore this email.</p>\r\n      </div>\r\n      <hr>\r\n    </div>\r\n  </body>\r\n</html>\r\n", //send https with hashedUser/jwttoken? and create template for email #TODO
-                To = user.EMail,
+                To = user.Email,
                 IsHtml = true
             };
 
@@ -88,20 +88,19 @@ namespace WayMatcherBL.Services
             return _databaseService.UpdateUser(user);
         }
 
-        public bool ConfigurateAddress(UserDto user, AddressDto address)
+        public bool ConfigurateAddress(UserDto user)
         {
-            if (user == null || address == null)
+            if (user == null || user.Address == null)
                 return false;
 
-            address.AddressId = _databaseService.GetAddressId(address);
+            user.Address.AddressId = _databaseService.GetAddressId(user.Address);
 
-            if (address.AddressId == -1)
+            if (user.Address.AddressId == -1)
             {
-                _databaseService.InsertAddress(address);
-                address.AddressId = _databaseService.GetAddressId(address);
+                _databaseService.InsertAddress(user.Address);
+                user.Address.AddressId = _databaseService.GetAddressId(user.Address);
             }
 
-            user.AddressId = address.AddressId;
             return _databaseService.UpdateUser(user);
         }
 
@@ -171,7 +170,7 @@ namespace WayMatcherBL.Services
             if (dbUser == null)
                 return false;
 
-            if ((dbUser.Username == user.Username || dbUser.EMail == user.EMail) && dbUser.Password == user.Password)
+            if ((dbUser.Username == user.Username || dbUser.Email == user.Email) && dbUser.Password == user.Password)
             {
                 var hashedMfA = GenerateMfA(dbUser);
 
@@ -201,16 +200,14 @@ namespace WayMatcherBL.Services
             return string.Empty;
         }
 
-        public bool RegisterUser(UserDto user, AddressDto address, VehicleDto vehicle)
+        public bool RegisterUser(UserDto user, VehicleDto vehicle)
         {
-            // add vehicle #TODO
+            user.Address.AddressId = _databaseService.GetAddressId(user.Address);
 
-            address.AddressId = _databaseService.GetAddressId(address);
-
-            if (address.AddressId == -1)
+            if (user.Address.AddressId == -1)
             {
-                _databaseService.InsertAddress(address);
-                address.AddressId = _databaseService.GetAddressId(address);
+                _databaseService.InsertAddress(user.Address);
+                user.Address.AddressId = _databaseService.GetAddressId(user.Address);
             }
 
             vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
@@ -221,8 +218,6 @@ namespace WayMatcherBL.Services
                 vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
             }
 
-            user.AddressId = address.AddressId;
-            
             if(_databaseService.InsertUser(user))
             {
                 var userId = GetUser(user).UserId;
