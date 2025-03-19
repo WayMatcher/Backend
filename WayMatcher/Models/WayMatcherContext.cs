@@ -49,6 +49,8 @@ public partial class WayMatcherContext : DbContext
 
     public virtual DbSet<VehicleMapping> VehicleMappings { get; set; }
 
+    public virtual DbSet<VwEventDetail> VwEventDetails { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("WayMatcher");
@@ -491,6 +493,67 @@ public partial class WayMatcherContext : DbContext
             entity.HasOne(d => d.Vehicle).WithMany(p => p.VehicleMappings)
                 .HasForeignKey(d => d.VehicleId)
                 .HasConstraintName("FK__Vehicle_M__Vehic__47C69FAC");
+        });
+
+        modelBuilder.Entity<VwEventDetail>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_EventDetails");
+
+            entity.Property(e => e.AddressAddressId).HasColumnName("Address_AddressId");
+            entity.Property(e => e.AddressId).HasColumnName("Address_ID");
+            entity.Property(e => e.AddressLine1)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("Address_Line1");
+            entity.Property(e => e.AddressLine2)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("Address_Line2");
+            entity.Property(e => e.City)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.ConfirmationStatusId).HasColumnName("ConfirmationStatus_ID");
+            entity.Property(e => e.Country)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.CountryCode)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("Country_Code");
+            entity.Property(e => e.CronSchedule)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("Cron_Schedule");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EventId).HasColumnName("Event_ID");
+            entity.Property(e => e.EventMemberTypeId).HasColumnName("EventMemberType_ID");
+            entity.Property(e => e.EventTypeId).HasColumnName("EventType_ID");
+            entity.Property(e => e.FreeSeats).HasColumnName("Free_Seats");
+            entity.Property(e => e.InviteId).HasColumnName("Invite_ID");
+            entity.Property(e => e.IsRequest).HasColumnName("Is_Request");
+            entity.Property(e => e.MemberId).HasColumnName("Member_ID");
+            entity.Property(e => e.PostalCode)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("Postal_Code");
+            entity.Property(e => e.Region)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.ScheduleId).HasColumnName("Schedule_ID");
+            entity.Property(e => e.ScheduleScheduleId).HasColumnName("Schedule_ScheduleId");
+            entity.Property(e => e.StartTimestamp).HasColumnName("Start_Timestamp");
+            entity.Property(e => e.State)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.StatusId).HasColumnName("Status_ID");
+            entity.Property(e => e.StopId).HasColumnName("Stop_ID");
+            entity.Property(e => e.StopSequenceNumber).HasColumnName("Stop_sequence_number");
+            entity.Property(e => e.Street)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.UserId).HasColumnName("User_ID");
         });
 
         OnModelCreatingPartial(modelBuilder);

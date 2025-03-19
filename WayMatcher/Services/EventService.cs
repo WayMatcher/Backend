@@ -54,11 +54,12 @@ namespace WayMatcherBL.Services
             foreach (var stop in _databaseService.GetStopList(eventDto))
             {
                 _databaseService.DeleteStop(stop);
+            }
 
-                //#TODO
-                //my head is a compiler, i am one with the compiler
-                //foreach member in event
-                //schedule in event
+            foreach (var member in _databaseService.GetEventMemberList(eventDto))
+            {
+                member.StatusId = (int)State.Cancelled;
+                _databaseService.DeleteEventMember(member);
             }
 
             _databaseService.UpdateEvent(eventDto);
@@ -97,12 +98,19 @@ namespace WayMatcherBL.Services
             return _databaseService.GetEvent(eventDto);
         }
 
-        public List<EventDto> GetEventList()
+        public List<EventDto> GetEventList(FilterDto filter)
         {
-            //findet man mit eventNamen, eventZeit, eventStart und eventZiel, mithilfe von VIEWS zurückbekommen #TODO
-            return _databaseService.GetFilteredEventList();
+            if (filter == null)
+                return _databaseService.GetFilteredEventList(new FilterDto());
 
-            throw new NotImplementedException();
+            if (filter.StartTime != null)
+                filter.StartTime.ScheduleId = _databaseService.GetScheduleId(filter.StartTime);
+            if (filter.StopLocation != null)
+                filter.StopLocation.AddressId = _databaseService.GetAddressId(filter.StopLocation);
+            if (filter.DestinationLocation != null)
+                filter.DestinationLocation.AddressId = _databaseService.GetAddressId(filter.DestinationLocation);
+
+            return _databaseService.GetFilteredEventList(filter);
         }
 
         public List<EventDto> GetUserEventList(UserDto user)

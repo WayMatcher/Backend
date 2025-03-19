@@ -85,6 +85,10 @@
       {
          "Name": "[WayMatcher].[Vehicle_Mapping]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[WayMatcher].[vw_EventDetails]",
+         "ObjectType": 3
       }
    ],
    "UiHint": null,

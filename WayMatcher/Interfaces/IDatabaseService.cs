@@ -32,8 +32,7 @@ namespace WayMatcherBL.Interfaces
         public bool InsertEvent(EventDto eventModel);
         public bool UpdateEvent(EventDto eventModel);
         public EventDto GetEvent(EventDto eventDto);
-        public List<EventDto> GetActiveEvents();
-        public List<EventDto> GetFilteredEventList();
+        public List<EventDto> GetFilteredEventList(FilterDto filter);
         public int GetEventId(EventDto eventModel);
 
         public List<VehicleDto> GetUserVehicles(int userId);

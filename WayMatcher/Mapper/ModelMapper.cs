@@ -39,7 +39,6 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<AddressDto>(address);
         }
-
         public Address ConvertAddressDtoToEntity(AddressDto addressDto)
         {
             return _mapper.Map<Address>(addressDto);
@@ -49,7 +48,6 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<EventDto>(eventItem);
         }
-
         public Event ConvertEventDtoToEntity(EventDto eventDto)
         {
             return _mapper.Map<Event>(eventDto);
@@ -59,7 +57,6 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<ScheduleDto>(schedule);
         }
-
         public Schedule ConvertScheduleDtoToEntity(ScheduleDto scheduleDto)
         {
             return _mapper.Map<Schedule>(scheduleDto);
@@ -69,7 +66,6 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<UserDto>(user);
         }
-
         public User ConvertUserDtoToEntity(UserDto userDto)
         {
             return _mapper.Map<User>(userDto);
@@ -79,7 +75,6 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<VehicleDto>(vehicle);
         }
-
         public Vehicle ConvertVehicleDtoToEntity(VehicleDto vehicleDto)
         {
             return _mapper.Map<Vehicle>(vehicleDto);
@@ -89,7 +84,6 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<VehicleMappingDto>(vehicle);
         }
-
         public VehicleMapping ConvertVehicleMappingDtoToEntity(VehicleMappingDto vehicleDto)
         {
             return _mapper.Map<VehicleMapping>(vehicleDto);
@@ -99,18 +93,16 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<StopDto>(stop);
         }
-
         public Stop ConvertStopDtoToEntity(StopDto stopDto)
         {
             return _mapper.Map<Stop>(stopDto);
         }
 
-
         public InviteDto ConvertInviteToDto(Invite invite)
         {
             return _mapper.Map<InviteDto>(invite);
         }
-        public Invite ConvertStopDtoToEntity(InviteDto inviteDto)
+        public Invite ConvertInviteDtoToEntity(InviteDto inviteDto)
         {
             return _mapper.Map<Invite>(inviteDto);
         }
@@ -120,7 +112,7 @@ namespace WayMatcherBL.Mapper
             return _mapper.Map<EventMemberDto>(eventMember);
         }
 
-        public EventMember ConvertStopDtoToEntity(EventMemberDto eventMemberDto)
+        public EventMember ConvertEventMemberDtoToEntity(EventMemberDto eventMemberDto)
         {
             return _mapper.Map<EventMember>(eventMemberDto);
         }

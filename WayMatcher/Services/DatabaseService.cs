@@ -29,17 +29,6 @@ namespace WayMatcherBL.Services
             return addressList;
         }
 
-        public List<EventDto> GetActiveEvents()
-        {
-            var eventList = new List<EventDto>();
-            foreach (var eventItem in _dbContext.Events.Where(e => e.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
-            {
-                eventList.Add(_mapper.ConvertEventToDto(eventItem));
-            }
-
-            return eventList;
-        }
-
         public List<ScheduleDto> GetActiveSchedules()
         {
             //var scheduleList = new List<ScheduleDto>();
@@ -73,11 +62,69 @@ namespace WayMatcherBL.Services
 
             return vehicleList;
         }
-        public List<EventDto> GetFilteredEventList() //wird mithilfe von Views gefiltert #TODO
+        public List<EventDto> GetFilteredEventList(FilterDto filter)
         {
-            //var filteredEventList = new List<EventDto>();
-            //foreach(var eventEntity in _dbContext.Events.Where(e => e.Schedule == )))
-            return null;
+            var activeStatusId = (int)State.Active;
+
+            var query = _dbContext.VwEventDetails
+                .Where(e => e.StatusId == activeStatusId)
+                .AsQueryable();
+
+            if (filter.StartTime != null)
+            {
+                query = query.Where(e => e.ScheduleId >= filter.StartTime.ScheduleId);
+            }
+
+            if (filter.StopLocation != null)
+            {
+                query = query.Where(e => e.AddressId == filter.StopLocation.AddressId);
+            }
+
+            if (filter.DestinationLocation != null)
+            {
+                var destinationQuery = _dbContext.VwEventDetails
+                    .Where(e => e.StatusId == activeStatusId)
+                    .GroupBy(e => e.EventId)
+                    .Select(g => new
+                    {
+                        EventId = g.Key,
+                        MaxStopSequenceNumber = g.Max(e => e.StopSequenceNumber)
+                    });
+
+                query = from e in query
+                        join d in destinationQuery on e.EventId equals d.EventId
+                        where e.StopSequenceNumber == d.MaxStopSequenceNumber && e.AddressId == filter.DestinationLocation.AddressId
+                        select e;
+            }
+
+            var filteredEventList = query
+                .GroupBy(e => e.EventId)
+                .Select(g => g.First())
+                .Select(e => new EventDto
+                {
+                    EventId = e.EventId,
+                    EventTypeId = e.EventTypeId,
+                    FreeSeats = e.FreeSeats,
+                    Description = e.Description,
+                    StartTimestamp = e.StartTimestamp,
+                    ScheduleId = e.ScheduleId,
+                    StatusId = e.StatusId
+                })
+                .ToList();
+
+            return filteredEventList;
+        }
+        public List<EventMemberDto> GetEventMemberList(EventDto eventDto)
+        {
+            var eventMemberList = new List<EventMemberDto>();
+            var eventMembers = _dbContext.EventMembers.Where(em => em.EventId == eventDto.EventId).ToList();
+
+            foreach (var eventMember in eventMembers)
+            {
+                eventMemberList.Add(_mapper.ConvertEventMemberToDto(eventMember));
+            }
+
+            return eventMemberList;
         }
         public AddressDto GetAddressById(int id)
         {
@@ -191,11 +238,11 @@ namespace WayMatcherBL.Services
             }
             return vehicle.VehicleId;
         }
-        
+
         public List<StopDto> GetStopList(EventDto eventDto)
         {
             var stopList = new List<StopDto>();
-            var stops = _dbContext.Stops.Where(s => s.EventId == eventDto.EventId).ToList(); 
+            var stops = _dbContext.Stops.Where(s => s.EventId == eventDto.EventId).ToList();
 
             foreach (var stop in stops)
             {
@@ -277,7 +324,7 @@ namespace WayMatcherBL.Services
 
         public bool InsertToInvite(InviteDto invite)
         {
-            var inviteEntity = _mapper.ConvertDtoToInvite(invite);
+            var inviteEntity = _mapper.ConvertInviteDtoToEntity(invite);
 
             _dbContext.Invites.Add(inviteEntity);
             return _dbContext.SaveChanges() > 0;
@@ -439,7 +486,7 @@ namespace WayMatcherBL.Services
         {
             var stopEntity = _dbContext.Stops.FirstOrDefault(s => s.StopId == stop.StopId);
 
-            if(stopEntity == null)
+            if (stopEntity == null)
                 return false;
 
             _dbContext.Stops.Remove(stopEntity);
@@ -452,17 +499,6 @@ namespace WayMatcherBL.Services
             throw new NotImplementedException();
         }
 
-        public List<EventMemberDto> GetEventMemberList(EventDto eventDto)
-        {
-            var eventMemberList = new List<EventMemberDto>();
-            var eventMembers = _dbContext.EventMembers.Where(em => em.EventId == eventDto.EventId).ToList();
 
-            foreach(var eventMember in eventMembers)
-            {
-                eventMemberList.Add(_mapper.ConvertEventMemberToDto(eventMember));
-            }
-
-            return eventMemberList;
-        }
     }
 }
