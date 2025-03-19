@@ -7,6 +7,7 @@ using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
+using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -64,6 +65,33 @@ namespace WayMatcherBL.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        private int GetVehicleId(VehicleDto vehicle)
+        {
+            vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
+
+            if (vehicle.VehicleId == -1)
+            {
+                _databaseService.InsertVehicle(vehicle);
+                vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
+            }
+
+            return vehicle.VehicleId;
+        }
+
+        private int GetAddressId(AddressDto address)
+        {
+            address.AddressId = _databaseService.GetAddressId(address);
+
+            if (address.AddressId == -1)
+            {
+                _databaseService.InsertAddress(address);
+                return _databaseService.GetAddressId(address);
+            }
+
+            return address.AddressId;
+        }
+
         public void SendChangePasswordMail(UserDto user)
         {
             var email = new EmailDto()
@@ -91,13 +119,7 @@ namespace WayMatcherBL.Services
             if (user == null || user.Address == null)
                 return false;
 
-            user.Address.AddressId = _databaseService.GetAddressId(user.Address);
-
-            if (user.Address.AddressId == -1)
-            {
-                _databaseService.InsertAddress(user.Address);
-                user.Address.AddressId = _databaseService.GetAddressId(user.Address);
-            }
+            user.Address.AddressId = GetAddressId(user.Address);
 
             return _databaseService.UpdateUser(user);
         }
@@ -115,13 +137,7 @@ namespace WayMatcherBL.Services
             if (user == null || vehicle == null)
                 return false;
 
-            vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
-
-            if (vehicle.VehicleId == -1)
-            {
-                _databaseService.InsertVehicle(vehicle);
-                vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
-            }
+            vehicle.VehicleId = GetVehicleId(vehicle);
 
             var userId = GetUser(user).UserId;
 
@@ -200,21 +216,7 @@ namespace WayMatcherBL.Services
 
         public bool RegisterUser(UserDto user, VehicleDto vehicle)
         {
-            user.Address.AddressId = _databaseService.GetAddressId(user.Address);
-
-            if (user.Address.AddressId == -1)
-            {
-                _databaseService.InsertAddress(user.Address);
-                user.Address.AddressId = _databaseService.GetAddressId(user.Address);
-            }
-
-            vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
-
-            if (vehicle.VehicleId == -1)
-            {
-                _databaseService.InsertVehicle(vehicle);
-                vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
-            }
+            user.Address.AddressId = GetAddressId(user.Address);
 
             if (_databaseService.InsertUser(user))
             {
@@ -222,7 +224,7 @@ namespace WayMatcherBL.Services
                 VehicleMappingDto vehicleMapping = new VehicleMappingDto()
                 {
                     UserId = userId,
-                    VehicleId = vehicle.VehicleId
+                    VehicleId = GetVehicleId(vehicle)
                 };
                 _databaseService.InsertVehicleMapping(vehicleMapping);
                 return true;

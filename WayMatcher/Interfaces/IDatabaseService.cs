@@ -9,7 +9,6 @@ namespace WayMatcherBL.Interfaces
         public bool UpdateUser(UserDto userModel);
         public UserDto GetUser(UserDto user);
         public List<UserDto> GetActiveUsers();
-        public int GetUserId(string username);
 
         public bool InsertAddress(AddressDto addressModel);
         public bool UpdateAddress(AddressDto addressModel);

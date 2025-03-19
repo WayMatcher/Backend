@@ -4,7 +4,7 @@
     {
         public int EventId { get; set; }
 
-        public int? EventTypeId { get; set; }
+        public int? EventRole { get; set; }
 
         public int? FreeSeats { get; set; }
 

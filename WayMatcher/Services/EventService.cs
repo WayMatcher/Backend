@@ -65,9 +65,9 @@ namespace WayMatcherBL.Services
             _databaseService.UpdateEvent(eventDto);
         }
 
-        public bool CreateEvent(EventDto eventDto, List<StopDto> stopList)
+        public bool CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user)
         {
-            if (eventDto == null || stopList.IsNullOrEmpty())
+            if (eventDto == null || user == null || stopList.IsNullOrEmpty())
                 return false;
 
             if (_databaseService.InsertEvent(eventDto))
@@ -85,6 +85,21 @@ namespace WayMatcherBL.Services
                     stop.EventId = _databaseService.GetEvent(eventDto).EventId;
                     AddStop(stop);
                 }
+
+                var eventMember = new EventMemberDto()
+                {
+                    EventId = _databaseService.GetEvent(eventDto).EventId,
+                    UserId = _databaseService.GetUser(user).UserId,
+                    StatusId = (int)State.Active,
+                };
+
+                if(eventDto.EventRole == (int)EventRole.Passenger)
+                    eventMember.EventRole = (int)EventRole.Passenger;
+                else
+                    eventMember.EventRole = (int)EventRole.Pilot;
+
+                AddEventMember(eventMember);
+
                 return true;
             }
             return false;
@@ -125,12 +140,10 @@ namespace WayMatcherBL.Services
                 return false;
 
             invite.ConfirmationStatusId = 0;
-            //invite.IsRequest = false;
-            //invite.IsRequest = true;
             return _databaseService.InsertToInvite(invite);
         }
 
-        public bool InviteExcepted(EventMemberDto eventMemberDto)
+        public bool AddEventMember(EventMemberDto eventMemberDto)
         {
             if (eventMemberDto == null)
                 return false;

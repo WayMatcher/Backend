@@ -4,7 +4,7 @@
     {
         public int MemberId { get; set; }
 
-        public int EventMemberTypeId { get; set; }
+        public int EventRole { get; set; }
 
         public int UserId { get; set; }
 

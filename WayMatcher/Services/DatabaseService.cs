@@ -103,7 +103,7 @@ namespace WayMatcherBL.Services
                 .Select(e => new EventDto
                 {
                     EventId = e.EventId,
-                    EventTypeId = e.EventTypeId,
+                    EventRole = e.EventTypeId,
                     FreeSeats = e.FreeSeats,
                     Description = e.Description,
                     StartTimestamp = e.StartTimestamp,
@@ -201,7 +201,7 @@ namespace WayMatcherBL.Services
 
         public int GetEventId(EventDto eventModel)
         {
-            var eventItem = _dbContext.Events.FirstOrDefault(e => e.Description == eventModel.Description && e.EventTypeId == eventModel.EventTypeId && e.FreeSeats == eventModel.FreeSeats && e.StartTimestamp == eventModel.StartTimestamp);
+            var eventItem = _dbContext.Events.FirstOrDefault(e => e.Description == eventModel.Description && e.EventTypeId == eventModel.EventRole && e.FreeSeats == eventModel.FreeSeats && e.StartTimestamp == eventModel.StartTimestamp);
             if (eventItem == null)
             {
                 return -1;
@@ -217,16 +217,6 @@ namespace WayMatcherBL.Services
                 return -1;
             }
             return schedule.ScheduleId;
-        }
-
-        public int GetUserId(string username)
-        {
-            var user = _dbContext.Users.FirstOrDefault(u => u.Username == username);
-            if (user == null)
-            {
-                return -1;
-            }
-            return user.UserId;
         }
 
         public int GetVehicleId(VehicleDto vehicleModel)
@@ -389,8 +379,8 @@ namespace WayMatcherBL.Services
             if (eventEntity == null)
                 return false;
 
-            if (eventModel.EventTypeId.HasValue)
-                eventEntity.EventTypeId = eventModel.EventTypeId;
+            if (eventModel.EventRole.HasValue)
+                eventEntity.EventTypeId = eventModel.EventRole;
 
             if (eventModel.FreeSeats.HasValue)
                 eventEntity.FreeSeats = eventModel.FreeSeats;
