@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
-using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -93,7 +91,7 @@ namespace WayMatcherBL.Services
                     StatusId = (int)State.Active,
                 };
 
-                if(eventDto.EventRole == (int)EventRole.Passenger)
+                if (eventDto.EventRole == (int)EventRole.Passenger)
                     eventMember.EventRole = (int)EventRole.Passenger;
                 else
                     eventMember.EventRole = (int)EventRole.Pilot;
