@@ -24,7 +24,7 @@ namespace WayMatcherBL.Services
         private string GetSolutionPath()
         {
             string directory = AppContext.BaseDirectory;
-            while (!Directory.GetFiles(directory, "*.sln").Any())
+            while (!Directory.GetFiles(directory, "*.sln").Any()) //#TODO change how the file gets found
             {
                 directory = Directory.GetParent(directory).FullName;
             }
