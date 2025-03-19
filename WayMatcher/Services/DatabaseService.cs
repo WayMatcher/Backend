@@ -18,6 +18,16 @@ namespace WayMatcherBL.Services
             _mapper = mapper;
         }
 
+        private List<ScheduleDto> GetSchedules()
+        {
+            var scheduleList = new List<ScheduleDto>();
+            foreach (var schedule in _dbContext.Schedules.Where(s => s.UserId.Equals(-1)).ToList())
+            {
+                scheduleList.Add(_mapper.ConvertScheduleToDto(schedule));
+            }
+            return scheduleList;
+        }
+
         public List<AddressDto> GetActiveAddresses()
         {
             var addressList = new List<AddressDto>();
@@ -29,21 +39,22 @@ namespace WayMatcherBL.Services
             return addressList;
         }
 
-        public List<ScheduleDto> GetActiveSchedules()
+        public List<ScheduleDto> GetUserSchedules(UserDto user)
         {
-            //var scheduleList = new List<ScheduleDto>();
-            //foreach (var schedule in _dbContext.Schedules.Where(s => s.Status.StatusDescription.Equals(State.Active)).ToList())
-            //{
-            //    scheduleList.Add(_mapper.ConvertScheduleToDto(schedule));
-            //}
+            var scheduleList = GetSchedules();
 
-            //return scheduleList;
-            return null;
+            foreach (var schedule in _dbContext.Schedules.Where(s => s.UserId.Equals(user.UserId)).ToList())
+            {
+                scheduleList.Add(_mapper.ConvertScheduleToDto(schedule));
+            }
+
+            return scheduleList;
         }
 
         public List<UserDto> GetActiveUsers()
         {
             var userList = new List<UserDto>();
+
             foreach (var user in _dbContext.Users.Where(u => u.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 userList.Add(_mapper.ConvertUserToDto(user));
@@ -55,6 +66,7 @@ namespace WayMatcherBL.Services
         public List<VehicleDto> GetActiveVehicles()
         {
             var vehicleList = new List<VehicleDto>();
+
             foreach (var vehicle in _dbContext.Vehicles.Where(v => v.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 vehicleList.Add(_mapper.ConvertVehicleToDto(vehicle));
@@ -472,6 +484,24 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        public bool UpdateEventMember(EventMemberDto eventMember)
+        {
+            var eventMemberEntity = _dbContext.EventMembers.FirstOrDefault(em => em.MemberId == eventMember.MemberId);
+            if (eventMemberEntity == null)
+                return false;
+
+            if (eventMember.EventRole != -1)
+                eventMemberEntity.EventMemberTypeId = eventMember.EventRole;
+
+            if (eventMember.EventId != -1)
+                eventMemberEntity.EventId = eventMember.EventId;
+
+            if (eventMember.StatusId != -1)
+                eventMemberEntity.StatusId = eventMember.StatusId;
+
+            return _dbContext.SaveChanges() > 0;
+        }
+
         public bool DeleteStop(StopDto stop)
         {
             var stopEntity = _dbContext.Stops.FirstOrDefault(s => s.StopId == stop.StopId);
@@ -483,12 +513,5 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
-
-        public bool DeleteEventMember(EventMemberDto eventMember)
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

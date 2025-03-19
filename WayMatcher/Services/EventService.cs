@@ -57,7 +57,9 @@ namespace WayMatcherBL.Services
             foreach (var member in _databaseService.GetEventMemberList(eventDto))
             {
                 member.StatusId = (int)State.Cancelled;
-                _databaseService.DeleteEventMember(member);
+                member.EventId = -1;
+                member.UserId = -1;
+                _databaseService.UpdateEventMember(member);
             }
 
             _databaseService.UpdateEvent(eventDto);
@@ -84,7 +86,7 @@ namespace WayMatcherBL.Services
                     AddStop(stop);
                 }
 
-                var eventMember = new EventMemberDto()
+                var eventMember = new EventMemberDto() //ersteller des Eventes
                 {
                     EventId = _databaseService.GetEvent(eventDto).EventId,
                     UserId = _databaseService.GetUser(user).UserId,
@@ -137,7 +139,7 @@ namespace WayMatcherBL.Services
             if (invite == null)
                 return false;
 
-            invite.ConfirmationStatusId = 0;
+            invite.ConfirmationStatusId = (int)State.Unread;
             return _databaseService.InsertToInvite(invite);
         }
 
@@ -146,15 +148,21 @@ namespace WayMatcherBL.Services
             if (eventMemberDto == null)
                 return false;
 
+            eventMemberDto.StatusId = (int)State.Active;
+
             return _databaseService.InsertToEventMember(eventMemberDto);
         }
 
-        public bool KickUserFromEvent(EventMemberDto eventMemberDto)
+        public bool DeleteEventMember(EventMemberDto eventMemberDto)
         {
             if (eventMemberDto == null)
                 return false;
 
-            return _databaseService.DeleteEventMember(eventMemberDto);
+            eventMemberDto.StatusId = (int)State.Cancelled;
+            eventMemberDto.EventId = -1;
+            eventMemberDto.UserId = -1;
+
+            return _databaseService.UpdateEventMember(eventMemberDto);
         }
 
         public bool PlanSchedule(ScheduleDto schedule)

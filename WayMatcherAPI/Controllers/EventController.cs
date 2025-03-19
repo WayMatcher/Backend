@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WayMatcherAPI.Models;
 using WayMatcherBL.DtoModels;
+using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 
@@ -43,6 +44,19 @@ namespace WayMatcherAPI.Controllers
 
             _eventService.EventInvite(inviteDto);
 
+            return BadRequest();
+        }
+
+        [HttpPost("AddEventMember")]
+        public IActionResult AddEventMember([FromBody] RequestEventMember member)
+        {
+            EventMemberDto eventMemberDto = new EventMemberDto()
+            {
+                EventId = member.Event.EventId,
+                UserId = member.User.UserId,
+                EventRole = (int)EventRole.Passenger, 
+            };
+            _eventService.AddEventMember(eventMemberDto);
             return BadRequest();
         }
     }

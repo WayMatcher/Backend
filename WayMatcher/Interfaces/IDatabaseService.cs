@@ -25,7 +25,7 @@ namespace WayMatcherBL.Interfaces
         public bool InsertSchedule(ScheduleDto scheduleModel);
         public bool UpdateSchedule(ScheduleDto scheduleModel);
         public ScheduleDto GetScheduleById(int id);
-        public List<ScheduleDto> GetActiveSchedules();
+        public List<ScheduleDto> GetUserSchedules(UserDto user);
         public int GetScheduleId(ScheduleDto scheduleModel);
 
         public bool InsertEvent(EventDto eventModel);
@@ -44,7 +44,7 @@ namespace WayMatcherBL.Interfaces
         public bool InsertToInvite(InviteDto invite);
 
         public bool InsertToEventMember(EventMemberDto eventMember);
-        public bool DeleteEventMember(EventMemberDto eventMember);
+        public bool UpdateEventMember(EventMemberDto eventMember);
         public List<EventMemberDto> GetEventMemberList(EventDto eventDto);
     }
 }

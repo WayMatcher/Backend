@@ -9,9 +9,9 @@ namespace WayMatcherBL.Interfaces
         public bool UpdateEvent(EventDto eventDto);
         public void CancelEvent(EventDto eventDto);
         public bool PlanSchedule(ScheduleDto schedule);
-        public bool EventInvite(InviteDto invite); //using database invite user table -> to Event Member when accepted
+        public bool EventInvite(InviteDto invite);
         public bool AddEventMember(EventMemberDto eventMember); //EventMemberDto 
-        public bool KickUserFromEvent(EventMemberDto eventMember); //EventMemberDto 
+        public bool DeleteEventMember(EventMemberDto eventMember); //EventMemberDto 
         public bool AddStop(StopDto stop);
         public bool RemoveStops(StopDto stop);
         public EventDto GetEvent(EventDto eventDto);
