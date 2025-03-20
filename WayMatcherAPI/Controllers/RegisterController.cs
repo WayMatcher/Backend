@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WayMatcherAPI.Models;
+using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 
@@ -21,7 +22,7 @@ namespace WayMatcherAPI.Controllers
         {
             var result = _userService.RegisterUser(user.User, user.Vehicle);
 
-            if (result)
+            if (result.Equals(RESTCode.Success))
             {
                 _userService.ConfigurateAddress(user.User);
                 _userService.ConfigurateVehicle(user.User, user.Vehicle);
@@ -29,7 +30,7 @@ namespace WayMatcherAPI.Controllers
                 return Ok(result);
             }
             else
-                return StatusCode(500, "An error occurred while registering the user.");
+                return BadRequest(result);
         }
     }
 }

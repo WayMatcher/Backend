@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
 using WayMatcherAPI.Models;
+using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 
@@ -28,10 +30,14 @@ namespace WayMatcherAPI.Controllers
 
             var result = _userService.AcceptMfA(user);
 
-            if (!string.IsNullOrEmpty(result))
+            if (result.Equals(RESTCode.Success))
                 return Ok(result);
+            else if (result.Equals(RESTCode.DbObjectNotFound))
+                return NotFound(result);
+            else if (result.Equals(RESTCode.ObjectNull))
+                return NotFound(result);
             else
-                return StatusCode(500, "An error occurred while processing the MFA input.");
+                return BadRequest(result);
         }
     }
 }

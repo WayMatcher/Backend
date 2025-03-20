@@ -1,11 +1,11 @@
 @WayMatcherAPI_HostAddress = http://localhost:5197
 
 ### Register a new user
-POST {{WayMatcherAPI_HostAddress}}/api/login/loginuser
+POST {{WayMatcherAPI_HostAddress}}/api/MfA/MfAInput
 Content-Type: application/json
 Accept: application/json
 {
-    "Username": "johndoe",
-    "Email": "",
-    "Password": "password123"
+    "Token": "asdf",
+    "Username": "asdf",
+    "Email": ""
 }

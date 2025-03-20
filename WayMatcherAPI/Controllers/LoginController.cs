@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using WayMatcherAPI.Models;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
@@ -29,7 +30,7 @@ namespace WayMatcherAPI.Controllers
 
             var result = _userService.LoginUser(user);
 
-            if (result.Equals(RESTCode.Ok))
+            if (result.Equals(RESTCode.Success))
                 return Ok(result);
             else if (result.Equals(RESTCode.DbObjectNotFound))
                 return NotFound(result);

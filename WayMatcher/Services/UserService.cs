@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Resources;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -189,19 +190,19 @@ namespace WayMatcherBL.Services
                 dbUser.MfAtoken = hashedMfA;
                 _databaseService.UpdateUser(dbUser);
 
-                return RESTCode.Ok;
+                return RESTCode.Success;
             }
             return RESTCode.InternalServerError;
         }
-        public string AcceptMfA(UserDto user)
+        public RESTCode AcceptMfA(UserDto user)
         {
             if (user == null)
-                return string.Empty;
+                return RESTCode.ObjectNull;
 
             var dbUser = _databaseService.GetUser(user);
 
             if (dbUser == null)
-                return string.Empty;
+                return RESTCode.DbObjectNotFound;
 
             if (dbUser.MfAtoken == user.MfAtoken)
             {
@@ -209,13 +210,13 @@ namespace WayMatcherBL.Services
                 dbUser.JWT = GenerateJWT(dbUser);
                 _databaseService.UpdateUser(dbUser);
 
-                return dbUser.JWT;
+                return RESTCode.Success;
             }
 
-            return string.Empty;
+            return RESTCode.InternalServerError;
         }
 
-        public bool RegisterUser(UserDto user, VehicleDto vehicle)
+        public RESTCode RegisterUser(UserDto user, VehicleDto vehicle)
         {
             user.Address.AddressId = GetAddressId(user.Address);
 
@@ -228,10 +229,10 @@ namespace WayMatcherBL.Services
                     VehicleId = GetVehicleId(vehicle)
                 };
                 _databaseService.InsertVehicleMapping(vehicleMapping);
-                return true;
+                return RESTCode.Success;
             }
 
-            return false;
+            return RESTCode.InternalServerError;
         }
     }
 }
