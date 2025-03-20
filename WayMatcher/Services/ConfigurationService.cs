@@ -9,31 +9,48 @@ namespace WayMatcherBL.Services
 
         public ConfigurationService()
         {
-            string solutionPath = GetSolutionPath();
-            string basePath = Path.Combine(solutionPath, "WayMatcher");
-            
-            Console.WriteLine($"Base path: {basePath}");  //log
+            string basePath = AppContext.BaseDirectory;
+            string appSettingsPath = FindFile(basePath, "appsettings.json");
+
+            if (appSettingsPath == null)
+            {
+                throw new FileNotFoundException("appsettings.json not found.");
+            }
+
+            Console.WriteLine($"AppSettings path: {appSettingsPath}"); 
 
             _configuration = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json")
+                .SetBasePath(Path.GetDirectoryName(appSettingsPath))
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
-            Console.WriteLine($"Configuration loaded: {_configuration != null}"); //log
+            Console.WriteLine($"Configuration loaded: {_configuration != null}"); 
         }
 
-        private string GetSolutionPath()
+        private string FindFile(string directory, string fileName)
         {
-            string directory = AppContext.BaseDirectory;
-            while (!Directory.GetFiles(directory, "*.sln").Any()) //#TODO change how the file gets found
+            foreach (var file in Directory.GetFiles(directory))
             {
-                directory = Directory.GetParent(directory).FullName;
+                if (Path.GetFileName(file) == fileName)
+                {
+                    return file;
+                }
             }
-            return directory;
+
+            foreach (var dir in Directory.GetDirectories(directory))
+            {
+                var result = FindFile(dir, fileName);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            return null;
         }
 
         public string GetConnectionString(string name)
         {
-            Console.WriteLine($"Retrieving connection string for: {name}"); //log
+            Console.WriteLine($"Retrieving connection string for: {name}");
             return _configuration.GetConnectionString(name);
         }
 

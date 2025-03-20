@@ -3,7 +3,6 @@ using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
-using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -76,9 +75,6 @@ namespace WayMatcherBL.Services
             }
 
             _databaseService.UpdateEvent(eventDto);
-
-
-
         }
 
         public bool CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user)
@@ -102,7 +98,7 @@ namespace WayMatcherBL.Services
                     AddStop(stop);
                 }
 
-                var eventMember = new EventMemberDto() //ersteller des Eventes
+                var eventMember = new EventMemberDto()
                 {
                     EventId = _databaseService.GetEvent(eventDto).EventId,
                     UserId = _databaseService.GetUser(user).UserId,
@@ -186,7 +182,6 @@ namespace WayMatcherBL.Services
                     IsHtml = true
                 };
             }
-
             return false;
         }
 
