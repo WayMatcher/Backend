@@ -202,6 +202,9 @@ namespace WayMatcherBL.Services
 
             var dbUser = _databaseService.GetUser(user);
 
+            if (dbUser == null)
+                return string.Empty;
+
             if (dbUser.MfAtoken == user.MfAtoken)
             {
                 dbUser.MfAtoken = null;
