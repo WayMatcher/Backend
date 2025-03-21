@@ -173,15 +173,15 @@ namespace WayMatcherBL.Services
             return _databaseService.GetUser(user);
         }
 
-        public RESTCode LoginUser(UserDto user)
+        public UserDto LoginUser(UserDto user)
         {
             if (user == null)
-                return RESTCode.ObjectNull;
+                return null;
 
             var dbUser = _databaseService.GetUser(user);
 
             if (dbUser == null)
-                return RESTCode.DbObjectNotFound;
+                return null;
 
             if ((dbUser.Username == user.Username || dbUser.Email == user.Email) && dbUser.Password == user.Password)
             {
@@ -190,9 +190,9 @@ namespace WayMatcherBL.Services
                 dbUser.MfAtoken = hashedMfA;
                 _databaseService.UpdateUser(dbUser);
 
-                return RESTCode.Success;
+                return user;
             }
-            return RESTCode.InternalServerError;
+            return null;
         }
         public RESTCode AcceptMfA(UserDto user)
         {

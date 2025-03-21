@@ -18,7 +18,7 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpPost("NewUser")]
-        public IActionResult NewUser([FromBody] UserEditModel user)
+        public IActionResult NewUser([FromBody] RequestRegisterUser user)
         {
             var result = _userService.RegisterUser(user.User, user.Vehicle);
 

@@ -28,7 +28,7 @@ namespace WayMatcherAPI.Controllers
                 Password = userLogin.Password
             };
 
-            var result = _userService.LoginUser(user);
+            var result = _userService.LoginUser(user).UserId;
 
             if (result.Equals(RESTCode.Success))
                 return Ok(result);

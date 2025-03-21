@@ -15,13 +15,13 @@ namespace WayMatcherAPI.Controllers
         {
             _userService = userService;
         }
-        private bool UpdateUserDetails(UserEditModel userEdit)
+        private bool UpdateUserDetails(RequestRegisterUser userEdit)
         {
             return _userService.ConfigurateAddress(userEdit.User) && _userService.ConfigurateVehicle(userEdit.User, userEdit.Vehicle) && _userService.ConfigurateUser(userEdit.User);
         }
 
         [HttpPost("EditUser")]
-        public IActionResult EditUser([FromBody] UserEditModel userEdit)
+        public IActionResult EditUser([FromBody] RequestRegisterUser userEdit)
         {
             var result = UpdateUserDetails(userEdit);
 

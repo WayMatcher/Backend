@@ -253,7 +253,18 @@ namespace WayMatcherBL.Services
 
             return stopList;
         }
+        public List<ChatMessageDto> GetChatMessageList(EventMember eventMember)
+        {
+            var chatMessageList = new List<ChatMessageDto>();
+            var chatMessages = _dbContext.ChatMessages.Where(tm => tm.EventId == eventMember.EventId).ToList();
 
+            foreach (var chatMessage in chatMessages)
+            {
+                chatMessageList.Add(_mapper.ConvertChatMessageToDto(chatMessage));
+            }
+
+            return chatMessageList;
+        }
         public bool InsertAddress(AddressDto addressModel)
         {
             var addressEntity = _mapper.ConvertAddressDtoToEntity(addressModel);
@@ -339,7 +350,13 @@ namespace WayMatcherBL.Services
             _dbContext.EventMembers.Add(eventMemberEntity);
             return _dbContext.SaveChanges() > 0;
         }
+        public bool InsertChatMessage(ChatMessageDto chatMessage)
+        {
+            var chatMessageEntity = _mapper.ConvertChatMessageDtoToEntity(chatMessage);
 
+            _dbContext.ChatMessages.Add(chatMessageEntity);
+            return _dbContext.SaveChanges() > 0;
+        }
         public bool UpdateAddress(AddressDto addressModel)
         {
             var addressEntity = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == addressModel.AddressId);

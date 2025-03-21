@@ -10,8 +10,8 @@ namespace WayMatcherBL.Interfaces
         public void CancelEvent(EventDto eventDto);
         public bool PlanSchedule(ScheduleDto schedule);
         public bool EventInvite(InviteDto invite);
-        public bool AddEventMember(EventMemberDto eventMember); //EventMemberDto 
-        public bool DeleteEventMember(EventMemberDto eventMember); //EventMemberDto 
+        public bool AddEventMember(EventMemberDto eventMember);
+        public bool DeleteEventMember(EventMemberDto eventMember);
         public bool AddStop(StopDto stop);
         public bool RemoveStops(StopDto stop);
         public EventDto GetEvent(EventDto eventDto);
@@ -20,5 +20,7 @@ namespace WayMatcherBL.Interfaces
         public void CalculateDistance(); //uses all stops 
         public void CalculateFuelConsumption(); //uses all stops and the car 
         public void CalculateTime(); //uses all stops
+        public bool SendChatMessage(ChatMessageDto message);
+        public List<ChatMessageDto> GetChatMessage(EventMemberDto eventMember);
     }
 }

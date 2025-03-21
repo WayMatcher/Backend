@@ -248,5 +248,21 @@ namespace WayMatcherBL.Services
 
             return false;
         }
+        public bool SendChatMessage(ChatMessageDto message)
+        {
+            if (message == null)
+                return false;
+
+            return _databaseService.InsertChatMessage(message);
+        }
+        public List<ChatMessageDto> GetChatMessage(EventMemberDto eventMember)
+        {
+            if(eventMember == null)
+                return null;
+
+            return _databaseService.GetTextMessageList(eventMember);
+
+            throw new NotImplementedException();
+        }
     }
 }

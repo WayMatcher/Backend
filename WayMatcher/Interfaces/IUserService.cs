@@ -6,7 +6,7 @@ namespace WayMatcherBL.Interfaces
     public interface IUserService
     {
         public RESTCode RegisterUser(UserDto user, VehicleDto vehicle); //sends email #TODO
-        public RESTCode LoginUser(UserDto user); //sends email #TODO
+        public UserDto LoginUser(UserDto user); //sends email #TODO
         public RESTCode AcceptMfA(UserDto user);
         public bool DeleteUser(UserDto user);
         public bool ConfigurateUser(UserDto user);
