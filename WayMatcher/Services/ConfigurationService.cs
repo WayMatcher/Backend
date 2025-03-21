@@ -69,5 +69,10 @@ namespace WayMatcherBL.Services
         {
             return _configuration["Jwt:JwtKey"];
         }
+
+        public string GetCertificate()
+        {
+            return _configuration["Kestrel:Endpoints:Https:Certificate:Path"];
+        }
     }
 }   
