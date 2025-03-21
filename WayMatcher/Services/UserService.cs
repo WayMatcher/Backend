@@ -176,33 +176,31 @@ namespace WayMatcherBL.Services
         public UserDto LoginUser(UserDto user)
         {
             if (user == null)
-                return null;
+                throw new ArgumentNullException(nameof(user), "User cannot be null");
 
             var dbUser = _databaseService.GetUser(user);
 
             if (dbUser == null)
-                return null;
+                throw new ArgumentNullException(nameof(dbUser), "Database user cannot be null");
 
             if ((dbUser.Username == user.Username || dbUser.Email == user.Email) && dbUser.Password == user.Password)
             {
-                var hashedMfA = GenerateMfA(dbUser);
-
-                dbUser.MfAtoken = hashedMfA;
+                dbUser.MfAtoken = GenerateMfA(dbUser);
                 _databaseService.UpdateUser(dbUser);
 
-                return user;
+                return dbUser;
             }
             return null;
         }
-        public RESTCode AcceptMfA(UserDto user)
+        public UserDto AcceptMfA(UserDto user)
         {
             if (user == null)
-                return RESTCode.ObjectNull;
+                throw new ArgumentNullException(nameof(user), "User cannot be null");
 
             var dbUser = _databaseService.GetUser(user);
 
             if (dbUser == null)
-                return RESTCode.DbObjectNotFound;
+                throw new ArgumentNullException(nameof(dbUser), "Database user cannot be null");
 
             if (dbUser.MfAtoken == user.MfAtoken)
             {
@@ -210,10 +208,10 @@ namespace WayMatcherBL.Services
                 dbUser.JWT = GenerateJWT(dbUser);
                 _databaseService.UpdateUser(dbUser);
 
-                return RESTCode.Success;
+                return dbUser;
             }
 
-            return RESTCode.InternalServerError;
+            return null;
         }
 
         public RESTCode RegisterUser(UserDto user, VehicleDto vehicle)

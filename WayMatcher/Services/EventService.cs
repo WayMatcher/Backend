@@ -151,8 +151,22 @@ namespace WayMatcherBL.Services
 
         public List<EventDto> GetUserEventList(UserDto user)
         {
-            //mithilfe von VIEWS in der datenbank holen #TODO
-            throw new NotImplementedException();
+            if (user == null)
+                return null;
+
+            var userEvents = new List<EventDto>();
+            var eventMembers = _databaseService.GetEventMemberList(new EventDto { EventId = user.UserId });
+
+            foreach (var eventMember in eventMembers)
+            {
+                var eventDto = _databaseService.GetEvent(new EventDto { EventId = eventMember.EventId });
+                if (eventDto != null)
+                {
+                    userEvents.Add(eventDto);
+                }
+            }
+
+            return userEvents;
         }
 
         public bool EventInvite(InviteDto invite)

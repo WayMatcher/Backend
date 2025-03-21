@@ -1,4 +1,5 @@
-﻿using WayMatcherBL.Enums;
+﻿using WayMatcherBL.DtoModels;
+using WayMatcherBL.Enums;
 using WayMatcherBL.LogicModels;
 
 namespace WayMatcherBL.Interfaces
@@ -7,7 +8,7 @@ namespace WayMatcherBL.Interfaces
     {
         public RESTCode RegisterUser(UserDto user, VehicleDto vehicle); //sends email #TODO
         public UserDto LoginUser(UserDto user); //sends email #TODO
-        public RESTCode AcceptMfA(UserDto user);
+        public UserDto AcceptMfA(UserDto user);
         public bool DeleteUser(UserDto user);
         public bool ConfigurateUser(UserDto user);
         public void SendChangePasswordMail(UserDto user); 

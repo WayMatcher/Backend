@@ -21,23 +21,29 @@ namespace WayMatcherAPI.Controllers
         [HttpPost("MfAInput")]
         public IActionResult MfAInput([FromBody] RequestMFAModel mfaModel)
         {
-            var user = new UserDto
+            try
             {
-                Username = mfaModel.Username,
-                Email = mfaModel.Email,
-                MfAtoken = mfaModel.Token
-            };
+                var user = new UserDto
+                {
+                    UserId = mfaModel.UserId,
+                    MfAtoken = mfaModel.Token
+                };
 
-            var result = _userService.AcceptMfA(user);
+                var result = _userService.AcceptMfA(user);
 
-            if (result.Equals(RESTCode.Success))
-                return Ok(result);
-            else if (result.Equals(RESTCode.DbObjectNotFound))
-                return NotFound(result);
-            else if (result.Equals(RESTCode.ObjectNull))
-                return NotFound(result);
-            else
-                return BadRequest(result);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

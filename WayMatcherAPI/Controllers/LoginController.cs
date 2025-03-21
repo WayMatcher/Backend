@@ -21,30 +21,48 @@ namespace WayMatcherAPI.Controllers
         [HttpPost("LoginUser")]
         public IActionResult Login([FromBody] RequestUserLoginModel userLogin)
         {
-            var user = new UserDto
+            try
             {
-                Username = userLogin.Username,
-                Email = userLogin.Email,
-                Password = userLogin.Password
-            };
+                var user = new UserDto
+                {
+                    Username = userLogin.Username,
+                    Email = userLogin.Email,
+                    Password = userLogin.Password
+                };
 
-            var result = _userService.LoginUser(user).UserId;
+                var result = _userService.LoginUser(user)?.UserId;
 
-            if (result.Equals(RESTCode.Success))
-                return Ok(result);
-            else if (result.Equals(RESTCode.DbObjectNotFound))
-                return NotFound(result);
-            else if (result.Equals(RESTCode.ObjectNull))
-                return NotFound(result);
-            else
-                return BadRequest(result);
+                if (result != -1)
+                    return Ok(result);
+                else
+                    return NotFound("User not found or invalid credentials.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
         [HttpPost("ForgotPassword")]
         public IActionResult ForgotPassword([FromBody] UserDto user)
         {
-            _userService.SendChangePasswordMail(user);
-            return Ok();
+            try
+            {
+                _userService.SendChangePasswordMail(user);
+                return Ok("Password reset email sent.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

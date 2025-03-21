@@ -5,7 +5,7 @@ namespace WayMatcherBL.Enums
     public enum RESTCode
     {
         [Description("Success")]
-        Success = 1,
+        Success = 200,
         [Description("DbObjectNotFound")]
         DbObjectNotFound = 2,
         [Description("InternalServerError")]
