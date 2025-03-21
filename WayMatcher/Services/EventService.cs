@@ -260,7 +260,7 @@ namespace WayMatcherBL.Services
             if(eventMember == null)
                 return null;
 
-            return _databaseService.GetTextMessageList(eventMember);
+            return _databaseService.GetChatMessageList(eventMember);
 
             throw new NotImplementedException();
         }

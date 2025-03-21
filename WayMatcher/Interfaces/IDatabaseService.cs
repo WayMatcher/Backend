@@ -48,6 +48,6 @@ namespace WayMatcherBL.Interfaces
         public List<EventMemberDto> GetEventMemberList(EventDto eventDto);
 
         public bool InsertChatMessage(ChatMessageDto textMessage);
-        public List<ChatMessageDto> GetTextMessageList(EventMemberDto eventMember);
+        public List<ChatMessageDto> GetChatMessageList(EventMemberDto eventMember);
     }
 }

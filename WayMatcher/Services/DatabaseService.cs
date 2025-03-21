@@ -253,7 +253,7 @@ namespace WayMatcherBL.Services
 
             return stopList;
         }
-        public List<ChatMessageDto> GetChatMessageList(EventMember eventMember)
+        public List<ChatMessageDto> GetChatMessageList(EventMemberDto eventMember)
         {
             var chatMessageList = new List<ChatMessageDto>();
             var chatMessages = _dbContext.ChatMessages.Where(tm => tm.EventId == eventMember.EventId).ToList();
