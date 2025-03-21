@@ -1,12 +1,11 @@
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Security.Cryptography.X509Certificates;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.Mapper;
 using WayMatcherBL.Models;
 using WayMatcherBL.Services;
-using Microsoft.AspNetCore.Authentication.Certificate;
 
 namespace WayMatcherAPI
 {

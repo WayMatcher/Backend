@@ -2,7 +2,6 @@
 using WayMatcherAPI.Models;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
-using WayMatcherBL.LogicModels;
 
 namespace WayMatcherAPI.Controllers
 {
