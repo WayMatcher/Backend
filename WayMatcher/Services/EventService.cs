@@ -3,6 +3,7 @@ using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
+using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -17,8 +18,32 @@ namespace WayMatcherBL.Services
             _emailService = emailService;
         }
 
+        private bool PlanSchedule(ScheduleDto schedule)
+        {
+            if (schedule == null)
+                return false;
+
+            return _databaseService.InsertSchedule(schedule);
+        }
+
+        private int GetAddressId(AddressDto address)
+        {
+            address.AddressId = _databaseService.GetAddressId(address);
+
+            if (address.AddressId == -1)
+            {
+                _databaseService.InsertAddress(address);
+                return _databaseService.GetAddressId(address);
+            }
+
+            return address.AddressId;
+        }
+
         public bool AddStop(StopDto stop)
         {
+            if (stop == null)
+                throw new ArgumentNullException("Stop cannot be null");
+
             var eventDto = new EventDto()
             {
                 EventId = stop.EventId,
@@ -26,10 +51,10 @@ namespace WayMatcherBL.Services
 
             var stopList = _databaseService.GetStopList(eventDto);
 
-            if (stopList.Contains(stop))
-                return _databaseService.InsertStop(stop);
+            if (!stopList.Contains(stop))
+                throw new ArgumentNullException("Stop already exists");
 
-            return false;
+            return _databaseService.InsertStop(stop);
         }
 
         public void CalculateDistance()
@@ -47,13 +72,17 @@ namespace WayMatcherBL.Services
             throw new NotImplementedException();
         }
 
-        public void CancelEvent(EventDto eventDto)
+        public bool CancelEvent(EventDto eventDto)
         {
+            if (eventDto == null)
+                throw new ArgumentNullException("Event cannot be null");
+
             eventDto.StatusId = (int)State.Cancelled;
 
             foreach (var stop in _databaseService.GetStopList(eventDto))
             {
-                _databaseService.DeleteStop(stop);
+                if (!_databaseService.DeleteStop(stop))
+                    throw new ArgumentNullException($"Stop {stop.StopId} could not be removed");
             }
 
             foreach (var member in _databaseService.GetEventMemberList(eventDto))
@@ -66,64 +95,63 @@ namespace WayMatcherBL.Services
                     To = user.Email,
                     IsHtml = true
                 };
-                _emailService.SendEmail(email);
 
                 member.StatusId = (int)State.Cancelled;
-                member.EventId = -1;
-                member.UserId = -1;
-                _databaseService.UpdateEventMember(member);
+
+                if (!_databaseService.UpdateEventMember(member))
+                    throw new ArgumentNullException($"Member {member.UserId} could not be removed");
+
+                _emailService.SendEmail(email);
             }
 
-            _databaseService.UpdateEvent(eventDto);
+            return _databaseService.UpdateEvent(eventDto);
         }
 
-        public bool CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user)
+        public EventDto CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user, ScheduleDto schedule)
         {
-            if (eventDto == null || user == null || stopList.IsNullOrEmpty())
-                return false;
+            if (eventDto == null || user == null || stopList.IsNullOrEmpty() || schedule == null)
+                throw new ArgumentNullException("Objects cannot be null");
 
-            if (_databaseService.InsertEvent(eventDto))
+            if (!PlanSchedule(schedule))
+                throw new ArgumentNullException("Schedule could not be planned");
+
+            eventDto.ScheduleId = _databaseService.GetScheduleId(schedule);
+
+            if (!_databaseService.InsertEvent(eventDto))
+                throw new ArgumentNullException("Event could not be created");
+
+            foreach (var stop in stopList)
             {
-                foreach (var stop in stopList)
-                {
-                    stop.Address.AddressId = _databaseService.GetAddressId(stop.Address);
+                stop.Address.AddressId = GetAddressId(stop.Address);
+                stop.EventId = _databaseService.GetEvent(eventDto).EventId;
 
-                    if (stop.Address.AddressId == -1)
-                    {
-                        _databaseService.InsertAddress(stop.Address);
-                        stop.Address.AddressId = _databaseService.GetAddressId(stop.Address);
-                    }
-
-                    stop.EventId = _databaseService.GetEvent(eventDto).EventId;
-                    AddStop(stop);
-                }
-
-                var eventMember = new EventMemberDto()
-                {
-                    EventId = _databaseService.GetEvent(eventDto).EventId,
-                    UserId = _databaseService.GetUser(user).UserId,
-                    StatusId = (int)State.Active,
-                };
-
-                if (eventDto.EventRole == (int)EventRole.Passenger)
-                    eventMember.EventRole = (int)EventRole.Passenger;
-                else
-                    eventMember.EventRole = (int)EventRole.Pilot;
-
-                AddEventMember(eventMember);
-
-                var email = new EmailDto()
-                {
-                    Subject = $"Event: {eventDto.EventId} created",
-                    Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /><style></style></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Event Confirmation</h1><h5 class=""text-teal-700"">Your event has been successfully set up!</h5><hr><div class=""space-y-3"">  <p class=""text-gray-700"">Dear {user.Username},</p>  <p class=""text-gray-700"">We are pleased to inform you that your event has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr>        <a class=""btn btn-primary"" href=""#"" target=""_blank"">View Event Details</a></div></div></div></body></html>",
-                    To = user.Email,
-                    IsHtml = true
-                };
-                _emailService.SendEmail(email);
-
-                return true;
+                AddStop(stop);
             }
-            return false;
+
+            var eventMember = new EventMemberDto()
+            {
+                EventId = _databaseService.GetEvent(eventDto).EventId,
+                UserId = _databaseService.GetUser(user).UserId,
+                StatusId = (int)State.Active,
+            };
+
+            if (eventDto.EventRole == (int)EventRole.Passenger)
+                eventMember.EventRole = (int)EventRole.Passenger;
+            else
+                eventMember.EventRole = (int)EventRole.Pilot;
+
+            AddEventMember(eventMember);
+
+            var email = new EmailDto()
+            {
+                Subject = $"Event: {eventDto.EventId} created",
+                Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /><style></style></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Event Confirmation</h1><h5 class=""text-teal-700"">Your event has been successfully set up!</h5><hr><div class=""space-y-3"">  <p class=""text-gray-700"">Dear {user.Username},</p>  <p class=""text-gray-700"">We are pleased to inform you that your event has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr>        <a class=""btn btn-primary"" href=""#"" target=""_blank"">View Event Details</a></div></div></div></body></html>",
+                To = user.Email,
+                IsHtml = true
+            };
+            _emailService.SendEmail(email);
+
+            return eventDto;
         }
 
         public EventDto GetEvent(EventDto eventDto)
@@ -172,31 +200,34 @@ namespace WayMatcherBL.Services
         public bool EventInvite(InviteDto invite)
         {
             if (invite == null)
-                return false;
+                throw new ArgumentNullException("Invite cannot be null");
 
             invite.ConfirmationStatusId = (int)State.Unread;
+
             return _databaseService.InsertToInvite(invite);
         }
 
         public bool AddEventMember(EventMemberDto eventMemberDto)
         {
             if (eventMemberDto == null)
-                return false;
+                throw new ArgumentNullException("Event member cannot be null");
 
             eventMemberDto.StatusId = (int)State.Active;
 
-            if (_databaseService.InsertToEventMember(eventMemberDto))
+            if (!_databaseService.InsertToEventMember(eventMemberDto))
+                throw new ArgumentNullException("Event member could not be added");
+
+            var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.UserId });
+            var email = new EmailDto()
             {
-                var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.UserId });
-                var email = new EmailDto()
-                {
-                    Subject = $"Event: {eventMemberDto.EventId} joined",
-                    Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Event Join Confirmation</h1><h5 class=""text-teal-700"">You've successfully joined the event!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Dear [User's Name],</p><p class=""text-gray-700"">We are excited to inform you that you've successfully joined the event. We look forward to your participation and hope you have a great experience.</p><p class=""text-gray-700"">If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
-                    To = user.Email,
-                    IsHtml = true
-                };
-            }
-            return false;
+                Subject = $"Event: {eventMemberDto.EventId} joined",
+                Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Event Join Confirmation</h1><h5 class=""text-teal-700"">You've successfully joined the event!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Dear [User's Name],</p><p class=""text-gray-700"">We are excited to inform you that you've successfully joined the event. We look forward to your participation and hope you have a great experience.</p><p class=""text-gray-700"">If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
+                To = user.Email,
+                IsHtml = true
+            };
+            _emailService.SendEmail(email);
+
+            return true;
         }
 
         public bool DeleteEventMember(EventMemberDto eventMemberDto)
@@ -220,48 +251,40 @@ namespace WayMatcherBL.Services
             return _databaseService.UpdateEventMember(eventMemberDto);
         }
 
-        public bool PlanSchedule(ScheduleDto schedule)
-        {
-            if (schedule == null)
-                return false;
-
-            return _databaseService.InsertSchedule(schedule);
-        }
-
         public bool RemoveStops(StopDto stop)
         {
             if (stop == null)
-                return false;
+                throw new ArgumentNullException("Stop cannot be null");
 
             return _databaseService.DeleteStop(stop);
         }
 
-        public bool UpdateEvent(EventDto eventDto)
+        public EventDto UpdateEvent(EventDto eventDto, ScheduleDto schedule)
         {
-            if (eventDto == null)
-                return false;
+            if (eventDto == null || schedule == null)
+                throw new ArgumentNullException("Objects cannot be null");
 
-            if (_databaseService.UpdateEvent(eventDto))
+            eventDto.ScheduleId = _databaseService.GetScheduleId(schedule);
+
+            if (!_databaseService.UpdateEvent(eventDto))
+                throw new ArgumentNullException("Event could not be updated");
+
+            foreach (var member in _databaseService.GetEventMemberList(eventDto))
             {
-                foreach (var member in _databaseService.GetEventMemberList(eventDto))
+                var user = _databaseService.GetUser(new UserDto() { UserId = member.UserId });
+
+                var email = new EmailDto()
                 {
-                    var user = _databaseService.GetUser(new UserDto() { UserId = member.UserId });
-
-                    var email = new EmailDto()
-                    {
-                        Subject = $"Event: {eventDto.EventId} changed",
-                        Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Event Update</h1><h5 class=""text-teal-700"">Your event details have changed</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Dear {user.Username},</p><p class=""text-gray-700"">We wanted to inform you that there has been a change to your event {eventDto.EventId}. Please review the updated information to ensure everything meets your expectations.</p><p class=""text-gray-700"">If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body</html>",
-                        To = user.Email,
-                        IsHtml = true
-                    };
-                    _emailService.SendEmail(email);
-                }
-
-                return true;
+                    Subject = $"Event: {eventDto.EventId} changed",
+                    Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Event Update</h1><h5 class=""text-teal-700"">Your event details have changed</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Dear {user.Username},</p><p class=""text-gray-700"">We wanted to inform you that there has been a change to your event {eventDto.EventId}. Please review the updated information to ensure everything meets your expectations.</p><p class=""text-gray-700"">If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body</html>",
+                    To = user.Email,
+                    IsHtml = true
+                };
+                _emailService.SendEmail(email);
             }
-
-            return false;
+            return eventDto;
         }
+
         public bool SendChatMessage(ChatMessageDto message)
         {
             if (message == null)
@@ -269,9 +292,10 @@ namespace WayMatcherBL.Services
 
             return _databaseService.InsertChatMessage(message);
         }
+
         public List<ChatMessageDto> GetChatMessage(EventMemberDto eventMember)
         {
-            if(eventMember == null)
+            if (eventMember == null)
                 return null;
 
             return _databaseService.GetChatMessageList(eventMember);

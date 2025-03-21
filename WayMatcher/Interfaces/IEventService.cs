@@ -5,10 +5,9 @@ namespace WayMatcherBL.Interfaces
 {
     public interface IEventService
     {
-        public bool CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user);
-        public bool UpdateEvent(EventDto eventDto);
-        public void CancelEvent(EventDto eventDto);
-        public bool PlanSchedule(ScheduleDto schedule);
+        public EventDto CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user, ScheduleDto scheduleDto);
+        public EventDto UpdateEvent(EventDto eventDto, ScheduleDto schedule);
+        public bool CancelEvent(EventDto eventDto);
         public bool EventInvite(InviteDto invite);
         public bool AddEventMember(EventMemberDto eventMember);
         public bool DeleteEventMember(EventMemberDto eventMember);

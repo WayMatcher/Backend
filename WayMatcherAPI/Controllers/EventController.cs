@@ -17,46 +17,199 @@ namespace WayMatcherAPI.Controllers
             _eventService = eventService;
         }
 
+        [HttpPost("CreateEvent")]
+        public IActionResult CreateEvent([FromBody] RequestEvent requestEvent)
+        {
+            try
+            {
+                var result = _eventService.CreateEvent(requestEvent.Event, requestEvent.StopList, requestEvent.User, requestEvent.Schedule);
+
+                if (result != null)
+                    return Ok(result); //returns event
+                else
+                    return NotFound("Event not found or invalid input.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost("UpdateEvent")]
+        public IActionResult UpdateEvent([FromBody] RequestEvent requestEvent)
+        {
+            try
+            {
+                var result = _eventService.UpdateEvent(requestEvent.Event, requestEvent.Schedule);
+                if (result != null)
+                    return Ok(result); //returns event
+                else
+                    return NotFound("Event not found or invalid input.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost("DeleteEvent")]
+        public IActionResult DeleteEvent([FromBody] RequestEvent requestEvent)
+        {
+            try
+            {
+                if (_eventService.CancelEvent(requestEvent.Event))
+                    return Ok("Event deleted.");
+                else
+                    return NotFound("Event not found or invalid input.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
         [HttpPost("RequestEventInvite")]
         public IActionResult RequestEventInvite([FromBody] RequestInviteModel invite)
         {
-            InviteDto inviteDto = new InviteDto()
+            try
             {
-                EventId = invite.Event.EventId,
-                UserId = invite.User.UserId,
-                IsRequest = true
-            };
+                InviteDto inviteDto = new InviteDto()
+                {
+                    EventId = invite.Event.EventId,
+                    UserId = invite.User.UserId,
+                    IsRequest = true
+                };
 
-            _eventService.EventInvite(inviteDto);
-
-            return BadRequest();
+                if (_eventService.EventInvite(inviteDto))
+                    return Ok("Invite sent.");
+                else
+                    return BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
+
         [HttpPost("SendEventInvite")]
         public IActionResult SendEventInvite([FromBody] RequestInviteModel invite)
         {
-            InviteDto inviteDto = new InviteDto()
+            try
             {
-                EventId = invite.Event.EventId,
-                UserId = invite.User.UserId,
-                IsRequest = false
-            };
-
-            _eventService.EventInvite(inviteDto);
-
-            return BadRequest();
+                InviteDto inviteDto = new InviteDto()
+                {
+                    EventId = invite.Event.EventId,
+                    UserId = invite.User.UserId,
+                    IsRequest = false
+                };
+                if (_eventService.EventInvite(inviteDto))
+                    return Ok("Invite sent.");
+                else
+                    return BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
         [HttpPost("AddEventMember")]
         public IActionResult AddEventMember([FromBody] RequestEventMember member)
         {
-            EventMemberDto eventMemberDto = new EventMemberDto()
+            try
             {
-                EventId = member.Event.EventId,
-                UserId = member.User.UserId,
-                EventRole = (int)EventRole.Passenger,
-            };
-            _eventService.AddEventMember(eventMemberDto);
-            return BadRequest();
+                EventMemberDto eventMemberDto = new EventMemberDto()
+                {
+                    EventId = member.Event.EventId,
+                    UserId = member.User.UserId,
+                    EventRole = (int)EventRole.Passenger,
+                };
+                if (_eventService.AddEventMember(eventMemberDto))
+                    return Ok("Member added.");
+                else
+                    return BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost("AddStop")]
+        public IActionResult AddStop([FromBody] RequestStop stop)
+        {
+            try
+            {
+                StopDto stopDto = new StopDto()
+                {
+                    EventId = stop.EventId,
+                    StopId = stop.StopId,
+                    Address = stop.Address,
+                    StopSequenceNumber = stop.StopSequenceNumber
+                };
+
+                if (_eventService.AddStop(stopDto))
+                    return Ok("Stop added.");
+                else
+                    return BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost("RemoveStop")]
+        public IActionResult RemoveStop([FromBody] RequestStop stop)
+        {
+            try
+            {
+                StopDto stopDto = new StopDto()
+                {
+                    StopId = stop.StopId,
+                };
+
+                if (_eventService.RemoveStops(stopDto))
+                    return Ok("Stop removed.");
+                else
+                    return BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }
