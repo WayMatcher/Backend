@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "coreclr",
+            "request": "launch",
+            "name": "Launch .NET Project",
+            "program": "${workspaceFolder}/WayMatcherAPI/bin/Debug/net9.0/WayMatcherAPI.dll",
+            "cwd": "${workspaceFolder}/WayMatcherAPI",
+            "preLaunchTask": "build"
+        }
+    ],
+}
