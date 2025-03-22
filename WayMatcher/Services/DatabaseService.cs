@@ -138,6 +138,30 @@ namespace WayMatcherBL.Services
 
             return eventMemberList;
         }
+
+        public List<RatingDto> GetRatingList(UserDto user)
+        {
+            var ratingList = new List<RatingDto>();
+            var ratings = _dbContext.Ratings.Where(r => r.RatedUserId == user.UserId).ToList();
+            foreach (var rating in ratings)
+            {
+                ratingList.Add(_mapper.ConvertRatingToDto(rating));
+            }
+            return ratingList;
+        }
+
+        public List<VehicleDto> GetUserVehicles(int userId)
+        {
+            var vehicleList = new List<VehicleDto>();
+            var vehicles = _dbContext.VehicleMappings.Where(vm => vm.UserId == userId).Select(vm => vm.Vehicle).ToList();
+
+            foreach (var vehicle in vehicles)
+            {
+                vehicleList.Add(_mapper.ConvertVehicleToDto(vehicle));
+            }
+
+            return vehicleList;
+        }
         public AddressDto GetAddressById(int id)
         {
             var address = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == id);
@@ -187,19 +211,15 @@ namespace WayMatcherBL.Services
             }
             return _mapper.ConvertVehicleToDto(vehicle);
         }
-
-        public List<VehicleDto> GetUserVehicles(int userId)
+        public RatingDto GetRating(RatingDto rating)
         {
-            var vehicleList = new List<VehicleDto>();
-            var vehicles = _dbContext.VehicleMappings.Where(vm => vm.UserId == userId).Select(vm => vm.Vehicle).ToList();
-
-            foreach (var vehicle in vehicles)
-            {
-                vehicleList.Add(_mapper.ConvertVehicleToDto(vehicle));
-            }
-
-            return vehicleList;
+            var ratingItem = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
+            if (ratingItem == null)
+                return null;
+            
+            return _mapper.ConvertRatingToDto(ratingItem);
         }
+        
 
         public int GetAddressId(AddressDto addressModel)
         {
@@ -355,6 +375,14 @@ namespace WayMatcherBL.Services
             var chatMessageEntity = _mapper.ConvertChatMessageDtoToEntity(chatMessage);
 
             _dbContext.ChatMessages.Add(chatMessageEntity);
+            return _dbContext.SaveChanges() > 0;
+        }
+        public bool InsertRating(RatingDto rating)
+        {
+            var ratingEntity = _mapper.ConvertRatingDtoToEntity(rating);
+            
+            _dbContext.Ratings.Add(ratingEntity);
+
             return _dbContext.SaveChanges() > 0;
         }
         public bool UpdateAddress(AddressDto addressModel)
@@ -518,7 +546,24 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
+        public bool UpdateRating(RatingDto rating)
+        {
+            var ratingEntity = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
 
+            if (ratingEntity == null && rating.UserWhoRatedId != ratingEntity.UserWhoRatedId)
+                return false;
+
+            if (rating.RatingValue != -1)
+                ratingEntity.RatingValue = rating.RatingValue;
+
+            if (rating.RatingText != null)
+                ratingEntity.RatingText = rating.RatingText;
+
+            if (rating.StatusId != -1)
+                ratingEntity.StatusId = rating.StatusId;
+
+            return _dbContext.SaveChanges() > 0;
+        }
         public bool DeleteStop(StopDto stop)
         {
             var stopEntity = _dbContext.Stops.FirstOrDefault(s => s.StopId == stop.StopId);

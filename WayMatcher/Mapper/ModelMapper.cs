@@ -33,6 +33,8 @@ namespace WayMatcherBL.Mapper
                 cfg.CreateMap<EventMemberDto, EventMember>();
                 cfg.CreateMap<ChatMessage, ChatMessageDto>();
                 cfg.CreateMap<ChatMessageDto, ChatMessage>();
+                cfg.CreateMap<Rating, RatingDto>();
+                cfg.CreateMap<RatingDto, Rating>();
             });
             _mapper = config.CreateMapper();
         }
@@ -123,9 +125,18 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<ChatMessageDto>(chatMessage);
         }
-        public ChatMessage ConvertChatMessageDtoToEntity(ChatMessageDto chatMessage)
+        public ChatMessage ConvertChatMessageDtoToEntity(ChatMessageDto chatMessageDto)
         {
-            return _mapper.Map<ChatMessage>(chatMessage);
+            return _mapper.Map<ChatMessage>(chatMessageDto);
+        }
+
+        public RatingDto ConvertRatingToDto(Rating rating)
+        {
+            return _mapper.Map<RatingDto>(rating);
+        }
+        public Rating ConvertRatingDtoToEntity(RatingDto ratingDto)
+        {
+            return _mapper.Map<Rating>(ratingDto);
         }
     }
 }

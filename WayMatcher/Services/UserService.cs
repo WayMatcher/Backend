@@ -232,5 +232,33 @@ namespace WayMatcherBL.Services
 
             return RESTCode.InternalServerError;
         }
+
+        public bool RateUser(RatingDto rate)
+        {
+            if (rate == null)
+                throw new ArgumentNullException("Rating cannot be null");
+
+            if (_databaseService.GetRating(rate).RatingId == rate.RatingId)
+                return _databaseService.UpdateRating(rate);
+            else
+                return _databaseService.InsertRating(rate);
+        }
+        public double UserRating(RatingDto rate)
+        {
+            if (rate == null)
+                throw new ArgumentNullException("Rating cannot be null");
+
+            UserDto user = new UserDto()
+            {
+                UserId = rate.RatedUserId
+            };
+
+            var ratings = _databaseService.GetRatingList(user);
+
+            if (ratings == null || ratings.Count == 0)
+                throw new ArgumentNullException("No ratings found for user");
+
+            return ratings.Average(r => r.RatingValue);
+        }
     }
 }

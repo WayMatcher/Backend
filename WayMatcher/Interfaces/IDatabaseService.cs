@@ -49,5 +49,10 @@ namespace WayMatcherBL.Interfaces
 
         public bool InsertChatMessage(ChatMessageDto textMessage);
         public List<ChatMessageDto> GetChatMessageList(EventMemberDto eventMember);
+
+        public bool InsertRating(RatingDto rating);
+        public bool UpdateRating(RatingDto rating);
+        public List<RatingDto> GetRatingList(UserDto user);
+        public RatingDto GetRating(RatingDto rating);
     }
 }
