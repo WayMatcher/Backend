@@ -1,0 +1,31 @@
+{
+    "ConnectionStrings": {
+        "DefaultConnection": "Server=AZUREDATABSE.database.windows.net;Database=DATABASENAME;User Id=USERNAME;Password=PASSWORD;"
+    },
+    "EmailServer": {
+        "Host": "SMTP-RELAY",
+        "Port": 587,
+        "Username": "BREVO-USERNAME",
+        "Password": "PASSWORD-FOR-BREVO"
+    },
+    "Jwt": {
+        "JwtKey": "JWT-KEY"
+    },
+    "Logging": {
+        "LogLevel": {
+            "Default": "Information",
+            "Microsoft.AspNetCore": "Warning"
+        }
+    },
+    "AllowedHosts": "*",
+    "Kestrel": { // Remove if not using HTTPS
+        "Endpoints": {
+            "Https": {
+                "Url": "https://PUBLIC.URL.COM:5000",
+                "Certificate": {
+                    "Path": "PATH/TO/certificate.pfx"
+                }
+            }
+        }
+    }
+}
