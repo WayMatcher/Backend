@@ -179,11 +179,11 @@ namespace WayMatcherBL.Services
         }
         public AddressDto GetAddress(UserDto user)
         {
-            var dbUser = GetUser(user);
+            var dbUser = _dbContext.Users.FirstOrDefault(u => u.EMail == user.Email || u.Username == user.Username || u.UserId == user.UserId);
             if (dbUser == null)
                 return null;
 
-            var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == dbUser.Address.AddressId);
+            var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == dbUser.AddressId);
             if (dbAddress == null)
                 return null;
 
