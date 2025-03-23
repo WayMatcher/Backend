@@ -84,16 +84,78 @@ namespace WayMatcherAPI.Controllers
             }
         }
 
-        [HttpPost("GetUser")]
-        public IActionResult GetUser([FromBody] UserDto user)
+        [HttpGet("GetUser")]
+        public IActionResult GetUser(RequestUser user)
         {
             try
             {
-                var result = _userService.GetUser(user);
+                var userDto = new UserDto()
+                {
+                    UserId = user.UserId,
+                    Username = user.Username,
+                    Email = user.Email,
+                };
+                var result = _userService.GetUser(userDto);
+
                 if (result != null)
                     return Ok(result);
                 else
                     return NotFound("User not found.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpGet("GetAddress")]
+        public IActionResult GetAddress(RequestUser user)
+        {
+            try
+            {
+                var userDto = new UserDto()
+                {
+                    UserId = user.UserId,
+                    Username = user.Username,
+                    Email = user.Email,
+                };
+                var result = _userService.GetAddress(userDto);
+
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound("Address not found.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpGet("GetVehicleList")]
+        public IActionResult GetVehicleList(RequestUser user)
+        {
+            try
+            {
+                var userDto = new UserDto()
+                {
+                    UserId = user.UserId,
+                    Username = user.Username,
+                    Email = user.Email,
+                };
+                var result = _userService.GetUserVehicleList(userDto);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound("Vehicle not found.");
             }
             catch (ArgumentNullException ex)
             {

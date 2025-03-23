@@ -16,6 +16,8 @@ namespace WayMatcherBL.Interfaces
         public bool ConfigurateVehicle(UserDto user, VehicleDto vehicle);
         public bool ConfigurateAddress(UserDto user);
         public UserDto GetUser(UserDto user);
+        public AddressDto GetAddress(UserDto user);
+        public List<VehicleDto> GetUserVehicleList(UserDto user);
         public List<UserDto> GetActiveUsers();
         public bool RateUser(RatingDto rate);
         public double UserRating(RatingDto rate);

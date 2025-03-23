@@ -27,12 +27,12 @@ namespace WayMatcherBL.Services
 
         private int GetAddressId(AddressDto address)
         {
-            address.AddressId = _databaseService.GetAddressId(address);
+            address.AddressId = _databaseService.GetAddress(address).AddressId;
 
             if (address.AddressId == -1)
             {
                 _databaseService.InsertAddress(address);
-                return _databaseService.GetAddressId(address);
+                return _databaseService.GetAddress(address).AddressId;
             }
 
             return address.AddressId;
@@ -169,9 +169,9 @@ namespace WayMatcherBL.Services
             if (filter.StartTime != null)
                 filter.StartTime.ScheduleId = _databaseService.GetScheduleId(filter.StartTime);
             if (filter.StopLocation != null)
-                filter.StopLocation.AddressId = _databaseService.GetAddressId(filter.StopLocation);
+                filter.StopLocation.AddressId = _databaseService.GetAddress(filter.StopLocation).AddressId;
             if (filter.DestinationLocation != null)
-                filter.DestinationLocation.AddressId = _databaseService.GetAddressId(filter.DestinationLocation);
+                filter.DestinationLocation.AddressId = _databaseService.GetAddress(filter.DestinationLocation).AddressId;
 
             return _databaseService.GetFilteredEventList(filter);
         }

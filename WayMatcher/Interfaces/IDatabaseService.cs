@@ -10,11 +10,12 @@ namespace WayMatcherBL.Interfaces
         public UserDto GetUser(UserDto user);
         public List<UserDto> GetActiveUsers();
 
-        public bool InsertAddress(AddressDto addressModel);
-        public bool UpdateAddress(AddressDto addressModel);
-        public AddressDto GetAddressById(int id);
+        public bool InsertAddress(AddressDto address);
+        public bool UpdateAddress(AddressDto address);
+        public AddressDto GetAddress(AddressDto address);
+        public AddressDto GetAddress(UserDto user);
+
         public List<AddressDto> GetActiveAddresses();
-        public int GetAddressId(AddressDto addressModel);
 
         public bool InsertVehicle(VehicleDto vehicleModel);
         public bool UpdateVehicle(VehicleDto vehicleModel);
@@ -34,7 +35,7 @@ namespace WayMatcherBL.Interfaces
         public List<EventDto> GetFilteredEventList(FilterDto filter);
         public int GetEventId(EventDto eventModel);
 
-        public List<VehicleDto> GetUserVehicles(int userId);
+        public List<VehicleDto> GetUserVehicles(UserDto user);
         public bool InsertVehicleMapping(VehicleMappingDto vehicleMapping);
 
         public bool InsertStop(StopDto stop);

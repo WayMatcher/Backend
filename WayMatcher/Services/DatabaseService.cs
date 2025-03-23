@@ -150,10 +150,10 @@ namespace WayMatcherBL.Services
             return ratingList;
         }
 
-        public List<VehicleDto> GetUserVehicles(int userId)
+        public List<VehicleDto> GetUserVehicles(UserDto user)
         {
             var vehicleList = new List<VehicleDto>();
-            var vehicles = _dbContext.VehicleMappings.Where(vm => vm.UserId == userId).Select(vm => vm.Vehicle).ToList();
+            var vehicles = _dbContext.VehicleMappings.Where(vm => vm.UserId == user.UserId).Select(vm => vm.Vehicle).ToList();
 
             foreach (var vehicle in vehicles)
             {
@@ -162,16 +162,26 @@ namespace WayMatcherBL.Services
 
             return vehicleList;
         }
-        public AddressDto GetAddressById(int id)
+        public AddressDto GetAddress(AddressDto address)
         {
-            var address = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == id);
-            if (address == null)
-            {
+            var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == address.AddressId || a.Longitude == address.Longitude && a.Latitude == address.Latitude && a.City == address.City && a.PostalCode == address.PostalCode && a.Country == address.Country);
+            if (dbAddress == null)
                 return null;
-            }
-            return _mapper.ConvertAddressToDto(address);
+            
+            return _mapper.ConvertAddressToDto(dbAddress);
         }
+        public AddressDto GetAddress(UserDto user)
+        {
+            var dbUser = _dbContext.Users.FirstOrDefault(u => u.UserId == user.UserId);
+            if(dbUser == null)
+                return null;
 
+            var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == dbUser.AddressId);
+            if (dbAddress == null)
+                return null;
+
+            return _mapper.ConvertAddressToDto(dbAddress);
+        }
         public EventDto GetEvent(EventDto eventDto)
         {
             var eventItem = _dbContext.Events.FirstOrDefault(e => e.EventId == eventDto.EventId);
@@ -218,17 +228,6 @@ namespace WayMatcherBL.Services
                 return null;
             
             return _mapper.ConvertRatingToDto(ratingItem);
-        }
-        
-
-        public int GetAddressId(AddressDto addressModel)
-        {
-            var address = _dbContext.Addresses.FirstOrDefault(a => a.Longitude == addressModel.Longitude && a.Latitude == addressModel.Latitude && a.City == addressModel.City && a.PostalCode == addressModel.PostalCode && a.Country == addressModel.Country);
-            if (address == null)
-            {
-                return -1;
-            }
-            return address.AddressId;
         }
 
         public int GetEventId(EventDto eventModel)

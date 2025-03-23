@@ -81,12 +81,12 @@ namespace WayMatcherBL.Services
 
         private int GetAddressId(AddressDto address)
         {
-            address.AddressId = _databaseService.GetAddressId(address);
+            address.AddressId = _databaseService.GetAddress(address).AddressId;
 
             if (address.AddressId == -1)
             {
                 _databaseService.InsertAddress(address);
-                return _databaseService.GetAddressId(address);
+                return _databaseService.GetAddress(address).AddressId;
             }
 
             return address.AddressId;
@@ -138,15 +138,15 @@ namespace WayMatcherBL.Services
 
             vehicle.VehicleId = GetVehicleId(vehicle);
 
-            var userId = GetUser(user).UserId;
+            var dbUser = GetUser(user);
 
-            foreach (var v in _databaseService.GetUserVehicles(userId))
+            foreach (var v in _databaseService.GetUserVehicles(dbUser))
             {
                 if (v.VehicleId != vehicle.VehicleId)
                 {
                     VehicleMappingDto vehicleMapping = new VehicleMappingDto()
                     {
-                        UserId = userId,
+                        UserId = dbUser.UserId,
                         VehicleId = vehicle.VehicleId
                     };
 
@@ -171,6 +171,14 @@ namespace WayMatcherBL.Services
         public UserDto GetUser(UserDto user)
         {
             return _databaseService.GetUser(user);
+        }
+        public AddressDto GetAddress(UserDto user)
+        {
+            return _databaseService.GetAddress(user);
+        }
+        public List<VehicleDto> GetUserVehicleList(UserDto user)
+        {
+            return _databaseService.GetUserVehicles(user);
         }
 
         public UserDto LoginUser(UserDto user)
