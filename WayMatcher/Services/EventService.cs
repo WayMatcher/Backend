@@ -3,7 +3,6 @@ using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
-using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -224,6 +223,7 @@ namespace WayMatcherBL.Services
                 Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Event Join Confirmation</h1><h5 class=""text-teal-700"">You've successfully joined the event!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Dear [User's Name],</p><p class=""text-gray-700"">We are excited to inform you that you've successfully joined the event. We look forward to your participation and hope you have a great experience.</p><p class=""text-gray-700"">If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
+
             };
             _emailService.SendEmail(email);
 
@@ -299,8 +299,6 @@ namespace WayMatcherBL.Services
                 return null;
 
             return _databaseService.GetChatMessageList(eventMember);
-
-            throw new NotImplementedException();
         }
     }
 }
