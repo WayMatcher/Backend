@@ -25,10 +25,6 @@ public partial class WayMatcherContext : DbContext
 
     public virtual DbSet<EventMember> EventMembers { get; set; }
 
-    public virtual DbSet<EventMemberType> EventMemberTypes { get; set; }
-
-    public virtual DbSet<EventType> EventTypes { get; set; }
-
     public virtual DbSet<Invite> Invites { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
@@ -49,7 +45,9 @@ public partial class WayMatcherContext : DbContext
 
     public virtual DbSet<VehicleMapping> VehicleMappings { get; set; }
 
-    public virtual DbSet<VwEventDetail> VwEventDetails { get; set; }
+    public virtual DbSet<VwPassengerEvent> VwPassengerEvents { get; set; }
+
+    public virtual DbSet<VwPilotEvent> VwPilotEvents { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -169,10 +167,6 @@ public partial class WayMatcherContext : DbContext
             entity.Property(e => e.StartTimestamp).HasColumnName("Start_Timestamp");
             entity.Property(e => e.StatusId).HasColumnName("Status_ID");
 
-            entity.HasOne(d => d.EventType).WithMany(p => p.Events)
-                .HasForeignKey(d => d.EventTypeId)
-                .HasConstraintName("FK__Event__EventType__515009E6");
-
             entity.HasOne(d => d.Schedule).WithMany(p => p.Events)
                 .HasForeignKey(d => d.ScheduleId)
                 .HasConstraintName("FK__Event__Schedule___52442E1F");
@@ -198,10 +192,6 @@ public partial class WayMatcherContext : DbContext
                 .HasForeignKey(d => d.EventId)
                 .HasConstraintName("FK__Event_Mem__Event__59E54FE7");
 
-            entity.HasOne(d => d.EventMemberType).WithMany(p => p.EventMembers)
-                .HasForeignKey(d => d.EventMemberTypeId)
-                .HasConstraintName("FK__Event_Mem__Event__57FD0775");
-
             entity.HasOne(d => d.Status).WithMany(p => p.EventMembers)
                 .HasForeignKey(d => d.StatusId)
                 .HasConstraintName("FK__Event_Mem__Statu__5AD97420");
@@ -209,32 +199,6 @@ public partial class WayMatcherContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.EventMembers)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK__Event_Mem__User___58F12BAE");
-        });
-
-        modelBuilder.Entity<EventMemberType>(entity =>
-        {
-            entity.HasKey(e => e.EventMemberTypeId).HasName("PK__EventMem__08F37EBA482F4895");
-
-            entity.ToTable("EventMemberType");
-
-            entity.Property(e => e.EventMemberTypeId).HasColumnName("EventMemberType_ID");
-            entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<EventType>(entity =>
-        {
-            entity.HasKey(e => e.EventTypeId).HasName("PK__EventTyp__CCBAA9DCDB5AF138");
-
-            entity.ToTable("EventType");
-
-            entity.Property(e => e.EventTypeId).HasColumnName("EventType_ID");
-            entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Invite>(entity =>
@@ -495,65 +459,38 @@ public partial class WayMatcherContext : DbContext
                 .HasConstraintName("FK__Vehicle_M__Vehic__47C69FAC");
         });
 
-        modelBuilder.Entity<VwEventDetail>(entity =>
+        modelBuilder.Entity<VwPassengerEvent>(entity =>
         {
             entity
                 .HasNoKey()
-                .ToView("vw_EventDetails");
+                .ToView("vw_PassengerEvents", "dbo");
 
-            entity.Property(e => e.AddressAddressId).HasColumnName("Address_AddressId");
-            entity.Property(e => e.AddressId).HasColumnName("Address_ID");
-            entity.Property(e => e.AddressLine1)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("Address_Line1");
-            entity.Property(e => e.AddressLine2)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("Address_Line2");
-            entity.Property(e => e.City)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.ConfirmationStatusId).HasColumnName("ConfirmationStatus_ID");
-            entity.Property(e => e.Country)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.CountryCode)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("Country_Code");
-            entity.Property(e => e.CronSchedule)
-                .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("Cron_Schedule");
             entity.Property(e => e.Description).IsUnicode(false);
-            entity.Property(e => e.EventId).HasColumnName("Event_ID");
-            entity.Property(e => e.EventMemberTypeId).HasColumnName("EventMemberType_ID");
+            entity.Property(e => e.EventId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("Event_ID");
             entity.Property(e => e.EventTypeId).HasColumnName("EventType_ID");
             entity.Property(e => e.FreeSeats).HasColumnName("Free_Seats");
-            entity.Property(e => e.InviteId).HasColumnName("Invite_ID");
-            entity.Property(e => e.IsRequest).HasColumnName("Is_Request");
-            entity.Property(e => e.MemberId).HasColumnName("Member_ID");
-            entity.Property(e => e.PostalCode)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("Postal_Code");
-            entity.Property(e => e.Region)
-                .HasMaxLength(255)
-                .IsUnicode(false);
             entity.Property(e => e.ScheduleId).HasColumnName("Schedule_ID");
-            entity.Property(e => e.ScheduleScheduleId).HasColumnName("Schedule_ScheduleId");
             entity.Property(e => e.StartTimestamp).HasColumnName("Start_Timestamp");
-            entity.Property(e => e.State)
-                .HasMaxLength(255)
-                .IsUnicode(false);
             entity.Property(e => e.StatusId).HasColumnName("Status_ID");
-            entity.Property(e => e.StopId).HasColumnName("Stop_ID");
-            entity.Property(e => e.StopSequenceNumber).HasColumnName("Stop_sequence_number");
-            entity.Property(e => e.Street)
-                .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.UserId).HasColumnName("User_ID");
+        });
+
+        modelBuilder.Entity<VwPilotEvent>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_PilotEvents", "dbo");
+
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EventId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("Event_ID");
+            entity.Property(e => e.EventTypeId).HasColumnName("EventType_ID");
+            entity.Property(e => e.FreeSeats).HasColumnName("Free_Seats");
+            entity.Property(e => e.ScheduleId).HasColumnName("Schedule_ID");
+            entity.Property(e => e.StartTimestamp).HasColumnName("Start_Timestamp");
+            entity.Property(e => e.StatusId).HasColumnName("Status_ID");
         });
 
         OnModelCreatingPartial(modelBuilder);

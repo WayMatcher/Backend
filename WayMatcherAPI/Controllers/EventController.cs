@@ -214,7 +214,7 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpGet("GetEventList")]
-        public IActionResult GetEventList([FromQuery] FilterDto filter)
+        public IActionResult GetEventList([FromQuery] bool? filter)
         {
             try
             {

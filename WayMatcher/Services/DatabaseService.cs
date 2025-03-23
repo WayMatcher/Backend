@@ -81,57 +81,34 @@ namespace WayMatcherBL.Services
 
             return vehicleList;
         }
-        public List<EventDto> GetFilteredEventList(FilterDto filter)
+        public List<EventDto> GetEventList(bool? isPilot)
         {
-            var activeStatusId = (int)State.Active;
-
-            var query = _dbContext.VwEventDetails
-                .Where(e => e.StatusId == activeStatusId)
-                .AsQueryable();
-
-            if (filter.StartTime != null)
+           var eventList = new List<EventDto>();
+            if (isPilot.HasValue)
             {
-                query = query.Where(e => e.ScheduleId >= filter.StartTime.ScheduleId);
-            }
-
-            if (filter.StopLocation != null)
-            {
-                query = query.Where(e => e.AddressId == filter.StopLocation.AddressId);
-            }
-
-            if (filter.DestinationLocation != null)
-            {
-                var destinationQuery = _dbContext.VwEventDetails
-                    .Where(e => e.StatusId == activeStatusId)
-                    .GroupBy(e => e.EventId)
-                    .Select(g => new
-                    {
-                        EventId = g.Key,
-                        MaxStopSequenceNumber = g.Max(e => e.StopSequenceNumber)
-                    });
-
-                query = from e in query
-                        join d in destinationQuery on e.EventId equals d.EventId
-                        where e.StopSequenceNumber == d.MaxStopSequenceNumber && e.AddressId == filter.DestinationLocation.AddressId
-                        select e;
-            }
-
-            var filteredEventList = query
-                .GroupBy(e => e.EventId)
-                .Select(g => g.First())
-                .Select(e => new EventDto
+                if(isPilot == true)
                 {
-                    EventId = e.EventId,
-                    EventRole = e.EventTypeId,
-                    FreeSeats = e.FreeSeats,
-                    Description = e.Description,
-                    StartTimestamp = e.StartTimestamp,
-                    ScheduleId = e.ScheduleId,
-                    StatusId = e.StatusId
-                })
-                .ToList();
-
-            return filteredEventList;
+                    foreach (var eventItem in _dbContext.VwPilotEvents.ToList().Where(e => e.StatusId == (int)State.Active))
+                    {
+                        eventList.Add(_mapper.ConvertVwPilotEventToDto(eventItem));
+                    }
+                }
+                else
+                {
+                    foreach (var eventItem in _dbContext.VwPassengerEvents.ToList().Where(e => e.StatusId == (int)State.Active))
+                    {
+                        eventList.Add(_mapper.ConvertVwPassengerEventToDto(eventItem));
+                    }
+                }
+            }
+            else
+            {
+                foreach (var eventItem in _dbContext.Events.ToList().Where(e => e.StatusId == (int)State.Active))
+                {
+                    eventList.Add(_mapper.ConvertEventToDto(eventItem));
+                }
+            }
+            return eventList;
         }
         public List<EventMemberDto> GetEventMemberList(EventDto eventDto)
         {
@@ -174,7 +151,7 @@ namespace WayMatcherBL.Services
             var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == address.AddressId || a.Longitude == address.Longitude && a.Latitude == address.Latitude && a.City == address.City && a.PostalCode == address.PostalCode && a.Country == address.Country);
             if (dbAddress == null)
                 return null;
-            
+
             return _mapper.ConvertAddressToDto(dbAddress);
         }
         public AddressDto GetAddress(UserDto user)
@@ -233,7 +210,7 @@ namespace WayMatcherBL.Services
             var ratingItem = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
             if (ratingItem == null)
                 return null;
-            
+
             return _mapper.ConvertRatingToDto(ratingItem);
         }
 
@@ -387,7 +364,7 @@ namespace WayMatcherBL.Services
         public bool InsertRating(RatingDto rating)
         {
             var ratingEntity = _mapper.ConvertRatingDtoToEntity(rating);
-            
+
             _dbContext.Ratings.Add(ratingEntity);
 
             return _dbContext.SaveChanges() > 0;

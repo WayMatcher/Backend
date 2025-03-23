@@ -15,7 +15,7 @@ namespace WayMatcherBL.Interfaces
         public bool RemoveStops(StopDto stop);
         public EventDto GetEvent(EventDto eventDto);
         public List<EventDto> GetUserEventList(UserDto user);
-        public List<EventDto> GetEventList(FilterDto filter);
+        public List<EventDto> GetEventList(bool? filter);
         public void CalculateDistance(); //uses all stops 
         public void CalculateFuelConsumption(); //uses all stops and the car 
         public void CalculateTime(); //uses all stops

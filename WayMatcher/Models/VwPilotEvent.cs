@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace WayMatcherBL.Models;
 
-public partial class Event
+public partial class VwPilotEvent
 {
     public int EventId { get; set; }
 
@@ -20,16 +20,4 @@ public partial class Event
     public int? ScheduleId { get; set; }
 
     public int? StatusId { get; set; }
-
-    public virtual ICollection<ChatMessage> ChatMessages { get; set; } = new List<ChatMessage>();
-
-    public virtual ICollection<EventMember> EventMembers { get; set; } = new List<EventMember>();
-
-    public virtual ICollection<Invite> Invites { get; set; } = new List<Invite>();
-
-    public virtual Schedule Schedule { get; set; }
-
-    public virtual Status Status { get; set; }
-
-    public virtual ICollection<Stop> Stops { get; set; } = new List<Stop>();
 }

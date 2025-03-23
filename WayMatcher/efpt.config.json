@@ -39,14 +39,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[WayMatcher].[EventMemberType]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[WayMatcher].[EventType]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[WayMatcher].[Invite]",
          "ObjectType": 0
       },
@@ -87,7 +79,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[WayMatcher].[vw_EventDetails]",
+         "Name": "[dbo].[vw_PassengerEvents]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[dbo].[vw_PilotEvents]",
          "ObjectType": 3
       }
    ],

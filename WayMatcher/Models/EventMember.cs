@@ -19,8 +19,6 @@ public partial class EventMember
 
     public virtual Event Event { get; set; }
 
-    public virtual EventMemberType EventMemberType { get; set; }
-
     public virtual Status Status { get; set; }
 
     public virtual User User { get; set; }

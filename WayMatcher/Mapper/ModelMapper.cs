@@ -16,6 +16,8 @@ namespace WayMatcherBL.Mapper
                 cfg.CreateMap<Address, AddressDto>();
                 cfg.CreateMap<AddressDto, Address>();
                 cfg.CreateMap<Event, EventDto>();
+                cfg.CreateMap<VwPilotEvent, EventDto>();
+                cfg.CreateMap<VwPassengerEvent, EventDto>();
                 cfg.CreateMap<EventDto, Event>();
                 cfg.CreateMap<Schedule, ScheduleDto>();
                 cfg.CreateMap<ScheduleDto, Schedule>();
@@ -52,6 +54,14 @@ namespace WayMatcherBL.Mapper
         public EventDto ConvertEventToDto(Event eventItem)
         {
             return _mapper.Map<EventDto>(eventItem);
+        }
+        public EventDto ConvertVwPilotEventToDto(VwPilotEvent vwPilot)
+        {
+            return _mapper.Map<EventDto>(vwPilot);
+        }
+        public EventDto ConvertVwPassengerEventToDto(VwPassengerEvent vwPassenger)
+        {
+            return _mapper.Map<EventDto>(vwPassenger);
         }
         public Event ConvertEventDtoToEntity(EventDto eventDto)
         {
