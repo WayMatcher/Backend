@@ -23,7 +23,13 @@ namespace WayMatcherAPI.Controllers
         {
             try
             {
-                var result = _eventService.CreateEvent(requestEvent.Event, requestEvent.StopList, requestEvent.User, requestEvent.Schedule);
+                var schedule = new ScheduleDto()
+                {
+                    UserId = requestEvent.User.UserId,
+                    CronSchedule = requestEvent.Schedule
+                };
+                
+                var result = _eventService.CreateEvent(requestEvent.Event, requestEvent.StopList, requestEvent.User, schedule);
 
                 if (result != null)
                     return Ok(result); //returns event
@@ -45,7 +51,13 @@ namespace WayMatcherAPI.Controllers
         {
             try
             {
-                var result = _eventService.UpdateEvent(requestEvent.Event, requestEvent.Schedule);
+                ScheduleDto schedule = new ScheduleDto()
+                {
+                    UserId = requestEvent.User.UserId,
+                    CronSchedule = requestEvent.Schedule
+                };
+
+                var result = _eventService.UpdateEvent(requestEvent.Event, schedule);
                 if (result != null)
                     return Ok(result); //returns event
                 else
@@ -258,7 +270,7 @@ namespace WayMatcherAPI.Controllers
         {
             try
             {
-                var result = _eventService.GetEvent(eventDto);
+                var result = _eventService.GetEvent(eventDto); //eventmember, stopList, schedule,  
                 if (result != null)
                     return Ok(result);
                 else

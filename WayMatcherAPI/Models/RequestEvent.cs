@@ -1,4 +1,5 @@
-﻿using WayMatcherBL.DtoModels;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using WayMatcherBL.DtoModels;
 using WayMatcherBL.LogicModels;
 
 namespace WayMatcherAPI.Models
@@ -8,6 +9,6 @@ namespace WayMatcherAPI.Models
         public UserDto User { get; set; }
         public EventDto Event { get; set; }
         public List<StopDto> StopList { get; set; }
-        public ScheduleDto Schedule { get; set; }
+        public string Schedule{ get; set; }
     }
 }

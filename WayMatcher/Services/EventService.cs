@@ -153,12 +153,20 @@ namespace WayMatcherBL.Services
             return eventDto;
         }
 
-        public EventDto GetEvent(EventDto eventDto)
+        public GetEventDetailsDto GetEvent(EventDto eventDto)
         {
             if (eventDto == null)
                 return null;
 
-            return _databaseService.GetEvent(eventDto);
+            var eventDetails = new GetEventDetailsDto()
+            {
+                Event = _databaseService.GetEvent(eventDto),
+                StopList = _databaseService.GetStopList(eventDto),
+                EventMembers = _databaseService.GetEventMemberList(eventDto),
+                Schedule = _databaseService.GetScheduleById(eventDto.ScheduleId ?? -1)
+            };
+
+            return eventDetails;
         }
 
         public List<EventDto> GetEventList(bool? isPilot)
