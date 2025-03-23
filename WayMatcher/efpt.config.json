@@ -79,11 +79,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[vw_PassengerEvents]",
+         "Name": "[WayMatcher].[vw_PassengerEvents]",
          "ObjectType": 3
       },
       {
-         "Name": "[dbo].[vw_PilotEvents]",
+         "Name": "[WayMatcher].[vw_PilotEvents]",
          "ObjectType": 3
       }
    ],

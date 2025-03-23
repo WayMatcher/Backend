@@ -463,7 +463,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToView("vw_PassengerEvents", "dbo");
+                .ToView("vw_PassengerEvents");
 
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.EventId)
@@ -480,7 +480,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToView("vw_PilotEvents", "dbo");
+                .ToView("vw_PilotEvents");
 
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.EventId)
