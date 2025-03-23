@@ -146,6 +146,18 @@ namespace WayMatcherBL.Services
 
             return vehicleList;
         }
+        public List<NotificationDto> GetNotificationList(UserDto user)
+        {
+            var notificationList = new List<NotificationDto>();
+            var notifications = _dbContext.Notifications.Where(n => n.UserId == user.UserId).ToList();
+
+            foreach (var notification in notifications)
+            {
+                notificationList.Add(_mapper.ConvertNotificationToDto(notification));
+            }
+
+            return notificationList;
+        }
         public AddressDto GetAddress(AddressDto address)
         {
             var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == address.AddressId || a.Longitude == address.Longitude && a.Latitude == address.Latitude && a.City == address.City && a.PostalCode == address.PostalCode && a.Country == address.Country);
@@ -369,6 +381,14 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
+        public bool InsertNotification(NotificationDto notification)
+        {
+            var notificationEntity = _mapper.ConvertNotificationDtoToEntity(notification);
+
+            _dbContext.Notifications.Add(notificationEntity);
+
+            return _dbContext.SaveChanges() > 0;
+        }
         public bool UpdateAddress(AddressDto addressModel)
         {
             var addressEntity = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == addressModel.AddressId);
@@ -559,5 +579,7 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
+
+
     }
 }

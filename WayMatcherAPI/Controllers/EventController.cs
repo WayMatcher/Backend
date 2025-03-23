@@ -270,7 +270,7 @@ namespace WayMatcherAPI.Controllers
         {
             try
             {
-                var result = _eventService.GetEvent(eventDto); //eventmember, stopList, schedule,  
+                var result = _eventService.GetEvent(eventDto);
                 if (result != null)
                     return Ok(result);
                 else

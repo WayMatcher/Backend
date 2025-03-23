@@ -13,7 +13,7 @@ namespace WayMatcherBL.Interfaces
         public bool DeleteEventMember(EventMemberDto eventMember);
         public bool AddStop(StopDto stop);
         public bool RemoveStops(StopDto stop);
-        public GetEventDetailsDto GetEvent(EventDto eventDto);
+        public EventDto GetEvent(EventDto eventDto);
         public List<EventDto> GetUserEventList(UserDto user);
         public List<EventDto> GetEventList(bool? filter);
         public void CalculateDistance(); //uses all stops 

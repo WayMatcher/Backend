@@ -3,6 +3,7 @@ using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
+using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -153,20 +154,18 @@ namespace WayMatcherBL.Services
             return eventDto;
         }
 
-        public GetEventDetailsDto GetEvent(EventDto eventDto)
+        public EventDto GetEvent(EventDto eventDto)
         {
             if (eventDto == null)
                 return null;
 
-            var eventDetails = new GetEventDetailsDto()
-            {
-                Event = _databaseService.GetEvent(eventDto),
-                StopList = _databaseService.GetStopList(eventDto),
-                EventMembers = _databaseService.GetEventMemberList(eventDto),
-                Schedule = _databaseService.GetScheduleById(eventDto.ScheduleId ?? -1)
-            };
+            eventDto = _databaseService.GetEvent(eventDto);
+            eventDto.StopList = _databaseService.GetStopList(eventDto);
+            eventDto.EventMembers = _databaseService.GetEventMemberList(eventDto);
+    
+            eventDto.Schedule = _databaseService.GetScheduleById(eventDto.ScheduleId ?? -1);
 
-            return eventDetails;
+            return eventDto;
         }
 
         public List<EventDto> GetEventList(bool? isPilot)

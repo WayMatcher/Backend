@@ -21,5 +21,7 @@ namespace WayMatcherBL.Interfaces
         public List<UserDto> GetActiveUsers();
         public bool RateUser(RatingDto rate);
         public double UserRating(RatingDto rate);
+        public bool SendNotification(NotificationDto notification);
+        public List<NotificationDto> GetNotification(UserDto user);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace WayMatcherBL.LogicModels
+﻿using WayMatcherBL.DtoModels;
+
+namespace WayMatcherBL.LogicModels
 {
     public class EventDto
     {
@@ -11,7 +13,9 @@
         public string? Description { get; set; }
 
         public DateTime? StartTimestamp { get; set; }
-
+        public List<EventMemberDto>? EventMembers { get; set; }
+        public List<StopDto>? StopList { get; set; }
+        public ScheduleDto? Schedule { get; set; }
         public int? ScheduleId { get; set; }
 
         public int? StatusId { get; set; }

@@ -56,6 +56,9 @@ namespace WayMatcherBL.Interfaces
         public List<RatingDto> GetRatingList(UserDto user);
         public RatingDto GetRating(RatingDto rating);
 
+        public bool InsertNotification(NotificationDto notification);
+        public List<NotificationDto> GetNotificationList(UserDto user);
+
         public void LogAudit(AuditDto audit);
     }
 }

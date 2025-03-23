@@ -270,5 +270,21 @@ namespace WayMatcherBL.Services
 
             return ratings.Average(r => r.RatingValue);
         }
+
+        public bool SendNotification(NotificationDto notification)
+        {
+            if (notification == null)
+                throw new ArgumentNullException("Notification cannot be null");
+
+            return _databaseService.InsertNotification(notification);
+        }
+
+        public List<NotificationDto> GetNotification(UserDto user)
+        {
+            if (user == null)
+                throw new ArgumentNullException("User cannot be null");
+
+            return _databaseService.GetNotificationList(user);
+        }
     }
 }

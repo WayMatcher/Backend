@@ -226,5 +226,47 @@ namespace WayMatcherAPI.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+
+        [HttpPost("SendNotification")]
+        public IActionResult SendNotification([FromBody] NotificationDto notificationDto)
+        {
+            try
+            {
+                var result = _userService.SendNotification(notificationDto);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound("No notifications found.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpGet("GetNotification")]
+        public IActionResult GetNotification([FromQuery] UserDto user)
+        {
+            try
+            {
+                var result = _userService.GetNotification(user);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound("No notifications found.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
     }
 }
