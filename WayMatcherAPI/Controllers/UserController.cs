@@ -85,13 +85,13 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpGet("GetUser")]
-        public IActionResult GetUser(RequestUser user)
+        public IActionResult GetUser([FromQuery] RequestUser user)
         {
             try
             {
                 var userDto = new UserDto()
                 {
-                    UserId = user.UserId,
+                    UserId = user.UserId ?? -1,
                     Username = user.Username,
                     Email = user.Email,
                 };
@@ -113,13 +113,13 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpGet("GetAddress")]
-        public IActionResult GetAddress(RequestUser user)
+        public IActionResult GetAddress([FromQuery] RequestUser user)
         {
             try
             {
                 var userDto = new UserDto()
                 {
-                    UserId = user.UserId,
+                    UserId = user.UserId ?? -1,
                     Username = user.Username,
                     Email = user.Email,
                 };
@@ -141,7 +141,7 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpGet("GetVehicleList")]
-        public IActionResult GetVehicleList([FromQuery] string? userId, [FromQuery] string? username, [FromQuery] string? email)
+        public IActionResult GetVehicleList([FromQuery] RequestUser user)
         {
             Console.WriteLine("Request Headers:");
             foreach (var header in Request.Headers)
@@ -152,9 +152,9 @@ namespace WayMatcherAPI.Controllers
             {
                 var userDto = new UserDto()
                 {
-                    UserId = int.TryParse(userId, out var parsedUserId) ? parsedUserId : 0,
-                    Username = username,
-                    Email = email,
+                    UserId = user.UserId ?? -1,
+                    Username = user.Username,
+                    Email = user.Email,
                 };
                 var result = _userService.GetUserVehicleList(userDto);
                 if (result != null)

@@ -172,10 +172,12 @@ namespace WayMatcherBL.Services
         {
             return _databaseService.GetUser(user);
         }
+
         public AddressDto GetAddress(UserDto user)
         {
             return _databaseService.GetAddress(user);
         }
+
         public List<VehicleDto> GetUserVehicleList(UserDto user)
         {
             return _databaseService.GetUserVehicles(user);
