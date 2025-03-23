@@ -3,6 +3,7 @@ using WayMatcherAPI.Models;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
+using WayMatcherBL.LogicModels;
 
 namespace WayMatcherAPI.Controllers
 {
@@ -133,7 +134,7 @@ namespace WayMatcherAPI.Controllers
             }
         }
 
-        [HttpPost("AddEventMember")]
+        [HttpPost("AddEventMember")] //happens over email link -> to page where this is getting called
         public IActionResult AddEventMember([FromBody] RequestEventMember member)
         {
             try
@@ -201,6 +202,47 @@ namespace WayMatcherAPI.Controllers
                     return Ok("Stop removed.");
                 else
                     return BadRequest();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost("GetEventList")]
+        public IActionResult GetEventList([FromBody] FilterDto filter)
+        {
+            try
+            {
+                var result = _eventService.GetEventList(filter);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound("Event not found or invalid input.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+        [HttpPost("GetUserEvent")]
+        public IActionResult GetUserEvent([FromBody] UserDto user)
+        {
+            try
+            {
+                var result = _eventService.GetUserEventList(user);
+                if (result != null)
+                    return Ok(result); 
+                else
+                    return NotFound("Event not found or invalid input.");
             }
             catch (ArgumentNullException ex)
             {
