@@ -4,11 +4,11 @@
     {
         public int EventId { get; set; }
 
-        public int? EventRole { get; set; }
+        public int? EventTypeId { get; set; }
 
         public int? FreeSeats { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public DateTime? StartTimestamp { get; set; }
 

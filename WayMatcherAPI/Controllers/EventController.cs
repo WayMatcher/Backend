@@ -214,11 +214,11 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpGet("GetEventList")]
-        public IActionResult GetEventList([FromQuery] bool? filter)
+        public IActionResult GetEventList([FromQuery] bool? isPilot)
         {
             try
             {
-                var result = _eventService.GetEventList(filter);
+                var result = _eventService.GetEventList(isPilot);
                 if (result != null)
                     return Ok(result);
                 else
@@ -241,6 +241,26 @@ namespace WayMatcherAPI.Controllers
                 var result = _eventService.GetUserEventList(user);
                 if (result != null)
                     return Ok(result); 
+                else
+                    return NotFound("Event not found or invalid input.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+        [HttpGet("GetEvent")]
+        public IActionResult GetEvent([FromQuery] EventDto eventDto)
+        {
+            try
+            {
+                var result = _eventService.GetEvent(eventDto);
+                if (result != null)
+                    return Ok(result);
                 else
                     return NotFound("Event not found or invalid input.");
             }

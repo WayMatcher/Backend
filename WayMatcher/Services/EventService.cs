@@ -134,7 +134,7 @@ namespace WayMatcherBL.Services
                 StatusId = (int)State.Active,
             };
 
-            if (eventDto.EventRole == (int)EventRole.Passenger)
+            if (eventDto.EventTypeId == (int)EventRole.Passenger)
                 eventMember.EventRole = (int)EventRole.Passenger;
             else
                 eventMember.EventRole = (int)EventRole.Pilot;

@@ -216,7 +216,7 @@ namespace WayMatcherBL.Services
 
         public int GetEventId(EventDto eventModel)
         {
-            var eventItem = _dbContext.Events.FirstOrDefault(e => e.Description == eventModel.Description && e.EventTypeId == eventModel.EventRole && e.FreeSeats == eventModel.FreeSeats && e.StartTimestamp == eventModel.StartTimestamp);
+            var eventItem = _dbContext.Events.FirstOrDefault(e => e.Description == eventModel.Description && e.EventTypeId == eventModel.EventTypeId && e.FreeSeats == eventModel.FreeSeats && e.StartTimestamp == eventModel.StartTimestamp);
             if (eventItem == null)
             {
                 return -1;
@@ -420,8 +420,8 @@ namespace WayMatcherBL.Services
             if (eventEntity == null)
                 return false;
 
-            if (eventModel.EventRole.HasValue)
-                eventEntity.EventTypeId = eventModel.EventRole;
+            if (eventModel.EventTypeId.HasValue)
+                eventEntity.EventTypeId = eventModel.EventTypeId;
 
             if (eventModel.FreeSeats.HasValue)
                 eventEntity.FreeSeats = eventModel.FreeSeats;
