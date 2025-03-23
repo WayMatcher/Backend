@@ -163,9 +163,7 @@ namespace WayMatcherBL.Services
 
         public List<EventDto> GetEventList(bool? isPilot)
         {
-            if (isPilot)
-                _databaseService.GetEventList(isPilot);
-
+            return _databaseService.GetEventList(isPilot);
         }
 
         public List<EventDto> GetUserEventList(UserDto user)
