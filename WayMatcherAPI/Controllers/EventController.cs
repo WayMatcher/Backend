@@ -213,8 +213,8 @@ namespace WayMatcherAPI.Controllers
             }
         }
 
-        [HttpPost("GetEventList")]
-        public IActionResult GetEventList([FromBody] FilterDto filter)
+        [HttpGet("GetEventList")]
+        public IActionResult GetEventList([FromQuery] FilterDto filter)
         {
             try
             {
