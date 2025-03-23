@@ -28,7 +28,7 @@ namespace WayMatcherBL.Services
             return scheduleList;
         }
 
-        private void LogAudit(AuditDto audit)
+        public void LogAudit(AuditDto audit)
         {
             var auditEntity = _mapper.ConvertAuditDtoToEntity(audit);
 
@@ -179,11 +179,11 @@ namespace WayMatcherBL.Services
         }
         public AddressDto GetAddress(UserDto user)
         {
-            var dbUser = _dbContext.Users.FirstOrDefault(u => u.UserId == user.UserId);
-            if(dbUser == null)
+            var dbUser = GetUser(user);
+            if (dbUser == null)
                 return null;
 
-            var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == dbUser.AddressId);
+            var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == dbUser.Address.AddressId);
             if (dbAddress == null)
                 return null;
 
@@ -299,19 +299,6 @@ namespace WayMatcherBL.Services
             addressEntity.Status.StatusDescription = State.Active.GetDescription();
 
             _dbContext.Addresses.Add(addressEntity);
-
-            //if(_dbContext.SaveChanges() > 0)
-            //{
-            //    AuditDto audit = new AuditDto
-            //    {
-            //        Message = "Address inserted",
-            //        EntityType = "Address",
-            //        Timestamp = DateTime.Now,
-            //        EntityId = addressEntity.AddressId,
-            //        UserId = addressModel.UserId
-            //    };
-            //    LogAudit(audit);
-            //}
 
             return _dbContext.SaveChanges() > 0;
         }
