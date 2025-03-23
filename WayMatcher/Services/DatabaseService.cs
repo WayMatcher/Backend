@@ -300,18 +300,18 @@ namespace WayMatcherBL.Services
 
             _dbContext.Addresses.Add(addressEntity);
 
-            if(_dbContext.SaveChanges() > 0)
-            {
-                AuditDto audit = new AuditDto
-                {
-                    Message = "Address inserted",
-                    EntityType = "Address",
-                    Timestamp = DateTime.Now,
-                    EntityId = addressEntity.AddressId,
-                    UserId = addressModel.UserId
-                };
-                LogAudit(audit);
-            }
+            //if(_dbContext.SaveChanges() > 0)
+            //{
+            //    AuditDto audit = new AuditDto
+            //    {
+            //        Message = "Address inserted",
+            //        EntityType = "Address",
+            //        Timestamp = DateTime.Now,
+            //        EntityId = addressEntity.AddressId,
+            //        UserId = addressModel.UserId
+            //    };
+            //    LogAudit(audit);
+            //}
 
             return _dbContext.SaveChanges() > 0;
         }
