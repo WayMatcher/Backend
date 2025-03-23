@@ -141,15 +141,20 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpGet("GetVehicleList")]
-        public IActionResult GetVehicleList(RequestUser user)
+        public IActionResult GetVehicleList([FromQuery] string? userId, [FromQuery] string? username, [FromQuery] string? email)
         {
+            Console.WriteLine("Request Headers:");
+            foreach (var header in Request.Headers)
+            {
+                Console.WriteLine($"{header.Key}: {header.Value}");
+            }
             try
             {
                 var userDto = new UserDto()
                 {
-                    UserId = user.UserId,
-                    Username = user.Username,
-                    Email = user.Email,
+                    UserId = int.TryParse(userId, out var parsedUserId) ? parsedUserId : 0,
+                    Username = username,
+                    Email = email,
                 };
                 var result = _userService.GetUserVehicleList(userDto);
                 if (result != null)
