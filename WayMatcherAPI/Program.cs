@@ -27,6 +27,7 @@ namespace WayMatcherAPI
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDatabaseService, DatabaseService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IEventService, EventService>();
 
             builder.Services.AddSingleton<ModelMapper>();
 

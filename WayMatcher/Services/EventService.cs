@@ -163,8 +163,7 @@ namespace WayMatcherBL.Services
 
         public List<EventDto> GetEventList(FilterDto filter)
         {
-            if (filter == null)
-                return _databaseService.GetFilteredEventList(new FilterDto());
+          
 
             if (filter.StartTime != null)
                 filter.StartTime.ScheduleId = _databaseService.GetScheduleId(filter.StartTime);
@@ -172,6 +171,8 @@ namespace WayMatcherBL.Services
                 filter.StopLocation.AddressId = _databaseService.GetAddress(filter.StopLocation).AddressId;
             if (filter.DestinationLocation != null)
                 filter.DestinationLocation.AddressId = _databaseService.GetAddress(filter.DestinationLocation).AddressId;
+            else
+                return _databaseService.GetFilteredEventList(new FilterDto());
 
             return _databaseService.GetFilteredEventList(filter);
         }
