@@ -59,6 +59,6 @@ namespace WayMatcherBL.Interfaces
         public bool InsertNotification(NotificationDto notification);
         public List<NotificationDto> GetNotificationList(UserDto user);
 
-        public void LogAudit(AuditDto audit);
+        //public void LogAudit(AuditDto audit);
     }
 }

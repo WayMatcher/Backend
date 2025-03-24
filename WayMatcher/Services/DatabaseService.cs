@@ -28,13 +28,13 @@ namespace WayMatcherBL.Services
             return scheduleList;
         }
 
-        public void LogAudit(AuditDto audit)
-        {
-            var auditEntity = _mapper.ConvertAuditDtoToEntity(audit);
+        //public void LogAudit(AuditDto audit)
+        //{
+        //    var auditEntity = _mapper.ConvertAuditDtoToEntity(audit);
 
-            _dbContext.Audits.Add(auditEntity);
-            _dbContext.SaveChanges();
-        }
+        //    _dbContext.Audits.Add(auditEntity);
+        //    _dbContext.SaveChanges();
+        //}
         public List<AddressDto> GetActiveAddresses()
         {
             var addressList = new List<AddressDto>();
