@@ -201,11 +201,14 @@ namespace WayMatcherBL.Services
         public UserDto GetUser(UserDto userDto)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.EMail == userDto.Email || u.Username == userDto.Username || u.UserId == userDto.UserId);
+
             if (user == null)
-            {
                 return null;
-            }
-            return _mapper.ConvertUserToDto(user);
+
+            userDto = _mapper.ConvertUserToDto(user);
+            userDto.Address = GetAddress(userDto);
+
+            return userDto;
         }
 
         public VehicleDto GetVehicleById(int id)
@@ -264,6 +267,11 @@ namespace WayMatcherBL.Services
             foreach (var stop in stops)
             {
                 stopList.Add(_mapper.ConvertStopToDto(stop));
+            }
+
+            foreach(var stop in stopList)
+            {
+                stop.Address = GetAddress(stop.Address);
             }
 
             return stopList;
