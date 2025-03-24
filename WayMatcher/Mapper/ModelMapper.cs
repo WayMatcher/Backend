@@ -10,10 +10,8 @@ namespace WayMatcherBL.Mapper
     {
         private readonly IMapper _mapper;
 
-        public ModelMapper(IMapper mapper)
+        public ModelMapper()
         {
-            _mapper = mapper;
-
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Address, AddressDto>();
