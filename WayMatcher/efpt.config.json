@@ -85,6 +85,10 @@
       {
          "Name": "[WayMatcher].[vw_PilotEvents]",
          "ObjectType": 3
+      },
+      {
+         "Name": "[WayMatcher].[LogAuditEntry]",
+         "ObjectType": 1
       }
    ],
    "UiHint": null,

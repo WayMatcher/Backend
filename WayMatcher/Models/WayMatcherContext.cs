@@ -57,7 +57,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.AddressId).HasName("PK__Address__03BDEBDABB144E85");
 
-            entity.ToTable("Address");
+            entity.ToTable("Address", tb => tb.HasTrigger("trg_Address_Audit"));
 
             entity.Property(e => e.AddressId).HasColumnName("Address_ID");
             entity.Property(e => e.AddressLine1)
@@ -123,7 +123,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.ChatMessageId).HasName("PK__Chat_Mes__A4F8A363F0F4AA1A");
 
-            entity.ToTable("Chat_Message");
+            entity.ToTable("Chat_Message", tb => tb.HasTrigger("trg_Chat_Message_Audit"));
 
             entity.Property(e => e.ChatMessageId).HasColumnName("Chat_Message_ID");
             entity.Property(e => e.EventId).HasColumnName("Event_ID");
@@ -157,7 +157,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.EventId).HasName("PK__Event__FD6BEFE45FB2E0F4");
 
-            entity.ToTable("Event");
+            entity.ToTable("Event", tb => tb.HasTrigger("trg_Event_Audit"));
 
             entity.Property(e => e.EventId).HasColumnName("Event_ID");
             entity.Property(e => e.Description).IsUnicode(false);
@@ -180,7 +180,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.MemberId).HasName("PK__Event_Me__42A68F27D735EAFA");
 
-            entity.ToTable("Event_Member");
+            entity.ToTable("Event_Member", tb => tb.HasTrigger("trg_Event_Member_Audit"));
 
             entity.Property(e => e.MemberId).HasColumnName("Member_ID");
             entity.Property(e => e.EventId).HasColumnName("Event_ID");
@@ -205,7 +205,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.InviteId).HasName("PK__Invite__D280FE625E146EA2");
 
-            entity.ToTable("Invite");
+            entity.ToTable("Invite", tb => tb.HasTrigger("trg_Invite_Audit"));
 
             entity.Property(e => e.InviteId).HasColumnName("Invite_ID");
             entity.Property(e => e.ConfirmationStatusId).HasColumnName("ConfirmationStatus_ID");
@@ -230,7 +230,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__8C1160B51877FA08");
 
-            entity.ToTable("Notification");
+            entity.ToTable("Notification", tb => tb.HasTrigger("trg_Notification_Audit"));
 
             entity.Property(e => e.NotificationId).HasColumnName("Notification_ID");
             entity.Property(e => e.EntityId).HasColumnName("Entity_ID");
@@ -251,7 +251,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.RatingId).HasName("PK__Rating__BE48C8257A812707");
 
-            entity.ToTable("Rating");
+            entity.ToTable("Rating", tb => tb.HasTrigger("trg_Rating_Audit"));
 
             entity.Property(e => e.RatingId).HasColumnName("Rating_ID");
             entity.Property(e => e.RatedUserId).HasColumnName("Rated_user_ID");
@@ -279,7 +279,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.RoleId).HasName("PK__Role__D80AB49BF51B3764");
 
-            entity.ToTable("Role");
+            entity.ToTable("Role", tb => tb.HasTrigger("trg_Role_Audit"));
 
             entity.Property(e => e.RoleId).HasColumnName("Role_ID");
             entity.Property(e => e.Description).IsUnicode(false);
@@ -293,7 +293,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.ScheduleId).HasName("PK__Schedule__8C4D3BBBDDB8A6FA");
 
-            entity.ToTable("Schedule");
+            entity.ToTable("Schedule", tb => tb.HasTrigger("trg_Schedule_Audit"));
 
             entity.Property(e => e.ScheduleId).HasColumnName("Schedule_ID");
             entity.Property(e => e.CronSchedule)
@@ -311,7 +311,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.StatusId).HasName("PK__Status__519009AC75A66F34");
 
-            entity.ToTable("Status");
+            entity.ToTable("Status", tb => tb.HasTrigger("trg_Status_Audit"));
 
             entity.Property(e => e.StatusId).HasColumnName("Status_ID");
             entity.Property(e => e.StatusDescription)
@@ -325,7 +325,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.StopId).HasName("PK__Stop__B509D9FA9AB4CD1C");
 
-            entity.ToTable("Stop");
+            entity.ToTable("Stop", tb => tb.HasTrigger("trg_Stop_Audit"));
 
             entity.Property(e => e.StopId).HasColumnName("Stop_ID");
             entity.Property(e => e.AddressId).HasColumnName("Address_ID");
@@ -345,7 +345,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.UserId).HasName("PK__User__206D9190FC60A966");
 
-            entity.ToTable("User");
+            entity.ToTable("User", tb => tb.HasTrigger("trg_User_Audit"));
 
             entity.HasIndex(e => e.Username, "UQ__User__536C85E44C860875").IsUnique();
 
@@ -407,7 +407,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.VehicleId).HasName("PK__Vehicle__CE6D7CB5F6EC6532");
 
-            entity.ToTable("Vehicle");
+            entity.ToTable("Vehicle", tb => tb.HasTrigger("trg_Vehicle_Audit"));
 
             entity.Property(e => e.VehicleId).HasColumnName("Vehicle_ID");
             entity.Property(e => e.ManufacturerName)
@@ -429,7 +429,7 @@ public partial class WayMatcherContext : DbContext
         {
             entity.HasKey(e => e.VehicleMappingId).HasName("PK__Vehicle___34B2F5A761341A8F");
 
-            entity.ToTable("Vehicle_Mapping");
+            entity.ToTable("Vehicle_Mapping", tb => tb.HasTrigger("trg_Vehicle_Mapping_Audit"));
 
             entity.Property(e => e.VehicleMappingId).HasColumnName("Vehicle_Mapping_ID");
             entity.Property(e => e.AdditionalInfo)
