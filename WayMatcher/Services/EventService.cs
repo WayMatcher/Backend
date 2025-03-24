@@ -170,7 +170,15 @@ namespace WayMatcherBL.Services
 
         public List<EventDto> GetEventList(bool? isPilot)
         {
-            return _databaseService.GetEventList(isPilot);
+            var eventList = _databaseService.GetEventList(isPilot);
+            foreach (var eventDto in eventList)
+            {
+                eventDto.StopList = _databaseService.GetStopList(eventDto);
+                eventDto.EventMembers = _databaseService.GetEventMemberList(eventDto);
+                eventDto.Schedule = _databaseService.GetScheduleById(eventDto.ScheduleId ?? -1);
+            }
+
+            return eventList;
         }
 
         public List<EventDto> GetUserEventList(UserDto user)
