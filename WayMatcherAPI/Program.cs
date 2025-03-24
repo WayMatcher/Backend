@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
@@ -30,11 +29,7 @@ namespace WayMatcherAPI
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IEventService, EventService>();
 
-            // Register AutoMapper
-            builder.Services.AddAutoMapper(typeof(ModelMapper));
-
             builder.Services.AddSingleton<ModelMapper>();
-            builder.Services.AddScoped<AddressResolver>();
 
             builder.Services.AddScoped<EmailServerDto>();
 
@@ -44,7 +39,7 @@ namespace WayMatcherAPI
                 options.AddPolicy(name: "AllowSpecificOrigin", // Use a descriptive name
                                 policy =>
                                 {
-                                    policy.WithOrigins("http://localhost:4000", "https://waymatcher.hobedere.com") // Your React app's origin
+                                    policy.WithOrigins(["http://localhost:4000", "https://waymatcher.hobedere.com"]) // Your React app's origin
                                             .AllowAnyMethod()
                                             .AllowAnyHeader()
                                             .AllowCredentials(); // IMPORTANT: Allow credentials
