@@ -268,5 +268,10 @@ namespace WayMatcherAPI.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+        [HttpGet("GetStatus")]
+        public IActionResult GetStatus()
+        {
+            return Ok();
+        }
     }
 }
