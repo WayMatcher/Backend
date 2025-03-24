@@ -3,7 +3,6 @@ using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
-using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
@@ -162,7 +161,7 @@ namespace WayMatcherBL.Services
             eventDto = _databaseService.GetEvent(eventDto);
             eventDto.StopList = _databaseService.GetStopList(eventDto);
             eventDto.EventMembers = _databaseService.GetEventMemberList(eventDto);
-    
+
             eventDto.Schedule = _databaseService.GetScheduleById(eventDto.ScheduleId ?? -1);
 
             return eventDto;

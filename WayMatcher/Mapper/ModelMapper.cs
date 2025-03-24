@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using WayMatcherBL.Models;
-using WayMatcherBL.LogicModels;
 using WayMatcherBL.DtoModels;
+using WayMatcherBL.Interfaces;
+using WayMatcherBL.LogicModels;
+using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Mapper
 {
