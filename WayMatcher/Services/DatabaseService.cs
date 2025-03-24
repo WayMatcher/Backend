@@ -28,13 +28,13 @@ namespace WayMatcherBL.Services
             return scheduleList;
         }
 
-        //public void LogAudit(AuditDto audit)
-        //{
-        //    var auditEntity = _mapper.ConvertAuditDtoToEntity(audit);
+        private StatusDto GetStatus(int id)
+        {
+            var status = _dbContext.Statuses.Where(s => s.StatusId.Equals(id)).FirstOrDefault();
+            
+            return _mapper.ConvertStatusToDto(status);
+        }
 
-        //    _dbContext.Audits.Add(auditEntity);
-        //    _dbContext.SaveChanges();
-        //}
         public List<AddressDto> GetActiveAddresses()
         {
             var addressList = new List<AddressDto>();
@@ -131,7 +131,7 @@ namespace WayMatcherBL.Services
 
                 eventMemberDto.User = GetUser(user);
                 eventMemberDto.EventRole = (EventRole)eventMember.EventMemberTypeId;
-                eventMemberDto.StatusId = eventMember.StatusId ?? -1;
+                eventMemberDto.Status = GetStatus(eventMember.StatusId ?? -1);
                 eventMemberList.Add(eventMemberDto);
             }
 
@@ -200,7 +200,10 @@ namespace WayMatcherBL.Services
             {
                 return null;
             }
-            return _mapper.ConvertEventToDto(eventItem);
+            eventDto = _mapper.ConvertEventToDto(eventItem);
+            eventDto.Status = GetStatus(eventItem.StatusId ?? -1);
+
+            return eventDto;
         }
 
         public ScheduleDto GetScheduleById(int id)
@@ -569,8 +572,8 @@ namespace WayMatcherBL.Services
             if (eventMember.EventId != -1)
                 eventMemberEntity.EventId = eventMember.EventId;
 
-            if (eventMember.StatusId != -1)
-                eventMemberEntity.StatusId = eventMember.StatusId;
+            if (eventMember.Status.StatusId != -1)
+                eventMemberEntity.Status.StatusId = eventMember.Status.StatusId;
 
             return _dbContext.SaveChanges() > 0;
         }

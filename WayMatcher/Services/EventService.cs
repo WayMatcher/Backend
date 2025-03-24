@@ -76,7 +76,7 @@ namespace WayMatcherBL.Services
             if (eventDto == null)
                 throw new ArgumentNullException("Event cannot be null");
 
-            eventDto.StatusId = (int)State.Cancelled;
+            eventDto.Status.StatusId = (int)State.Cancelled;
 
             foreach (var stop in _databaseService.GetStopList(eventDto))
             {
@@ -95,7 +95,7 @@ namespace WayMatcherBL.Services
                     IsHtml = true
                 };
 
-                member.StatusId = (int)State.Cancelled;
+                member.Status.StatusId = (int)State.Cancelled;
 
                 if (!_databaseService.UpdateEventMember(member))
                     throw new ArgumentNullException($"Member {member.User.UserId} could not be removed");
@@ -127,11 +127,14 @@ namespace WayMatcherBL.Services
                 AddStop(stop);
             }
 
+
+
             var eventMember = new EventMemberDto()
             {
                 EventId = _databaseService.GetEvent(eventDto).EventId,
                 User = _databaseService.GetUser(user),
-                StatusId = (int)State.Active,
+                Status = new StatusDto() { StatusId = (int)State.Active }
+
             };
 
             if (eventDto.EventTypeId == (int)EventRole.Passenger)
@@ -215,7 +218,7 @@ namespace WayMatcherBL.Services
             if (eventMemberDto == null)
                 throw new ArgumentNullException("Event member cannot be null");
 
-            eventMemberDto.StatusId = (int)State.Active;
+            eventMemberDto.Status.StatusId = (int)State.Active;
 
             if (!_databaseService.InsertToEventMember(eventMemberDto))
                 throw new ArgumentNullException("Event member could not be added");
@@ -248,7 +251,7 @@ namespace WayMatcherBL.Services
                 IsHtml = true
             };
 
-            eventMemberDto.StatusId = (int)State.Cancelled;
+            eventMemberDto.Status.StatusId = (int)State.Cancelled;
             eventMemberDto.EventId = -1;
             eventMemberDto.User.UserId = -1;
 

@@ -46,6 +46,8 @@ namespace WayMatcherBL.Mapper
                 cfg.CreateMap<RatingDto, Rating>();
                 cfg.CreateMap<Notification, NotificationDto>();
                 cfg.CreateMap<NotificationDto, Notification>();
+                cfg.CreateMap<Status, StatusDto>();
+                cfg.CreateMap<StatusDto, Status>();
                 cfg.CreateMap<AuditDto, Audit>();
             });
             _mapper = config.CreateMapper();
@@ -158,6 +160,7 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<Rating>(ratingDto);
         }
+        
         public NotificationDto ConvertNotificationToDto(Notification notification)
         {
             return _mapper.Map<NotificationDto>(notification);
@@ -166,6 +169,16 @@ namespace WayMatcherBL.Mapper
         {
             return _mapper.Map<Notification>(notificationDto);
         }
+
+        public StatusDto ConvertStatusToDto(Status status)
+        {
+            return _mapper.Map<StatusDto>(status);
+        }
+        public Status ConvertStatusDtoToEntity(StatusDto statusDto)
+        {
+            return _mapper.Map<Status>(statusDto);
+        }
+
         public Audit ConvertAuditDtoToEntity(AuditDto auditDto)
         {
             return _mapper.Map<Audit>(auditDto);

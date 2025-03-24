@@ -7,12 +7,12 @@ namespace WayMatcherBL.DtoModels
     {
         public int MemberId { get; set; }
 
-        public EventRole EventRole { get; set; } //Pilot, Passenger
+        public EventRole EventRole { get; set; } 
 
-        public UserDto User { get; set; } //User
+        public UserDto User { get; set; } 
 
         public int EventId { get; set; }
 
-        public int StatusId { get; set; } //StatusDto
+        public StatusDto? Status { get; set; } 
     }
 }

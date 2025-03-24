@@ -17,7 +17,7 @@ namespace WayMatcherBL.LogicModels
         public List<StopDto>? StopList { get; set; }
         public ScheduleDto? Schedule { get; set; }
         public int? ScheduleId { get; set; }
+        public StatusDto? Status { get; set; }
 
-        public int? StatusId { get; set; }
     }
 }
