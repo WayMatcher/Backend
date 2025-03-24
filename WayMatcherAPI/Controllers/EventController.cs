@@ -154,8 +154,8 @@ namespace WayMatcherAPI.Controllers
                 EventMemberDto eventMemberDto = new EventMemberDto()
                 {
                     EventId = member.Event.EventId,
-                    UserId = member.User.UserId,
-                    EventRole = (int)EventRole.Passenger,
+                    User = member.User,
+                    EventRole = EventRole.Passenger,
                 };
                 if (_eventService.AddEventMember(eventMemberDto))
                     return Ok("Member added.");

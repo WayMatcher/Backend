@@ -21,7 +21,8 @@ namespace WayMatcherAPI
             builder.Services.AddOpenApi();
 
             builder.Services.AddDbContext<WayMatcherContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                .EnableSensitiveDataLogging());
 
             builder.Services.AddSingleton<ConfigurationService>();
             builder.Services.AddScoped<IUserService, UserService>();

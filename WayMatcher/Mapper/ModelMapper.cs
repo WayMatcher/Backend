@@ -36,8 +36,10 @@ namespace WayMatcherBL.Mapper
                     .ForMember(dest => dest.AddressId, opt => opt.MapFrom(src => src.Address.AddressId));
                 cfg.CreateMap<Invite, InviteDto>();
                 cfg.CreateMap<InviteDto, Invite>();
-                cfg.CreateMap<EventMember, EventMemberDto>();
-                cfg.CreateMap<EventMemberDto, EventMember>();
+                cfg.CreateMap<EventMember, EventMemberDto>()
+                    .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserDto { UserId = src.User.UserId }));
+                cfg.CreateMap<EventMemberDto, EventMember>()
+                    .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.UserId));
                 cfg.CreateMap<ChatMessage, ChatMessageDto>();
                 cfg.CreateMap<ChatMessageDto, ChatMessage>();
                 cfg.CreateMap<Rating, RatingDto>();

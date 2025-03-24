@@ -64,7 +64,12 @@ namespace WayMatcherBL.Services
 
             foreach (var user in _dbContext.Users.Where(u => u.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
-                userList.Add(_mapper.ConvertUserToDto(user));
+                var userDto = _mapper.ConvertUserToDto(user);
+                if(userDto.Address == null)
+                    userDto.Address = new AddressDto();
+                userDto.Address.AddressId = user.AddressId ?? -1;
+                userDto.Address = GetAddress(userDto.Address);
+                userList.Add(userDto);
             }
 
             return userList;
@@ -83,10 +88,10 @@ namespace WayMatcherBL.Services
         }
         public List<EventDto> GetEventList(bool? isPilot)
         {
-           var eventList = new List<EventDto>();
+            var eventList = new List<EventDto>();
             if (isPilot.HasValue)
             {
-                if(isPilot == true)
+                if (isPilot == true)
                 {
                     foreach (var eventItem in _dbContext.VwPilotEvents.ToList().Where(e => e.StatusId == (int)State.Active))
                     {
@@ -117,7 +122,17 @@ namespace WayMatcherBL.Services
 
             foreach (var eventMember in eventMembers)
             {
-                eventMemberList.Add(_mapper.ConvertEventMemberToDto(eventMember));
+                var eventMemberDto = _mapper.ConvertEventMemberToDto(eventMember);
+
+                var user = new UserDto()
+                {
+                    UserId = eventMember.UserId ?? -1
+                };
+
+                eventMemberDto.User = GetUser(user);
+                eventMemberDto.EventRole = (EventRole)eventMember.EventMemberTypeId;
+                eventMemberDto.StatusId = eventMember.StatusId ?? -1;
+                eventMemberList.Add(eventMemberDto);
             }
 
             return eventMemberList;
@@ -220,6 +235,7 @@ namespace WayMatcherBL.Services
             }
             return _mapper.ConvertVehicleToDto(vehicle);
         }
+
         public RatingDto GetRating(RatingDto rating)
         {
             var ratingItem = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
@@ -266,12 +282,12 @@ namespace WayMatcherBL.Services
 
             foreach (var stop in stops)
             {
-                stopList.Add(_mapper.ConvertStopToDto(stop));
-            }
-
-            foreach(var stop in stopList)
-            {
-                stop.Address = GetAddress(stop.Address);
+                var stopDto = _mapper.ConvertStopToDto(stop);
+                if (stopDto.Address == null)
+                    stopDto.Address = new AddressDto();
+                stopDto.Address.AddressId = stop.AddressId ?? -1;
+                stopDto.Address = GetAddress(stopDto.Address);
+                stopList.Add(stopDto);
             }
 
             return stopList;
@@ -547,8 +563,8 @@ namespace WayMatcherBL.Services
             if (eventMemberEntity == null)
                 return false;
 
-            if (eventMember.EventRole != -1)
-                eventMemberEntity.EventMemberTypeId = eventMember.EventRole;
+            if ((int)eventMember.EventRole != -1)
+                eventMemberEntity.EventMemberTypeId = (int)eventMember.EventRole;
 
             if (eventMember.EventId != -1)
                 eventMemberEntity.EventId = eventMember.EventId;

@@ -86,7 +86,7 @@ namespace WayMatcherBL.Services
 
             foreach (var member in _databaseService.GetEventMemberList(eventDto))
             {
-                var user = _databaseService.GetUser(new UserDto() { UserId = member.UserId });
+                var user = _databaseService.GetUser(new UserDto() { UserId = member.User.UserId });
                 var email = new EmailDto()
                 {
                     Subject = $"Event: {eventDto.EventId} cancelled",
@@ -98,7 +98,7 @@ namespace WayMatcherBL.Services
                 member.StatusId = (int)State.Cancelled;
 
                 if (!_databaseService.UpdateEventMember(member))
-                    throw new ArgumentNullException($"Member {member.UserId} could not be removed");
+                    throw new ArgumentNullException($"Member {member.User.UserId} could not be removed");
 
                 _emailService.SendEmail(email);
             }
@@ -130,14 +130,14 @@ namespace WayMatcherBL.Services
             var eventMember = new EventMemberDto()
             {
                 EventId = _databaseService.GetEvent(eventDto).EventId,
-                UserId = _databaseService.GetUser(user).UserId,
+                User = _databaseService.GetUser(user),
                 StatusId = (int)State.Active,
             };
 
             if (eventDto.EventTypeId == (int)EventRole.Passenger)
-                eventMember.EventRole = (int)EventRole.Passenger;
+                eventMember.EventRole = EventRole.Passenger;
             else
-                eventMember.EventRole = (int)EventRole.Pilot;
+                eventMember.EventRole = EventRole.Pilot;
 
             AddEventMember(eventMember);
 
@@ -220,7 +220,7 @@ namespace WayMatcherBL.Services
             if (!_databaseService.InsertToEventMember(eventMemberDto))
                 throw new ArgumentNullException("Event member could not be added");
 
-            var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.UserId });
+            var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.User.UserId });
             var email = new EmailDto()
             {
                 Subject = $"Event: {eventMemberDto.EventId} joined",
@@ -239,7 +239,7 @@ namespace WayMatcherBL.Services
             if (eventMemberDto == null)
                 return false;
 
-            var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.UserId });
+            var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.User.UserId });
             var email = new EmailDto()
             {
                 Subject = $"Event: {eventMemberDto.EventId} kicked",
@@ -250,7 +250,7 @@ namespace WayMatcherBL.Services
 
             eventMemberDto.StatusId = (int)State.Cancelled;
             eventMemberDto.EventId = -1;
-            eventMemberDto.UserId = -1;
+            eventMemberDto.User.UserId = -1;
 
             return _databaseService.UpdateEventMember(eventMemberDto);
         }
@@ -275,7 +275,7 @@ namespace WayMatcherBL.Services
 
             foreach (var member in _databaseService.GetEventMemberList(eventDto))
             {
-                var user = _databaseService.GetUser(new UserDto() { UserId = member.UserId });
+                var user = _databaseService.GetUser(new UserDto() { UserId = member.User.UserId });
 
                 var email = new EmailDto()
                 {
