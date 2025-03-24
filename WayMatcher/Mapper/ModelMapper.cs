@@ -8,9 +8,12 @@ namespace WayMatcherBL.Mapper
     public class ModelMapper : Profile
     {
         private readonly IMapper _mapper;
+        private readonly IDatabaseService _databaseService;
 
-        public ModelMapper()
+        public ModelMapper(IDatabaseService databaseService)
         {
+            _databaseService = databaseService;
+
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Address, AddressDto>();
@@ -22,7 +25,7 @@ namespace WayMatcherBL.Mapper
                 cfg.CreateMap<Schedule, ScheduleDto>();
                 cfg.CreateMap<ScheduleDto, Schedule>();
                 cfg.CreateMap<User, UserDto>()
-                    .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new AddressDto { AddressId = src.Address.AddressId }));
+                    .ForMember(dest => dest.Address, opt => opt.MapFrom(src => _databaseService.GetAddress(new AddressDto { AddressId = src.Address.AddressId })));
                 cfg.CreateMap<UserDto, User>()
                     .ForMember(dest => dest.AddressId, opt => opt.MapFrom(src => src.Address.AddressId));
                 cfg.CreateMap<Vehicle, VehicleDto>();
@@ -30,7 +33,7 @@ namespace WayMatcherBL.Mapper
                 cfg.CreateMap<VehicleMapping, VehicleMappingDto>();
                 cfg.CreateMap<VehicleMappingDto, VehicleMapping>();
                 cfg.CreateMap<Stop, StopDto>()
-                    .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new AddressDto { AddressId = src.Address.AddressId }));
+                    .ForMember(dest => dest.Address, opt => opt.MapFrom(src => _databaseService.GetAddress(new AddressDto { AddressId = src.Address.AddressId })));
                 cfg.CreateMap<StopDto, Stop>()
                     .ForMember(dest => dest.AddressId, opt => opt.MapFrom(src => src.Address.AddressId));
                 cfg.CreateMap<Invite, InviteDto>();
