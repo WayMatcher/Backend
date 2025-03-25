@@ -11,7 +11,7 @@
         public string Telephone { get; set; }
         public string? AdditionalDescription { get; set; }
         public bool? LicenseVerified { get; set; }
-        public byte[] ProfilePicture { get; set; }
+        public byte[]? ProfilePicture { get; set; }
         public DateTime? CreationDate { get; set; }
         public AddressDto Address { get; set; }
         public int? RoleId { get; set; }
