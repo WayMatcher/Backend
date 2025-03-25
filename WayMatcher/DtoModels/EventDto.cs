@@ -14,6 +14,7 @@ namespace WayMatcherBL.LogicModels
 
         public DateTime? StartTimestamp { get; set; }
         public List<EventMemberDto>? EventMembers { get; set; }
+        public List<InviteDto>? InviteList { get; set; }
         public List<StopDto>? StopList { get; set; }
         public ScheduleDto? Schedule { get; set; }
         public int? ScheduleId { get; set; }

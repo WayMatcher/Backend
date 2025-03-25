@@ -101,9 +101,14 @@ namespace WayMatcherAPI.Controllers
                 InviteDto inviteDto = new InviteDto()
                 {
                     EventId = invite.Event.EventId,
-                    UserId = invite.User.UserId,
-                    IsRequest = true
+                    User = invite.User,
+                    IsRequest = true,
                 };
+
+                if(invite.IsPilot)
+                    inviteDto.eventRole = EventRole.Pilot;
+                else
+                    inviteDto.eventRole = EventRole.Passenger;
 
                 if (_eventService.EventInvite(inviteDto))
                     return Ok("Invite sent.");
@@ -125,12 +130,19 @@ namespace WayMatcherAPI.Controllers
         {
             try
             {
-                InviteDto inviteDto = new InviteDto()
+                var inviteDto = new InviteDto()
                 {
                     EventId = invite.Event.EventId,
-                    UserId = invite.User.UserId,
-                    IsRequest = false
+                    User = invite.User,
+                    IsRequest = false,
                 };
+
+
+                if (invite.IsPilot)
+                    inviteDto.eventRole = EventRole.Pilot;
+                else
+                    inviteDto.eventRole = EventRole.Passenger;
+
                 if (_eventService.EventInvite(inviteDto))
                     return Ok("Invite sent.");
                 else
@@ -146,8 +158,8 @@ namespace WayMatcherAPI.Controllers
             }
         }
 
-        [HttpPost("AddEventMember")] //happens over email link -> to page where this is getting called
-        public IActionResult AddEventMember([FromBody] RequestEventMember member)
+        [HttpGet("AddEventMember")]
+        public IActionResult AddEventMember([FromQuery] RequestEventMember member)
         {
             try
             {
@@ -285,5 +297,27 @@ namespace WayMatcherAPI.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+
+        [HttpGet("GetUserToInvite")]
+        public IActionResult GetUserToInvite([FromQuery] EventDto eventDto)
+        {
+            try
+            {
+                var result = _eventService.GetUserToInvite(eventDto);
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound("Event not found or invalid input.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
     }
 }

@@ -43,9 +43,12 @@ namespace WayMatcherBL.Interfaces
         public List<StopDto> GetStopList(EventDto eventDto);
 
         public bool InsertToInvite(InviteDto invite);
+        public bool UpdateInvite(InviteDto invite);
+        public List<InviteDto> GetInviteList(EventDto eventDto);
 
         public bool InsertToEventMember(EventMemberDto eventMember);
         public bool UpdateEventMember(EventMemberDto eventMember);
+        public UserDto GetEventOwner(EventDto eventDto);
         public List<EventMemberDto> GetEventMemberList(EventDto eventDto);
 
         public bool InsertChatMessage(ChatMessageDto textMessage);

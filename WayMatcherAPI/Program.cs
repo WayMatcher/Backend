@@ -6,6 +6,7 @@ using WayMatcherBL.Interfaces;
 using WayMatcherBL.Mapper;
 using WayMatcherBL.Models;
 using WayMatcherBL.Services;
+using static System.Net.WebRequestMethods;
 
 namespace WayMatcherAPI
 {
@@ -40,7 +41,7 @@ namespace WayMatcherAPI
                 options.AddPolicy(name: "AllowSpecificOrigin", // Use a descriptive name
                                 policy =>
                                 {
-                                    policy.WithOrigins(["http://localhost:4000", "https://waymatcher.hobedere.com"]) // Your React app's origin
+                                    policy.WithOrigins(["http://localhost:4000", "http://localhost:5197", "https://waymatcher.hobedere.com"]) // Your React app's origin
                                             .AllowAnyMethod()
                                             .AllowAnyHeader()
                                             .AllowCredentials(); // IMPORTANT: Allow credentials

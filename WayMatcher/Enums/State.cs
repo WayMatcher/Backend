@@ -16,7 +16,9 @@ namespace WayMatcherBL.Enums
         Completed = 17,
         [Description("Cancelled")]
         Cancelled = 18,
+        [Description("Pending")]
+        Pending = 19,
         [Description("Unread")]
-        Unread = 19,
+        Unread = 20,
     }
 }

@@ -31,7 +31,7 @@ namespace WayMatcherBL.Services
         private StatusDto GetStatus(int id)
         {
             var status = _dbContext.Statuses.Where(s => s.StatusId.Equals(id)).FirstOrDefault();
-            
+
             return _mapper.ConvertStatusToDto(status);
         }
 
@@ -65,7 +65,7 @@ namespace WayMatcherBL.Services
             foreach (var user in _dbContext.Users.Where(u => u.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 var userDto = _mapper.ConvertUserToDto(user);
-                if(userDto.Address == null)
+                if (userDto.Address == null)
                     userDto.Address = new AddressDto();
                 userDto.Address.AddressId = user.AddressId ?? -1;
                 userDto.Address = GetAddress(userDto.Address);
@@ -172,6 +172,22 @@ namespace WayMatcherBL.Services
             }
 
             return notificationList;
+        }
+        public List<InviteDto> GetInviteList(EventDto eventDto)
+        {
+            var inviteList = new List<InviteDto>();
+            var invites = _dbContext.Invites.Where(i => i.EventId == eventDto.EventId && i.ConfirmationStatusId == (int)State.Pending).ToList();
+            foreach (var invite in invites)
+            {
+                var inviteDto = _mapper.ConvertInviteToDto(invite);
+                if (inviteDto.User == null)
+                    inviteDto.User = new UserDto();
+
+                inviteDto.User = GetUser(new UserDto() { UserId = invite.UserId ?? -1 });
+
+                inviteList.Add(inviteDto);
+            }
+            return inviteList;
         }
         public AddressDto GetAddress(AddressDto address)
         {
@@ -307,6 +323,23 @@ namespace WayMatcherBL.Services
 
             return chatMessageList;
         }
+
+        public UserDto GetEventOwner(EventDto eventDto)
+        {
+            var eventOwnerId = _dbContext.Events.Where(e => e.EventId.Equals(eventDto)).FirstOrDefault().EventOwnerId;
+
+            var user = new UserDto()
+            {
+                UserId = eventOwnerId ?? -1
+            };
+
+            var eventOwner = GetUser(user);
+
+            if (eventOwner == null)
+                return null;
+            return eventOwner;
+        }
+
         public bool InsertAddress(AddressDto addressModel)
         {
             var addressEntity = _mapper.ConvertAddressDtoToEntity(addressModel);
@@ -595,6 +628,16 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
+        public bool UpdateInvite(InviteDto invite)
+        {
+            var inviteEntity = _dbContext.Invites.FirstOrDefault(i => i.InviteId == invite.InviteId);
+            if (inviteEntity == null)
+                return false;
+            if (invite.ConfirmationStatusId != -1)
+                inviteEntity.ConfirmationStatusId = invite.ConfirmationStatusId;
+            return _dbContext.SaveChanges() > 0;
+        }
+
         public bool DeleteStop(StopDto stop)
         {
             var stopEntity = _dbContext.Stops.FirstOrDefault(s => s.StopId == stop.StopId);

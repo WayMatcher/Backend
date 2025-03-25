@@ -21,6 +21,8 @@ public partial class Event
 
     public int? StatusId { get; set; }
 
+    public int? EventOwnerId { get; set; }
+
     public virtual ICollection<ChatMessage> ChatMessages { get; set; } = new List<ChatMessage>();
 
     public virtual ICollection<EventMember> EventMembers { get; set; } = new List<EventMember>();

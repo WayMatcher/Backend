@@ -1,6 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Resources;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,25 +7,40 @@ using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
-using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
+    /// <summary>
+    /// Service class for managing user-related operations.
+    /// </summary>
     public class UserService : IUserService
     {
-        IDatabaseService _databaseService;
-        IEmailService _emailService;
-        ConfigurationService _configuration;
+        private readonly IDatabaseService _databaseService;
+        private readonly IEmailService _emailService;
+        private readonly ConfigurationService _configuration;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserService"/> class.
+        /// </summary>
+        /// <param name="databaseService">The database service.</param>
+        /// <param name="emailService">The email service.</param>
+        /// <param name="configuration">The configuration service.</param>
         public UserService(IDatabaseService databaseService, IEmailService emailService, ConfigurationService configuration)
         {
             _databaseService = databaseService;
             _emailService = emailService;
             _configuration = configuration;
         }
+
+        /// <summary>
+        /// Generates a Multi-Factor Authentication (MFA) code for the user and sends it via email.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>The hashed MFA code.</returns>
         private string GenerateMfA(UserDto user)
         {
             Random random = new Random();
-            int randomNumber = random.Next(1000, 10000); //4 digit number
+            int randomNumber = random.Next(1000, 10000); // 4 digit number
             byte[] numberBytes = Encoding.UTF8.GetBytes(randomNumber.ToString());
 
             EmailDto email = new EmailDto()
@@ -44,6 +58,12 @@ namespace WayMatcherBL.Services
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
         }
+
+        /// <summary>
+        /// Generates a JSON Web Token (JWT) for the user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>The generated JWT.</returns>
         private string GenerateJWT(UserDto user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSecretKey()));
@@ -66,6 +86,11 @@ namespace WayMatcherBL.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        /// <summary>
+        /// Gets the vehicle ID for the specified vehicle.
+        /// </summary>
+        /// <param name="vehicle">The vehicle DTO.</param>
+        /// <returns>The vehicle ID.</returns>
         private int GetVehicleId(VehicleDto vehicle)
         {
             vehicle.VehicleId = _databaseService.GetVehicleId(vehicle);
@@ -79,6 +104,11 @@ namespace WayMatcherBL.Services
             return vehicle.VehicleId;
         }
 
+        /// <summary>
+        /// Gets the address ID for the specified address.
+        /// </summary>
+        /// <param name="address">The address DTO.</param>
+        /// <returns>The address ID.</returns>
         private int GetAddressId(AddressDto address)
         {
             address.AddressId = _databaseService.GetAddress(address).AddressId;
@@ -92,6 +122,10 @@ namespace WayMatcherBL.Services
             return address.AddressId;
         }
 
+        /// <summary>
+        /// Sends an email to the user to change their password.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
         public void SendChangePasswordMail(UserDto user)
         {
             var email = new EmailDto()
@@ -103,6 +137,12 @@ namespace WayMatcherBL.Services
             };
             _emailService.SendEmail(email);
         }
+
+        /// <summary>
+        /// Changes the password for the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>True if the password was changed successfully; otherwise, false.</returns>
         public bool ChangePassword(UserDto user)
         {
             user = _databaseService.GetUser(user);
@@ -113,6 +153,11 @@ namespace WayMatcherBL.Services
             return _databaseService.UpdateUser(user);
         }
 
+        /// <summary>
+        /// Configures the address for the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>True if the address was configured successfully; otherwise, false.</returns>
         public bool ConfigurateAddress(UserDto user)
         {
             if (user == null || user.Address == null)
@@ -123,6 +168,11 @@ namespace WayMatcherBL.Services
             return _databaseService.UpdateUser(user);
         }
 
+        /// <summary>
+        /// Configures the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>True if the user was configured successfully; otherwise, false.</returns>
         public bool ConfigurateUser(UserDto user)
         {
             if (user == null)
@@ -131,6 +181,12 @@ namespace WayMatcherBL.Services
             return _databaseService.UpdateUser(user);
         }
 
+        /// <summary>
+        /// Configures the vehicle for the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <param name="vehicle">The vehicle DTO.</param>
+        /// <returns>True if the vehicle was configured successfully; otherwise, false.</returns>
         public bool ConfigurateVehicle(UserDto user, VehicleDto vehicle)
         {
             if (user == null || vehicle == null)
@@ -157,32 +213,60 @@ namespace WayMatcherBL.Services
             return false;
         }
 
+        /// <summary>
+        /// Deletes the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>True if the user was deleted successfully; otherwise, false.</returns>
         public bool DeleteUser(UserDto user)
         {
             user.StatusId = (int)State.Inactive;
             return _databaseService.UpdateUser(user);
         }
 
+        /// <summary>
+        /// Gets a list of active users.
+        /// </summary>
+        /// <returns>A list of active users.</returns>
         public List<UserDto> GetActiveUsers()
         {
             return _databaseService.GetActiveUsers();
         }
 
+        /// <summary>
+        /// Gets the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>The user DTO.</returns>
         public UserDto GetUser(UserDto user)
         {
             return _databaseService.GetUser(user);
         }
-
+        /// <summary>
+        /// Gets the address for the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>The address DTO.</returns>
         public AddressDto GetAddress(UserDto user)
         {
             return _databaseService.GetAddress(user);
         }
 
+        /// <summary>
+        /// Gets a list of vehicles for the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>A list of vehicle DTOs.</returns>
         public List<VehicleDto> GetUserVehicleList(UserDto user)
         {
             return _databaseService.GetUserVehicles(user);
         }
 
+        /// <summary>
+        /// Logs in the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>The logged-in user DTO.</returns>
         public UserDto LoginUser(UserDto user)
         {
             if (user == null)
@@ -202,6 +286,12 @@ namespace WayMatcherBL.Services
             }
             return null;
         }
+
+        /// <summary>
+        /// Accepts the MFA code for the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>The user DTO with the generated JWT.</returns>
         public UserDto AcceptMfA(UserDto user)
         {
             if (user == null)
@@ -224,6 +314,12 @@ namespace WayMatcherBL.Services
             return null;
         }
 
+        /// <summary>
+        /// Registers a new user and their vehicle.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <param name="vehicle">The vehicle DTO.</param>
+        /// <returns>The REST code indicating the result of the operation.</returns>
         public RESTCode RegisterUser(UserDto user, VehicleDto vehicle)
         {
             user.Address.AddressId = GetAddressId(user.Address);
@@ -243,6 +339,11 @@ namespace WayMatcherBL.Services
             return RESTCode.InternalServerError;
         }
 
+        /// <summary>
+        /// Rates the specified user.
+        /// </summary>
+        /// <param name="rate">The rating DTO.</param>
+        /// <returns>True if the rating was successful; otherwise, false.</returns>
         public bool RateUser(RatingDto rate)
         {
             if (rate == null)
@@ -253,6 +354,12 @@ namespace WayMatcherBL.Services
             else
                 return _databaseService.InsertRating(rate);
         }
+
+        /// <summary>
+        /// Gets the average rating for the specified user.
+        /// </summary>
+        /// <param name="rate">The rating DTO.</param>
+        /// <returns>The average rating value.</returns>
         public double UserRating(RatingDto rate)
         {
             if (rate == null)
@@ -271,6 +378,11 @@ namespace WayMatcherBL.Services
             return ratings.Average(r => r.RatingValue);
         }
 
+        /// <summary>
+        /// Sends a notification to the specified user.
+        /// </summary>
+        /// <param name="notification">The notification DTO.</param>
+        /// <returns>True if the notification was sent successfully; otherwise, false.</returns>
         public bool SendNotification(NotificationDto notification)
         {
             if (notification == null)
@@ -279,6 +391,11 @@ namespace WayMatcherBL.Services
             return _databaseService.InsertNotification(notification);
         }
 
+        /// <summary>
+        /// Gets a list of notifications for the specified user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>A list of notification DTOs.</returns>
         public List<NotificationDto> GetNotification(UserDto user)
         {
             if (user == null)

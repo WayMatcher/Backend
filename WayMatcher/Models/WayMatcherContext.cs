@@ -161,6 +161,7 @@ public partial class WayMatcherContext : DbContext
 
             entity.Property(e => e.EventId).HasColumnName("Event_ID");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EventOwnerId).HasColumnName("EventOwner_ID");
             entity.Property(e => e.EventTypeId).HasColumnName("EventType_ID");
             entity.Property(e => e.FreeSeats).HasColumnName("Free_Seats");
             entity.Property(e => e.ScheduleId).HasColumnName("Schedule_ID");

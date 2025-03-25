@@ -21,5 +21,6 @@ namespace WayMatcherBL.Interfaces
         public void CalculateTime(); //uses all stops
         public bool SendChatMessage(ChatMessageDto message);
         public List<ChatMessageDto> GetChatMessage(EventMemberDto eventMember);
+        public List<UserDto> GetUserToInvite(EventDto eventDto);
     }
 }
