@@ -53,7 +53,7 @@ namespace WayMatcherAPI.Controllers
 
                 var result = _userService.RegisterUser(user.User, vehicleList, vehicleMappingList);
 
-                if (result.Equals(RESTCode.Success))
+                if (result)
                     return Ok(result);
                 else
                     return BadRequest(result);
