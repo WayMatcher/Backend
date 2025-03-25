@@ -261,7 +261,7 @@ namespace WayMatcherBL.Services
                 throw new ArgumentNullException("User cannot be null");
 
             var userEvents = new List<EventDto>();
-            var eventMembers = _databaseService.GetEventMemberList(new EventDto { EventId = user.UserId });
+            var eventMembers = _databaseService.GetEventMemberList(new EventDto { EventId = user.UserId ?? -1});
 
             foreach (var eventMember in eventMembers)
             {

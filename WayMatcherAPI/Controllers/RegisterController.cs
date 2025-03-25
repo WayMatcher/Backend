@@ -49,6 +49,8 @@ namespace WayMatcherAPI.Controllers
                     vehicleMappingList.Add(vehicleMappingDto);
                 }
 
+                user.User.Password = user.Password;
+
                 var result = _userService.RegisterUser(user.User, vehicleList, vehicleMappingList);
 
                 if (result.Equals(RESTCode.Success))

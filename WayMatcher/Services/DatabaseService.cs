@@ -268,7 +268,12 @@ namespace WayMatcherBL.Services
         {
             var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == address.AddressId || a.Longitude == address.Longitude && a.Latitude == address.Latitude && a.City == address.City && a.PostalCode == address.PostalCode && a.Country == address.Country);
             if (dbAddress == null)
-                return null;
+            {
+                dbAddress = new Address()
+                {
+                    AddressId = -1
+                };
+            }
 
             return _mapper.ConvertAddressToDto(dbAddress);
         }
@@ -487,8 +492,8 @@ namespace WayMatcherBL.Services
         {
             var addressEntity = _mapper.ConvertAddressDtoToEntity(addressModel);
 
-            addressEntity.Status = new Status();
-            addressEntity.Status.StatusDescription = State.Active.GetDescription();
+            addressEntity.StatusId = (int)State.Active;
+            addressEntity.AddressId = 0;
 
             _dbContext.Addresses.Add(addressEntity);
 
@@ -532,8 +537,9 @@ namespace WayMatcherBL.Services
         {
             var userEntity = _mapper.ConvertUserDtoToEntity(userModel);
 
-            userEntity.Status = new Status();
-            userEntity.Status.StatusDescription = State.Active.GetDescription();
+            userEntity.StatusId = (int)State.Active;
+            userEntity.AddressId = userModel.Address.AddressId;
+            userEntity.Address = null;
 
             _dbContext.Users.Add(userEntity);
             return _dbContext.SaveChanges() > 0;
@@ -548,8 +554,9 @@ namespace WayMatcherBL.Services
         {
             var vehicleEntity = _mapper.ConvertVehicleDtoToEntity(vehicleModel);
 
-            vehicleEntity.Status = new Status();
-            vehicleEntity.Status.StatusDescription = State.Active.GetDescription();
+            vehicleEntity.VehicleId = 0;
+
+            vehicleEntity.StatusId = (int)State.Active;
 
             _dbContext.Vehicles.Add(vehicleEntity);
             return _dbContext.SaveChanges() > 0;
@@ -564,8 +571,7 @@ namespace WayMatcherBL.Services
         {
             var vehicleMappingEntity = _mapper.ConvertVehicleMappingDtoToEntity(vehicleMapping);
 
-            vehicleMappingEntity.Status = new Status();
-            vehicleMappingEntity.Status.StatusDescription = State.Active.GetDescription();
+            vehicleMappingEntity.StatusId = (int)State.Active;
 
             _dbContext.VehicleMappings.Add(vehicleMappingEntity);
             return _dbContext.SaveChanges() > 0;

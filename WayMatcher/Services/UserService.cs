@@ -340,7 +340,7 @@ namespace WayMatcherBL.Services
                     var vehicleMapping = new VehicleMappingDto()
                     {
                         UserId = userId,
-                        VehicleId = vehicleList[i].VehicleId,
+                        VehicleId = GetVehicleId(vehicleList[i]),
                         FuelMilage = vehicleMappingList[i].FuelMilage,
                         AdditionalInfo = vehicleMappingList[i].AdditionalInfo,
                         LicensePlate = vehicleMappingList[i].LicensePlate

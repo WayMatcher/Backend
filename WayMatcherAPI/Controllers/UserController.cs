@@ -235,7 +235,7 @@ namespace WayMatcherAPI.Controllers
             {
                 var rating = new RatingDto
                 {
-                    RatedUserId = user.UserId
+                    RatedUserId = user.UserId ?? -1
                 };
 
                 var result = _userService.UserRating(rating);

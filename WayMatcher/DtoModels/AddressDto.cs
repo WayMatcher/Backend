@@ -26,7 +26,7 @@ namespace WayMatcherBL.LogicModels
 
         public string AddressLine1 { get; set; }
 
-        public string AddressLine2 { get; set; }
+        public string? AddressLine2 { get; set; }
 
         public int? StatusId { get; set; }
 
