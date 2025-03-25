@@ -3,6 +3,7 @@ using WayMatcherAPI.Models;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
+using WayMatcherBL.Models;
 
 namespace WayMatcherAPI.Controllers
 {
@@ -18,7 +19,33 @@ namespace WayMatcherAPI.Controllers
         }
         private bool UpdateUserDetails(RequestRegisterUser userEdit)
         {
-            return _userService.ConfigurateAddress(userEdit.User) && _userService.ConfigurateVehicle(userEdit.User, userEdit.VehicleList) && _userService.ConfigurateUser(userEdit.User);
+            var vehicleList = new List<VehicleDto>();
+            var vehicleMappingList = new List<VehicleMappingDto>();
+
+            foreach (var vehicle in userEdit.VehicleList)
+            {
+                var vehicleDto = new VehicleDto()
+                {
+                    VehicleId = vehicle.VehicleId ?? -1,
+                    Model = vehicle.Model,
+                    Seats = vehicle.Seats,
+                    YearOfManufacture = vehicle.YearOfManufacture,
+                    ManufacturerName = vehicle.ManufacturerName
+                };
+
+                var vehicleMappingDto = new VehicleMappingDto()
+                {
+                    FuelMilage = vehicle.FuelMilage,
+                    AdditionalInfo = vehicle.AdditionalInfo,
+                    LicensePlate = vehicle.LicensePlate,
+                    VehicleId = vehicle.VehicleId ?? -1,
+                };
+
+                vehicleList.Add(vehicleDto);
+                vehicleMappingList.Add(vehicleMappingDto);
+            }
+
+            return _userService.ConfigurateAddress(userEdit.User) && _userService.ConfigurateVehicle(userEdit.User, vehicleList, vehicleMappingList) && _userService.ConfigurateUser(userEdit.User);
         }
 
         [HttpPost("EditUser")]

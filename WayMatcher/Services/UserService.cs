@@ -1,8 +1,8 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
@@ -182,34 +182,41 @@ namespace WayMatcherBL.Services
         }
 
         /// <summary>
-        /// Configures the vehicle for the specified user.
+        /// Configures vehicles and vehicle mappings for the specified user.
         /// </summary>
         /// <param name="user">The user DTO.</param>
-        /// <param name="vehicle">The vehicle DTO.</param>
-        /// <returns>True if the vehicle was configured successfully; otherwise, false.</returns>
-        public bool ConfigurateVehicle(UserDto user, VehicleDto vehicle)
+        /// <param name="vehicleList">The list of vehicles to configure.</param>
+        /// <param name="vehicleMappingList">The list of vehicle mappings to configure.</param>
+        /// <returns>True if the vehicles and vehicle mappings were successfully configured; otherwise, false.</returns>
+        public bool ConfigurateVehicle(UserDto user, List<VehicleDto> vehicleList, List<VehicleMappingDto> vehicleMappingList)
         {
-            if (user == null || vehicle == null)
-                return false;
+            if (user == null || vehicleList == null)
+                throw new ArgumentNullException("User or vehicle cannot be null");
 
-            vehicle.VehicleId = GetVehicleId(vehicle);
-
-            var dbUser = GetUser(user);
-
-            foreach (var v in _databaseService.GetUserVehicles(dbUser))
+            foreach (var vehicle in vehicleList)
             {
-                if (v.VehicleId != vehicle.VehicleId)
-                {
-                    VehicleMappingDto vehicleMapping = new VehicleMappingDto()
-                    {
-                        UserId = dbUser.UserId,
-                        VehicleId = vehicle.VehicleId
-                    };
+                vehicle.VehicleId = GetVehicleId(vehicle);
 
-                    _databaseService.InsertVehicleMapping(vehicleMapping);
+                var dbUser = GetUser(user);
+
+                var vehicleListDb = _databaseService.GetUserVehicles(dbUser);
+                for (int i = 0; i < vehicleListDb.Count; i++)
+                {
+                    if (vehicleListDb[i].VehicleId != vehicle.VehicleId)
+                    {
+                        var vehicleMapping = new VehicleMappingDto()
+                        {
+                            UserId = dbUser.UserId,
+                            VehicleId = vehicle.VehicleId,
+                            FuelMilage = vehicleMappingList[i].FuelMilage,
+                            AdditionalInfo = vehicleMappingList[i].AdditionalInfo,
+                            LicensePlate = vehicleMappingList[i].LicensePlate
+                        };
+                        _databaseService.InsertVehicleMapping(vehicleMapping);
+                    }
                 }
             }
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -314,12 +321,13 @@ namespace WayMatcherBL.Services
         }
 
         /// <summary>
-        /// Registers a new user and their vehicle.
+        /// Registers a new user and their vehicles and vehicle mappings.
         /// </summary>
         /// <param name="user">The user DTO.</param>
-        /// <param name="vehicleList">A list of vehicle DTOs associated with the user.</param>
-        /// <returns>The REST code indicating the result of the operation.</returns>
-        public RESTCode RegisterUser(UserDto user, List<VehicleDto> vehicleList)
+        /// <param name="vehicleList">A list of vehicle DTOs.</param>
+        /// <param name="vehicleMappingList">A list of vehicle mappings associated with the user.</param>
+        /// <returns>True if the user was successfully registered; otherwise, false.</returns>
+        public bool RegisterUser(UserDto user, List<VehicleDto> vehicleList, List<VehicleMappingDto> vehicleMappingList)
         {
             user.Address.AddressId = GetAddressId(user.Address);
 
@@ -327,19 +335,22 @@ namespace WayMatcherBL.Services
             {
                 var userId = GetUser(user).UserId;
 
-                foreach(var vehicle in vehicleList)
+                for (int i = 0; i < vehicleList.Count; i++)
                 {
                     var vehicleMapping = new VehicleMappingDto()
                     {
                         UserId = userId,
-                        VehicleId = GetVehicleId(vehicle)
+                        VehicleId = vehicleList[i].VehicleId,
+                        FuelMilage = vehicleMappingList[i].FuelMilage,
+                        AdditionalInfo = vehicleMappingList[i].AdditionalInfo,
+                        LicensePlate = vehicleMappingList[i].LicensePlate
                     };
                     _databaseService.InsertVehicleMapping(vehicleMapping);
                 }
-               
-                return RESTCode.Success;
+
+                return true;
             }
-            return RESTCode.InternalServerError;
+            throw new ArgumentNullException("User cannot be null");
         }
 
         /// <summary>

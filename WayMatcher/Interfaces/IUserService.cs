@@ -10,12 +10,13 @@ namespace WayMatcherBL.Interfaces
     public interface IUserService
     {
         /// <summary>
-        /// Registers a new user with the specified vehicles.
+        /// Registers a new user with the specified vehicles and vehicle mappings.
         /// </summary>
         /// <param name="user">The user to register.</param>
-        /// <param name="vehicle">The list of vehicles associated with the user.</param>
-        /// <returns>A REST code indicating the result of the operation.</returns>
-        public RESTCode RegisterUser(UserDto user, List<VehicleDto> vehicle);
+        /// <param name="vehicleList">The list of vehicles associated with the user.</param>
+        /// <param name="vehicleMappingList">The list of vehicle mappings associated with the user.</param>
+        /// <returns>True if the user was successfully registered; otherwise, false.</returns>
+        public bool RegisterUser(UserDto user, List<VehicleDto> vehicleList, List<VehicleMappingDto> vehicleMappingList);
 
         /// <summary>
         /// Logs in a user.
@@ -59,12 +60,13 @@ namespace WayMatcherBL.Interfaces
         public bool ChangePassword(UserDto user);
 
         /// <summary>
-        /// Configures a vehicle for a user.
+        /// Configures vehicles and vehicle mappings for a user.
         /// </summary>
-        /// <param name="user">The user to configure the vehicle for.</param>
-        /// <param name="vehicle">The vehicle to configure.</param>
-        /// <returns>True if the vehicle was successfully configured; otherwise, false.</returns>
-        public bool ConfigurateVehicle(UserDto user, VehicleDto vehicle);
+        /// <param name="user">The user to configure the vehicles for.</param>
+        /// <param name="vehicleList">The list of vehicles to configure.</param>
+        /// <param name="vehicleMappingList">The list of vehicle mappings to configure.</param>
+        /// <returns>True if the vehicles and vehicle mappings were successfully configured; otherwise, false.</returns>
+        public bool ConfigurateVehicle(UserDto user, List<VehicleDto> vehicleList, List<VehicleMappingDto> vehicleMappingList);
 
         /// <summary>
         /// Configures the address of a user.

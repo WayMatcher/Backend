@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WayMatcherAPI.Models;
+using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
+using WayMatcherBL.LogicModels;
 
 namespace WayMatcherAPI.Controllers
 {
@@ -21,7 +23,33 @@ namespace WayMatcherAPI.Controllers
         {
             try
             {
-                var result = _userService.RegisterUser(user.User, user.VehicleList);
+                var vehicleList = new List<VehicleDto>();
+                var vehicleMappingList = new List<VehicleMappingDto>();
+
+                foreach (var vehicle in user.VehicleList)
+                {
+                    var vehicleDto = new VehicleDto()
+                    {
+                        VehicleId = vehicle.VehicleId ?? -1,
+                        Model = vehicle.Model,
+                        Seats = vehicle.Seats,
+                        YearOfManufacture = vehicle.YearOfManufacture,
+                        ManufacturerName = vehicle.ManufacturerName
+                    };
+
+                    var vehicleMappingDto = new VehicleMappingDto()
+                    {
+                        FuelMilage = vehicle.FuelMilage,
+                        AdditionalInfo = vehicle.AdditionalInfo,
+                        LicensePlate = vehicle.LicensePlate,
+                        VehicleId = vehicle.VehicleId ?? -1,
+                    };
+
+                    vehicleList.Add(vehicleDto);
+                    vehicleMappingList.Add(vehicleMappingDto);
+                }
+
+                var result = _userService.RegisterUser(user.User, vehicleList, vehicleMappingList);
 
                 if (result.Equals(RESTCode.Success))
                     return Ok(result);
