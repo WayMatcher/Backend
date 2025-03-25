@@ -19,17 +19,23 @@ namespace WayMatcherAPI.Controllers
         [HttpPost("NewUser")]
         public IActionResult NewUser([FromBody] RequestRegisterUser user)
         {
-            var result = _userService.RegisterUser(user.User, user.Vehicle);
-
-            if (result.Equals(RESTCode.Success))
+            try
             {
-                _userService.ConfigurateAddress(user.User);
-                _userService.ConfigurateVehicle(user.User, user.Vehicle);
+                var result = _userService.RegisterUser(user.User, user.VehicleList);
 
-                return Ok(result);
+                if (result.Equals(RESTCode.Success))
+                    return Ok(result);
+                else
+                    return BadRequest(result);
             }
-            else
-                return BadRequest(result);
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

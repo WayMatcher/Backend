@@ -209,7 +209,6 @@ namespace WayMatcherBL.Services
                     _databaseService.InsertVehicleMapping(vehicleMapping);
                 }
             }
-
             return false;
         }
 
@@ -318,24 +317,28 @@ namespace WayMatcherBL.Services
         /// Registers a new user and their vehicle.
         /// </summary>
         /// <param name="user">The user DTO.</param>
-        /// <param name="vehicle">The vehicle DTO.</param>
+        /// <param name="vehicleList">A list of vehicle DTOs associated with the user.</param>
         /// <returns>The REST code indicating the result of the operation.</returns>
-        public RESTCode RegisterUser(UserDto user, VehicleDto vehicle)
+        public RESTCode RegisterUser(UserDto user, List<VehicleDto> vehicleList)
         {
             user.Address.AddressId = GetAddressId(user.Address);
 
             if (_databaseService.InsertUser(user))
             {
                 var userId = GetUser(user).UserId;
-                VehicleMappingDto vehicleMapping = new VehicleMappingDto()
+
+                foreach(var vehicle in vehicleList)
                 {
-                    UserId = userId,
-                    VehicleId = GetVehicleId(vehicle)
-                };
-                _databaseService.InsertVehicleMapping(vehicleMapping);
+                    var vehicleMapping = new VehicleMappingDto()
+                    {
+                        UserId = userId,
+                        VehicleId = GetVehicleId(vehicle)
+                    };
+                    _databaseService.InsertVehicleMapping(vehicleMapping);
+                }
+               
                 return RESTCode.Success;
             }
-
             return RESTCode.InternalServerError;
         }
 

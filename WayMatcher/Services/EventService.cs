@@ -6,17 +6,31 @@ using WayMatcherBL.LogicModels;
 
 namespace WayMatcherBL.Services
 {
+    /// <summary>
+    /// Provides services for managing events, including creation, updating, cancellation, and member management.
+    /// </summary>
     public class EventService : IEventService
     {
-        private IDatabaseService _databaseService;
-        private IEmailService _emailService;
+        private readonly IDatabaseService _databaseService;
+        private readonly IEmailService _emailService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EventService"/> class.
+        /// </summary>
+        /// <param name="databaseService">The database service.</param>
+        /// <param name="emailService">The email service.</param>
         public EventService(IDatabaseService databaseService, IEmailService emailService)
         {
             _databaseService = databaseService;
             _emailService = emailService;
         }
 
+        /// <summary>
+        /// Plans the schedule.
+        /// </summary>
+        /// <param name="schedule">The schedule DTO.</param>
+        /// <returns><c>true</c> if the schedule was successfully planned; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the schedule is null.</exception>
         private bool PlanSchedule(ScheduleDto schedule)
         {
             if (schedule == null)
@@ -24,6 +38,11 @@ namespace WayMatcherBL.Services
             return _databaseService.InsertSchedule(schedule);
         }
 
+        /// <summary>
+        /// Gets the address identifier.
+        /// </summary>
+        /// <param name="address">The address DTO.</param>
+        /// <returns>The address identifier.</returns>
         private int GetAddressId(AddressDto address)
         {
             address.AddressId = _databaseService.GetAddress(address).AddressId;
@@ -37,6 +56,12 @@ namespace WayMatcherBL.Services
             return address.AddressId;
         }
 
+        /// <summary>
+        /// Adds a stop to an event.
+        /// </summary>
+        /// <param name="stop">The stop DTO.</param>
+        /// <returns><c>true</c> if the stop was successfully added; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the stop is null or already exists.</exception>
         public bool AddStop(StopDto stop)
         {
             if (stop == null)
@@ -55,21 +80,39 @@ namespace WayMatcherBL.Services
             return _databaseService.InsertStop(stop);
         }
 
+        /// <summary>
+        /// Calculates the distance for an event.
+        /// </summary>
+        /// <exception cref="NotImplementedException">Thrown when the method is not implemented.</exception>
         public void CalculateDistance()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Calculates the fuel consumption for an event.
+        /// </summary>
+        /// <exception cref="NotImplementedException">Thrown when the method is not implemented.</exception>
         public void CalculateFuelConsumption()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Calculates the time for an event.
+        /// </summary>
+        /// <exception cref="NotImplementedException">Thrown when the method is not implemented.</exception>
         public void CalculateTime()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Cancels an event.
+        /// </summary>
+        /// <param name="eventDto">The event DTO.</param>
+        /// <returns><c>true</c> if the event was successfully cancelled; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the event is null or a stop/member could not be removed.</exception>
         public bool CancelEvent(EventDto eventDto)
         {
             if (eventDto == null)
@@ -107,6 +150,15 @@ namespace WayMatcherBL.Services
             return _databaseService.UpdateEvent(eventDto);
         }
 
+        /// <summary>
+        /// Creates a new event.
+        /// </summary>
+        /// <param name="eventDto">The event DTO.</param>
+        /// <param name="stopList">The list of stops.</param>
+        /// <param name="user">The user DTO.</param>
+        /// <param name="schedule">The schedule DTO.</param>
+        /// <returns>The created event DTO.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
         public EventDto CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user, ScheduleDto schedule)
         {
             if (eventDto == null || user == null || stopList.IsNullOrEmpty() || schedule == null)
@@ -159,6 +211,12 @@ namespace WayMatcherBL.Services
             return eventDto;
         }
 
+        /// <summary>
+        /// Gets an event by its DTO.
+        /// </summary>
+        /// <param name="eventDto">The event DTO.</param>
+        /// <returns>The event DTO with additional details.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the event is null or has an invalid ID.</exception>
         public EventDto GetEvent(EventDto eventDto)
         {
             if (eventDto == null || eventDto.EventId == 0)
@@ -173,6 +231,11 @@ namespace WayMatcherBL.Services
             return eventDto;
         }
 
+        /// <summary>
+        /// Gets a list of events.
+        /// </summary>
+        /// <param name="isPilot">Filter for pilot events.</param>
+        /// <returns>A list of event DTOs.</returns>
         public List<EventDto> GetEventList(bool? isPilot)
         {
             var eventList = _databaseService.GetEventList(isPilot);
@@ -186,6 +249,12 @@ namespace WayMatcherBL.Services
             return eventList;
         }
 
+        /// <summary>
+        /// Gets a list of events for a user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>A list of event DTOs.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the user is null.</exception>
         public List<EventDto> GetUserEventList(UserDto user)
         {
             if (user == null)
@@ -206,6 +275,13 @@ namespace WayMatcherBL.Services
             return userEvents;
         }
 
+
+        /// <summary>
+        /// Sends an event invite.
+        /// </summary>
+        /// <param name="invite">The invite DTO.</param>
+        /// <returns><c>true</c> if the invite was successfully sent; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the invite or user is null.</exception>
         public bool EventInvite(InviteDto invite)
         {
             var email = new EmailDto()
@@ -243,6 +319,12 @@ namespace WayMatcherBL.Services
             return _databaseService.InsertToInvite(invite);
         }
 
+        /// <summary>
+        /// Adds an event member.
+        /// </summary>
+        /// <param name="eventMemberDto">The event member DTO.</param>
+        /// <returns><c>true</c> if the event member was successfully added; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the event member is null or could not be added.</exception>
         public bool AddEventMember(EventMemberDto eventMemberDto)
         {
             if (eventMemberDto == null)
@@ -269,6 +351,12 @@ namespace WayMatcherBL.Services
             return true;
         }
 
+        /// <summary>
+        /// Deletes an event member.
+        /// </summary>
+        /// <param name="eventMemberDto">The event member DTO.</param>
+        /// <returns><c>true</c> if the event member was successfully deleted; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the event member is null.</exception>
         public bool DeleteEventMember(EventMemberDto eventMemberDto)
         {
             if (eventMemberDto == null)
@@ -292,6 +380,12 @@ namespace WayMatcherBL.Services
             return _databaseService.UpdateEventMember(eventMemberDto);
         }
 
+        /// <summary>
+        /// Removes a stop from an event.
+        /// </summary>
+        /// <param name="stop">The stop DTO.</param>
+        /// <returns><c>true</c> if the stop was successfully removed; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the stop is null.</exception>
         public bool RemoveStops(StopDto stop)
         {
             if (stop == null)
@@ -300,6 +394,13 @@ namespace WayMatcherBL.Services
             return _databaseService.DeleteStop(stop);
         }
 
+        /// <summary>
+        /// Updates an event with a new schedule.
+        /// </summary>
+        /// <param name="eventDto">The event DTO.</param>
+        /// <param name="schedule">The schedule DTO.</param>
+        /// <returns>The updated event DTO.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the event or schedule is null.</exception>
         public EventDto UpdateEvent(EventDto eventDto, ScheduleDto schedule)
         {
             if (eventDto == null || schedule == null)
@@ -329,6 +430,12 @@ namespace WayMatcherBL.Services
             return eventDto;
         }
 
+        /// <summary>
+        /// Sends a chat message.
+        /// </summary>
+        /// <param name="message">The chat message DTO.</param>
+        /// <returns><c>true</c> if the message was successfully sent; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the message is null.</exception>
         public bool SendChatMessage(ChatMessageDto message)
         {
             if (message == null)
@@ -336,12 +443,25 @@ namespace WayMatcherBL.Services
             return _databaseService.InsertChatMessage(message);
         }
 
+        /// <summary>
+        /// Gets chat messages for an event member.
+        /// </summary>
+        /// <param name="eventMember">The event member DTO.</param>
+        /// <returns>A list of chat message DTOs.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the event member is null.</exception>
         public List<ChatMessageDto> GetChatMessage(EventMemberDto eventMember)
         {
             if (eventMember == null)
                 throw new ArgumentNullException("Event member cannot be null");
             return _databaseService.GetChatMessageList(eventMember);
         }
+
+        /// <summary>
+        /// Gets a list of users to invite to an event.
+        /// </summary>
+        /// <param name="eventDto">The event DTO.</param>
+        /// <returns>A list of user DTOs.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the event is null.</exception>
         public List<UserDto> GetUserToInvite(EventDto eventDto)
         {
             if (eventDto == null)

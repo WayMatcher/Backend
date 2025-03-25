@@ -7,17 +7,29 @@ using WayMatcherBL.Models;
 
 namespace WayMatcherBL.Services
 {
+    /// <summary>
+    /// Provides database operations for various entities.
+    /// </summary>
     public class DatabaseService : IDatabaseService
     {
         private readonly WayMatcherContext _dbContext;
         private ModelMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseService"/> class.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        /// <param name="mapper">The model mapper.</param>
         public DatabaseService(WayMatcherContext dbContext, ModelMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets the list of schedules.
+        /// </summary>
+        /// <returns>A list of <see cref="ScheduleDto"/>.</returns>
         private List<ScheduleDto> GetSchedules()
         {
             var scheduleList = new List<ScheduleDto>();
@@ -28,6 +40,11 @@ namespace WayMatcherBL.Services
             return scheduleList;
         }
 
+        /// <summary>
+        /// Gets the status by ID.
+        /// </summary>
+        /// <param name="id">The status ID.</param>
+        /// <returns>A <see cref="StatusDto"/>.</returns>
         private StatusDto GetStatus(int id)
         {
             var status = _dbContext.Statuses.Where(s => s.StatusId.Equals(id)).FirstOrDefault();
@@ -35,6 +52,10 @@ namespace WayMatcherBL.Services
             return _mapper.ConvertStatusToDto(status);
         }
 
+        /// <summary>
+        /// Gets the list of active addresses.
+        /// </summary>
+        /// <returns>A list of <see cref="AddressDto"/>.</returns>
         public List<AddressDto> GetActiveAddresses()
         {
             var addressList = new List<AddressDto>();
@@ -46,6 +67,11 @@ namespace WayMatcherBL.Services
             return addressList;
         }
 
+        /// <summary>
+        /// Gets the list of schedules for a user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of <see cref="ScheduleDto"/>.</returns>
         public List<ScheduleDto> GetUserSchedules(UserDto user)
         {
             var scheduleList = GetSchedules();
@@ -58,6 +84,10 @@ namespace WayMatcherBL.Services
             return scheduleList;
         }
 
+        /// <summary>
+        /// Gets the list of active users.
+        /// </summary>
+        /// <returns>A list of <see cref="UserDto"/>.</returns>
         public List<UserDto> GetActiveUsers()
         {
             var userList = new List<UserDto>();
@@ -75,6 +105,10 @@ namespace WayMatcherBL.Services
             return userList;
         }
 
+        /// <summary>
+        /// Gets the list of active vehicles.
+        /// </summary>
+        /// <returns>A list of <see cref="VehicleDto"/>.</returns>
         public List<VehicleDto> GetActiveVehicles()
         {
             var vehicleList = new List<VehicleDto>();
@@ -86,6 +120,12 @@ namespace WayMatcherBL.Services
 
             return vehicleList;
         }
+
+        /// <summary>
+        /// Gets the list of events.
+        /// </summary>
+        /// <param name="isPilot">Indicates if the events are for pilots.</param>
+        /// <returns>A list of <see cref="EventDto"/>.</returns>
         public List<EventDto> GetEventList(bool? isPilot)
         {
             var eventList = new List<EventDto>();
@@ -115,6 +155,13 @@ namespace WayMatcherBL.Services
             }
             return eventList;
         }
+
+
+        /// <summary>
+        /// Gets the list of event members.
+        /// </summary>
+        /// <param name="eventDto">The event.</param>
+        /// <returns>A list of <see cref="EventMemberDto"/>.</returns>
         public List<EventMemberDto> GetEventMemberList(EventDto eventDto)
         {
             var eventMemberList = new List<EventMemberDto>();
@@ -138,6 +185,11 @@ namespace WayMatcherBL.Services
             return eventMemberList;
         }
 
+        /// <summary>
+        /// Gets the list of ratings for a user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of <see cref="RatingDto"/>.</returns>
         public List<RatingDto> GetRatingList(UserDto user)
         {
             var ratingList = new List<RatingDto>();
@@ -149,6 +201,11 @@ namespace WayMatcherBL.Services
             return ratingList;
         }
 
+        /// <summary>
+        /// Gets the list of vehicles for a user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of <see cref="VehicleDto"/>.</returns>
         public List<VehicleDto> GetUserVehicles(UserDto user)
         {
             var vehicleList = new List<VehicleDto>();
@@ -161,6 +218,12 @@ namespace WayMatcherBL.Services
 
             return vehicleList;
         }
+
+        /// <summary>
+        /// Gets the list of notifications for a user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A list of <see cref="NotificationDto"/>.</returns>
         public List<NotificationDto> GetNotificationList(UserDto user)
         {
             var notificationList = new List<NotificationDto>();
@@ -173,6 +236,12 @@ namespace WayMatcherBL.Services
 
             return notificationList;
         }
+
+        /// <summary>
+        /// Gets the list of invites for an event.
+        /// </summary>
+        /// <param name="eventDto">The event.</param>
+        /// <returns>A list of <see cref="InviteDto"/>.</returns>
         public List<InviteDto> GetInviteList(EventDto eventDto)
         {
             var inviteList = new List<InviteDto>();
@@ -189,6 +258,12 @@ namespace WayMatcherBL.Services
             }
             return inviteList;
         }
+
+        /// <summary>
+        /// Gets the address by address details.
+        /// </summary>
+        /// <param name="address">The address details.</param>
+        /// <returns>A <see cref="AddressDto"/>.</returns>
         public AddressDto GetAddress(AddressDto address)
         {
             var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == address.AddressId || a.Longitude == address.Longitude && a.Latitude == address.Latitude && a.City == address.City && a.PostalCode == address.PostalCode && a.Country == address.Country);
@@ -197,6 +272,12 @@ namespace WayMatcherBL.Services
 
             return _mapper.ConvertAddressToDto(dbAddress);
         }
+
+        /// <summary>
+        /// Gets the address by user details.
+        /// </summary>
+        /// <param name="user">The user details.</param>
+        /// <returns>A <see cref="AddressDto"/>.</returns>
         public AddressDto GetAddress(UserDto user)
         {
             var dbUser = _dbContext.Users.FirstOrDefault(u => u.EMail == user.Email || u.Username == user.Username || u.UserId == user.UserId);
@@ -209,6 +290,12 @@ namespace WayMatcherBL.Services
 
             return _mapper.ConvertAddressToDto(dbAddress);
         }
+
+        /// <summary>
+        /// Gets the event by event details.
+        /// </summary>
+        /// <param name="eventDto">The event details.</param>
+        /// <returns>A <see cref="EventDto"/>.</returns>
         public EventDto GetEvent(EventDto eventDto)
         {
             var eventItem = _dbContext.Events.FirstOrDefault(e => e.EventId == eventDto.EventId);
@@ -222,6 +309,11 @@ namespace WayMatcherBL.Services
             return eventDto;
         }
 
+        /// <summary>
+        /// Gets the schedule by ID.
+        /// </summary>
+        /// <param name="id">The schedule ID.</param>
+        /// <returns>A <see cref="ScheduleDto"/>.</returns>
         public ScheduleDto GetScheduleById(int id)
         {
             var schedule = _dbContext.Schedules.FirstOrDefault(s => s.ScheduleId == id);
@@ -232,6 +324,11 @@ namespace WayMatcherBL.Services
             return _mapper.ConvertScheduleToDto(schedule);
         }
 
+        /// <summary>
+        /// Gets the user by user details.
+        /// </summary>
+        /// <param name="userDto">The user details.</param>
+        /// <returns>A <see cref="UserDto"/>.</returns>
         public UserDto GetUser(UserDto userDto)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.EMail == userDto.Email || u.Username == userDto.Username || u.UserId == userDto.UserId);
@@ -245,6 +342,11 @@ namespace WayMatcherBL.Services
             return userDto;
         }
 
+        /// <summary>
+        /// Gets the vehicle by ID.
+        /// </summary>
+        /// <param name="id">The vehicle ID.</param>
+        /// <returns>A <see cref="VehicleDto"/>.</returns>
         public VehicleDto GetVehicleById(int id)
         {
             var vehicle = _dbContext.Vehicles.FirstOrDefault(v => v.VehicleId == id);
@@ -255,6 +357,11 @@ namespace WayMatcherBL.Services
             return _mapper.ConvertVehicleToDto(vehicle);
         }
 
+        /// <summary>
+        /// Gets the rating by rating details.
+        /// </summary>
+        /// <param name="rating">The rating details.</param>
+        /// <returns>A <see cref="RatingDto"/>.</returns>
         public RatingDto GetRating(RatingDto rating)
         {
             var ratingItem = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
@@ -264,6 +371,11 @@ namespace WayMatcherBL.Services
             return _mapper.ConvertRatingToDto(ratingItem);
         }
 
+        /// <summary>
+        /// Gets the event ID by event details.
+        /// </summary>
+        /// <param name="eventModel">The event details.</param>
+        /// <returns>The event ID.</returns>
         public int GetEventId(EventDto eventModel)
         {
             var eventItem = _dbContext.Events.FirstOrDefault(e => e.Description == eventModel.Description && e.EventTypeId == eventModel.EventTypeId && e.FreeSeats == eventModel.FreeSeats && e.StartTimestamp == eventModel.StartTimestamp);
@@ -274,6 +386,11 @@ namespace WayMatcherBL.Services
             return eventItem.EventId;
         }
 
+        /// <summary>
+        /// Gets the schedule ID by schedule details.
+        /// </summary>
+        /// <param name="scheduleModel">The schedule details.</param>
+        /// <returns>The schedule ID.</returns>
         public int GetScheduleId(ScheduleDto scheduleModel)
         {
             var schedule = _dbContext.Schedules.FirstOrDefault(s => s.CronSchedule == scheduleModel.CronSchedule);
@@ -284,6 +401,11 @@ namespace WayMatcherBL.Services
             return schedule.ScheduleId;
         }
 
+        /// <summary>
+        /// Gets the vehicle ID by vehicle details.
+        /// </summary>
+        /// <param name="vehicleModel">The vehicle details.</param>
+        /// <returns>The vehicle ID.</returns>
         public int GetVehicleId(VehicleDto vehicleModel)
         {
             var vehicle = _dbContext.Vehicles.FirstOrDefault(v => v.Model == vehicleModel.Model && v.Seats == vehicleModel.Seats);
@@ -294,6 +416,11 @@ namespace WayMatcherBL.Services
             return vehicle.VehicleId;
         }
 
+        /// <summary>
+        /// Gets the list of stops for an event.
+        /// </summary>
+        /// <param name="eventDto">The event.</param>
+        /// <returns>A list of <see cref="StopDto"/>.</returns>
         public List<StopDto> GetStopList(EventDto eventDto)
         {
             var stopList = new List<StopDto>();
@@ -311,6 +438,12 @@ namespace WayMatcherBL.Services
 
             return stopList;
         }
+
+        /// <summary>
+        /// Gets the list of chat messages for an event member.
+        /// </summary>
+        /// <param name="eventMember">The event member.</param>
+        /// <returns>A list of <see cref="ChatMessageDto"/>.</returns>
         public List<ChatMessageDto> GetChatMessageList(EventMemberDto eventMember)
         {
             var chatMessageList = new List<ChatMessageDto>();
@@ -324,6 +457,11 @@ namespace WayMatcherBL.Services
             return chatMessageList;
         }
 
+        /// <summary>
+        /// Gets the event owner by event details.
+        /// </summary>
+        /// <param name="eventDto">The event details.</param>
+        /// <returns>A <see cref="UserDto"/> representing the event owner.</returns>
         public UserDto GetEventOwner(EventDto eventDto)
         {
             var eventOwnerId = _dbContext.Events.Where(e => e.EventId.Equals(eventDto)).FirstOrDefault().EventOwnerId;
@@ -340,6 +478,11 @@ namespace WayMatcherBL.Services
             return eventOwner;
         }
 
+        /// <summary>
+        /// Inserts a new address.
+        /// </summary>
+        /// <param name="addressModel">The address details.</param>
+        /// <returns><c>true</c> if the address was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertAddress(AddressDto addressModel)
         {
             var addressEntity = _mapper.ConvertAddressDtoToEntity(addressModel);
@@ -352,6 +495,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Inserts a new event.
+        /// </summary>
+        /// <param name="eventModel">The event details.</param>
+        /// <returns><c>true</c> if the event was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertEvent(EventDto eventModel)
         {
             var eventEntity = _mapper.ConvertEventDtoToEntity(eventModel);
@@ -363,6 +511,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Inserts a new schedule.
+        /// </summary>
+        /// <param name="scheduleModel">The schedule details.</param>
+        /// <returns><c>true</c> if the schedule was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertSchedule(ScheduleDto scheduleModel)
         {
             var scheduleEntity = _mapper.ConvertScheduleDtoToEntity(scheduleModel);
@@ -370,6 +523,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Inserts a new user.
+        /// </summary>
+        /// <param name="userModel">The user details.</param>
+        /// <returns><c>true</c> if the user was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertUser(UserDto userModel)
         {
             var userEntity = _mapper.ConvertUserDtoToEntity(userModel);
@@ -381,6 +539,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Inserts a new vehicle.
+        /// </summary>
+        /// <param name="vehicleModel">The vehicle details.</param>
+        /// <returns><c>true</c> if the vehicle was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertVehicle(VehicleDto vehicleModel)
         {
             var vehicleEntity = _mapper.ConvertVehicleDtoToEntity(vehicleModel);
@@ -392,6 +555,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Inserts a new vehicle mapping.
+        /// </summary>
+        /// <param name="vehicleMapping">The vehicle mapping details.</param>
+        /// <returns><c>true</c> if the vehicle mapping was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertVehicleMapping(VehicleMappingDto vehicleMapping)
         {
             var vehicleMappingEntity = _mapper.ConvertVehicleMappingDtoToEntity(vehicleMapping);
@@ -402,6 +570,12 @@ namespace WayMatcherBL.Services
             _dbContext.VehicleMappings.Add(vehicleMappingEntity);
             return _dbContext.SaveChanges() > 0;
         }
+
+        /// <summary>
+        /// Inserts a new stop.
+        /// </summary>
+        /// <param name="stop">The stop details.</param>
+        /// <returns><c>true</c> if the stop was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertStop(StopDto stop)
         {
             var stopEntity = _mapper.ConvertStopDtoToEntity(stop);
@@ -411,6 +585,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Inserts a new invite.
+        /// </summary>
+        /// <param name="invite">The invite details.</param>
+        /// <returns><c>true</c> if the invite was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertToInvite(InviteDto invite)
         {
             var inviteEntity = _mapper.ConvertInviteDtoToEntity(invite);
@@ -419,6 +598,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Inserts a new event member.
+        /// </summary>
+        /// <param name="eventMember">The event member details.</param>
+        /// <returns><c>true</c> if the event member was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertToEventMember(EventMemberDto eventMember)
         {
             var eventMemberEntity = _mapper.ConvertEventMemberDtoToEntity(eventMember);
@@ -426,6 +610,12 @@ namespace WayMatcherBL.Services
             _dbContext.EventMembers.Add(eventMemberEntity);
             return _dbContext.SaveChanges() > 0;
         }
+
+        /// <summary>
+        /// Inserts a new chat message.
+        /// </summary>
+        /// <param name="chatMessage">The chat message details.</param>
+        /// <returns><c>true</c> if the chat message was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertChatMessage(ChatMessageDto chatMessage)
         {
             var chatMessageEntity = _mapper.ConvertChatMessageDtoToEntity(chatMessage);
@@ -433,6 +623,12 @@ namespace WayMatcherBL.Services
             _dbContext.ChatMessages.Add(chatMessageEntity);
             return _dbContext.SaveChanges() > 0;
         }
+
+        /// <summary>
+        /// Inserts a new rating.
+        /// </summary>
+        /// <param name="rating">The rating details.</param>
+        /// <returns><c>true</c> if the rating was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertRating(RatingDto rating)
         {
             var ratingEntity = _mapper.ConvertRatingDtoToEntity(rating);
@@ -441,6 +637,12 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
+
+        /// <summary>
+        /// Inserts a new notification.
+        /// </summary>
+        /// <param name="notification">The notification details.</param>
+        /// <returns><c>true</c> if the notification was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertNotification(NotificationDto notification)
         {
             var notificationEntity = _mapper.ConvertNotificationDtoToEntity(notification);
@@ -449,6 +651,12 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
+
+        /// <summary>
+        /// Updates an existing address.
+        /// </summary>
+        /// <param name="addressModel">The address details.</param>
+        /// <returns><c>true</c> if the address was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateAddress(AddressDto addressModel)
         {
             var addressEntity = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == addressModel.AddressId);
@@ -494,6 +702,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Updates an existing event.
+        /// </summary>
+        /// <param name="eventModel">The event details.</param>
+        /// <returns><c>true</c> if the event was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateEvent(EventDto eventModel)
         {
             var eventEntity = _dbContext.Events.FirstOrDefault(e => e.EventId == eventModel.EventId);
@@ -515,6 +728,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Updates an existing schedule.
+        /// </summary>
+        /// <param name="scheduleModel">The schedule details.</param>
+        /// <returns><c>true</c> if the schedule was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateSchedule(ScheduleDto scheduleModel)
         {
             var scheduleEntity = _dbContext.Schedules.FirstOrDefault(s => s.ScheduleId == scheduleModel.ScheduleId);
@@ -527,6 +745,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Updates an existing user.
+        /// </summary>
+        /// <param name="userModel">The user details.</param>
+        /// <returns><c>true</c> if the user was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateUser(UserDto userModel)
         {
             var userEntity = _dbContext.Users.FirstOrDefault(u => u.UserId == userModel.UserId);
@@ -572,6 +795,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Updates an existing vehicle.
+        /// </summary>
+        /// <param name="vehicleModel">The vehicle details.</param>
+        /// <returns><c>true</c> if the vehicle was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateVehicle(VehicleDto vehicleModel)
         {
             var vehicleEntity = _dbContext.Vehicles.FirstOrDefault(v => v.VehicleId == vehicleModel.VehicleId);
@@ -593,6 +821,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Updates an existing event member.
+        /// </summary>
+        /// <param name="eventMember">The event member details.</param>
+        /// <returns><c>true</c> if the event member was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateEventMember(EventMemberDto eventMember)
         {
             var eventMemberEntity = _dbContext.EventMembers.FirstOrDefault(em => em.MemberId == eventMember.MemberId);
@@ -610,6 +843,12 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
+
+        /// <summary>
+        /// Updates an existing rating.
+        /// </summary>
+        /// <param name="rating">The rating details.</param>
+        /// <returns><c>true</c> if the rating was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateRating(RatingDto rating)
         {
             var ratingEntity = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
@@ -628,6 +867,12 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
+
+        /// <summary>
+        /// Updates an existing invite.
+        /// </summary>
+        /// <param name="invite">The invite details.</param>
+        /// <returns><c>true</c> if the invite was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateInvite(InviteDto invite)
         {
             var inviteEntity = _dbContext.Invites.FirstOrDefault(i => i.InviteId == invite.InviteId);
@@ -638,6 +883,11 @@ namespace WayMatcherBL.Services
             return _dbContext.SaveChanges() > 0;
         }
 
+        /// <summary>
+        /// Deletes an existing stop.
+        /// </summary>
+        /// <param name="stop">The stop details.</param>
+        /// <returns><c>true</c> if the stop was deleted successfully; otherwise, <c>false</c>.</returns>
         public bool DeleteStop(StopDto stop)
         {
             var stopEntity = _dbContext.Stops.FirstOrDefault(s => s.StopId == stop.StopId);
@@ -649,7 +899,5 @@ namespace WayMatcherBL.Services
 
             return _dbContext.SaveChanges() > 0;
         }
-
-
     }
 }

@@ -5,11 +5,20 @@ using WayMatcherBL.Interfaces;
 
 namespace WayMatcherBL.Services
 {
+    /// <summary>
+    /// Provides email sending services.
+    /// </summary>
     public class EmailService : IEmailService, IDisposable
     {
         private readonly SmtpClient _smtpClient;
         private readonly EmailServerDto _emailServer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailService"/> class.
+        /// </summary>
+        /// <param name="configurationService">The configuration service to retrieve email server settings.</param>
+        /// <exception cref="ArgumentNullException">Thrown when email server settings are null.</exception>
+        /// <exception cref="ArgumentException">Thrown when the email server host is null or empty.</exception>
         public EmailService(ConfigurationService configurationService)
         {
             var emailServerDto = configurationService.GetEmailServer();
@@ -25,6 +34,10 @@ namespace WayMatcherBL.Services
             _smtpClient.Authenticate(_emailServer.Username, _emailServer.Password);
         }
 
+        /// <summary>
+        /// Sends an email.
+        /// </summary>
+        /// <param name="email">The email DTO containing the email details.</param>
         public void SendEmail(EmailDto email)
         {
             var mailMessage = new MimeMessage();
@@ -40,6 +53,9 @@ namespace WayMatcherBL.Services
             _smtpClient.Send(mailMessage);
         }
 
+        /// <summary>
+        /// Disposes the SMTP client.
+        /// </summary>
         public void Dispose()
         {
             _smtpClient.Dispose();
