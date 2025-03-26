@@ -228,6 +228,7 @@ namespace WayMatcherBL.Services
             eventDto.EventMembers = _databaseService.GetEventMemberList(eventDto);
             eventDto.InviteList = _databaseService.GetInviteList(eventDto);
             eventDto.Schedule = _databaseService.GetScheduleById(eventDto.ScheduleId ?? -1);
+            eventDto.Owner = _databaseService.GetEventOwner(eventDto);
 
             return eventDto;
         }
