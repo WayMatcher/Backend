@@ -104,7 +104,8 @@ namespace WayMatcherAPI.Controllers
                 {
                     EventId = invite.EventId,
                     User = _userService.GetUser(new UserDto() { UserId = invite.UserId }),
-                    IsRequest = false,
+                    Message = invite.Message,
+                    IsRequest = true,
                 };
 
                 if (invite.IsPilot)
@@ -140,6 +141,7 @@ namespace WayMatcherAPI.Controllers
                 {
                     EventId = invite.EventId,
                     User = _userService.GetUser(new UserDto() { UserId = invite.UserId }),
+                    Message = invite.Message,
                     IsRequest = false,
                 };
 

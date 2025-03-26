@@ -245,7 +245,7 @@ namespace WayMatcherBL.Services
         public List<InviteDto> GetInviteList(EventDto eventDto)
         {
             var inviteList = new List<InviteDto>();
-            var invites = _dbContext.Invites.Where(i => i.EventId == eventDto.EventId && i.ConfirmationStatusId == (int)State.Pending).ToList();
+            var invites = _dbContext.Invites.Where(i => i.EventId == eventDto.EventId && i.StatusId == (int)State.Pending).ToList();
             foreach (var invite in invites)
             {
                 var inviteDto = _mapper.ConvertInviteToDto(invite);
@@ -631,8 +631,12 @@ namespace WayMatcherBL.Services
                 throw new ArgumentException("An invite with the same ID already exists.");
 
             var inviteEntity = _mapper.ConvertInviteDtoToEntity(invite);
+            inviteEntity.UserId = invite.User.UserId;
+            inviteEntity.User = null;
+            inviteEntity.Status = null;
 
             _dbContext.Invites.Add(inviteEntity);
+            
             return _dbContext.SaveChanges() > 0;
         }
 
@@ -932,8 +936,8 @@ namespace WayMatcherBL.Services
             var inviteEntity = _dbContext.Invites.FirstOrDefault(i => i.InviteId == invite.InviteId);
             if (inviteEntity == null)
                 return false;
-            if (invite.ConfirmationStatusId != -1)
-                inviteEntity.ConfirmationStatusId = invite.ConfirmationStatusId;
+            if (invite.StatusId != -1)
+                inviteEntity.StatusId = invite.StatusId ?? -1;
             return _dbContext.SaveChanges() > 0;
         }
 

@@ -19,8 +19,6 @@ public partial class WayMatcherContext : DbContext
 
     public virtual DbSet<ChatMessage> ChatMessages { get; set; }
 
-    public virtual DbSet<ConfirmationStatus> ConfirmationStatuses { get; set; }
-
     public virtual DbSet<Event> Events { get; set; }
 
     public virtual DbSet<EventMember> EventMembers { get; set; }
@@ -140,19 +138,6 @@ public partial class WayMatcherContext : DbContext
                 .HasConstraintName("FK__Chat_Mess__User___5EAA0504");
         });
 
-        modelBuilder.Entity<ConfirmationStatus>(entity =>
-        {
-            entity.HasKey(e => e.ConfirmationStatusId).HasName("PK__Confirma__1B10A687CBE8A23D");
-
-            entity.ToTable("ConfirmationStatus");
-
-            entity.Property(e => e.ConfirmationStatusId).HasColumnName("ConfirmationStatus_ID");
-            entity.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
         modelBuilder.Entity<Event>(entity =>
         {
             entity.HasKey(e => e.EventId).HasName("PK__Event__FD6BEFE45FB2E0F4");
@@ -204,23 +189,24 @@ public partial class WayMatcherContext : DbContext
 
         modelBuilder.Entity<Invite>(entity =>
         {
-            entity.HasKey(e => e.InviteId).HasName("PK__Invite__D280FE625E146EA2");
+            entity.HasKey(e => e.InviteId).HasName("PK__Invite__D280FE6256ED9CB3");
 
-            entity.ToTable("Invite", tb => tb.HasTrigger("trg_Invite_Audit"));
+            entity.ToTable("Invite");
 
             entity.Property(e => e.InviteId).HasColumnName("Invite_ID");
-            entity.Property(e => e.ConfirmationStatusId).HasColumnName("ConfirmationStatus_ID");
             entity.Property(e => e.EventId).HasColumnName("Event_ID");
             entity.Property(e => e.IsRequest).HasColumnName("Is_Request");
+            entity.Property(e => e.StatusId).HasColumnName("Status_ID");
             entity.Property(e => e.UserId).HasColumnName("User_ID");
-
-            entity.HasOne(d => d.ConfirmationStatus).WithMany(p => p.Invites)
-                .HasForeignKey(d => d.ConfirmationStatusId)
-                .HasConstraintName("FK__Invite__Confirma__6462DE5A");
 
             entity.HasOne(d => d.Event).WithMany(p => p.Invites)
                 .HasForeignKey(d => d.EventId)
                 .HasConstraintName("FK__Invite__Event_ID__65570293");
+
+            entity.HasOne(d => d.Status).WithMany(p => p.Invites)
+                .HasForeignKey(d => d.StatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Invite__Status_ID__664B26CC");
 
             entity.HasOne(d => d.User).WithMany(p => p.Invites)
                 .HasForeignKey(d => d.UserId)

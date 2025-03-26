@@ -292,7 +292,7 @@ namespace WayMatcherBL.Services
             if (invite == null || invite.User == null)
                 throw new ArgumentNullException("Invite cannot be null");
 
-            invite.ConfirmationStatusId = (int)State.Pending;
+            invite.StatusId = (int)State.Pending;
             invite.User = _databaseService.GetUser(invite.User);
 
             if (!invite.IsRequest)

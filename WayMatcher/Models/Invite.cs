@@ -9,7 +9,7 @@ public partial class Invite
 {
     public int InviteId { get; set; }
 
-    public int? ConfirmationStatusId { get; set; }
+    public int StatusId { get; set; }
 
     public bool? IsRequest { get; set; }
 
@@ -17,9 +17,9 @@ public partial class Invite
 
     public int? UserId { get; set; }
 
-    public virtual ConfirmationStatus ConfirmationStatus { get; set; }
-
     public virtual Event Event { get; set; }
+
+    public virtual Status Status { get; set; }
 
     public virtual User User { get; set; }
 }

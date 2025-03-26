@@ -7,5 +7,6 @@ namespace WayMatcherAPI.Models
         public int UserId { get; set; }
         public int EventId { get; set; }
         public bool IsPilot { get; set; }
+        public string Message { get; set; }
     }
 }

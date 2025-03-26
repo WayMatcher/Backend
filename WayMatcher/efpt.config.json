@@ -27,10 +27,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[WayMatcher].[ConfirmationStatus]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[WayMatcher].[Event]",
          "ObjectType": 0
       },

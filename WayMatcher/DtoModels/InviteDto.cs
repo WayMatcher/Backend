@@ -16,7 +16,7 @@ namespace WayMatcherBL.DtoModels
         /// <summary>
         /// Gets or sets the confirmation status identifier for the invite.
         /// </summary>
-        public int? ConfirmationStatusId { get; set; }
+        public int? StatusId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the invite is a request.

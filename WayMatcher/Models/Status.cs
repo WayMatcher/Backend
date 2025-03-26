@@ -17,6 +17,8 @@ public partial class Status
 
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();
 
+    public virtual ICollection<Invite> Invites { get; set; } = new List<Invite>();
+
     public virtual ICollection<Rating> Ratings { get; set; } = new List<Rating>();
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
