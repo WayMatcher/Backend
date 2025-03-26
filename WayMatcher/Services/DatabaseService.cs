@@ -469,7 +469,7 @@ namespace WayMatcherBL.Services
         /// <returns>A <see cref="UserDto"/> representing the event owner.</returns>
         public UserDto GetEventOwner(EventDto eventDto)
         {
-            var eventOwnerId = _dbContext.Events.Where(e => e.EventId.Equals(eventDto)).FirstOrDefault().EventOwnerId;
+            var eventOwnerId = _dbContext.Events.Where(e => e.EventId.Equals(eventDto.EventId)).FirstOrDefault().EventOwnerId;
 
             var user = new UserDto()
             {

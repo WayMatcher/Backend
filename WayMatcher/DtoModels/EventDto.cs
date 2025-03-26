@@ -61,5 +61,10 @@ namespace WayMatcherBL.LogicModels
         /// Gets or sets the status of the event.
         /// </summary>
         public StatusDto? Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets the schedule for the event.
+        /// </summary>
+        public UserDto? Owner { get; set; }
     }
 }
