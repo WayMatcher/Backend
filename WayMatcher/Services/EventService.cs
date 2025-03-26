@@ -118,7 +118,7 @@ namespace WayMatcherBL.Services
             if (eventDto == null)
                 throw new ArgumentNullException("Event cannot be null");
 
-            eventDto.Status.StatusId = (int)State.Cancelled;
+            eventDto.Status.StatusId = (int)Status.Cancelled;
 
             foreach (var stop in _databaseService.GetStopList(eventDto))
             {
@@ -139,7 +139,7 @@ namespace WayMatcherBL.Services
                     IsHtml = true
                 };
 
-                member.Status.StatusId = (int)State.Cancelled;
+                member.Status.StatusId = (int)Status.Cancelled;
 
                 if (!_databaseService.UpdateEventMember(member))
                     throw new ArgumentNullException($"Member {member.User.UserId} could not be removed");
@@ -186,7 +186,7 @@ namespace WayMatcherBL.Services
             {
                 EventId = _databaseService.GetEvent(eventDto).EventId,
                 User = _databaseService.GetUser(user),
-                Status = new StatusDto() { StatusId = (int)State.Active }
+                Status = new StatusDto() { StatusId = (int)Status.Active }
 
             };
 
@@ -292,7 +292,7 @@ namespace WayMatcherBL.Services
             if (invite == null || invite.User == null)
                 throw new ArgumentNullException("Invite cannot be null");
 
-            invite.ConfirmationStatusId = (int)State.Pending;
+            invite.ConfirmationStatusId = (int)Status.Pending;
             invite.User = _databaseService.GetUser(invite.User);
 
             if (!invite.IsRequest)
@@ -330,7 +330,7 @@ namespace WayMatcherBL.Services
             if (eventMemberDto == null)
                 throw new ArgumentNullException("Event member cannot be null");
 
-            eventMemberDto.Status.StatusId = (int)State.Active;
+            eventMemberDto.Status.StatusId = (int)Status.Active;
 
             if (!_databaseService.InsertToEventMember(eventMemberDto))
                 throw new ArgumentNullException("Event member could not be added");
@@ -373,7 +373,7 @@ namespace WayMatcherBL.Services
                 IsHtml = true
             };
 
-            eventMemberDto.Status.StatusId = (int)State.Cancelled;
+            eventMemberDto.Status.StatusId = (int)Status.Cancelled;
             eventMemberDto.EventId = -1;
             eventMemberDto.User.UserId = -1;
 

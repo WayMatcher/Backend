@@ -237,7 +237,7 @@ namespace WayMatcherBL.Services
                 throw new ArgumentNullException("User cannot be null");
 
             user.Address.AddressId = GetAddressId(user.Address);
-            user.StatusId = (int)State.Inactive;
+            user.StatusId = (int)Status.Inactive;
             return _databaseService.UpdateUser(user);
         }
 
@@ -291,7 +291,7 @@ namespace WayMatcherBL.Services
 
             var dbUser = _databaseService.GetUser(user);
 
-            if (dbUser == null || dbUser.StatusId == (int)State.Inactive)
+            if (dbUser == null || dbUser.StatusId == (int)Status.Inactive)
                 throw new ArgumentNullException(nameof(dbUser), "Database user cannot be null");
 
             if ((dbUser.Username == user.Username || dbUser.Email == user.Email) && dbUser.Password == user.Password)
@@ -346,9 +346,9 @@ namespace WayMatcherBL.Services
 
             if (existingUser != null)
             {
-                if (existingUser.StatusId == (int)State.Inactive)
+                if (existingUser.StatusId == (int)Status.Inactive)
                 {
-                    existingUser.StatusId = (int)State.Active;
+                    existingUser.StatusId = (int)Status.Active;
                     _databaseService.UpdateUser(existingUser);
                     return true;
                 }
