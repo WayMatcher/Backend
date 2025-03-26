@@ -285,10 +285,15 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpGet("GetNotification")]
-        public IActionResult GetNotification([FromQuery] UserDto user)
+        public IActionResult GetNotification([FromQuery] int userID)
         {
             try
             {
+                var user = new UserDto()
+                {
+                    UserId = userID
+                };
+
                 var result = _userService.GetNotification(user);
                 if (result != null)
                     return Ok(result);
