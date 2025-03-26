@@ -237,7 +237,7 @@ namespace WayMatcherBL.Services
                 throw new ArgumentNullException("User cannot be null");
 
             user.Address.AddressId = GetAddressId(user.Address);
-            user.StatusId = (int)Status.Inactive;
+            user.StatusId = (int)State.Inactive;
             return _databaseService.UpdateUser(user);
         }
 
@@ -291,7 +291,7 @@ namespace WayMatcherBL.Services
 
             var dbUser = _databaseService.GetUser(user);
 
-            if (dbUser == null || dbUser.StatusId == (int)Status.Inactive)
+            if (dbUser == null || dbUser.StatusId == (int)State.Inactive)
                 throw new ArgumentNullException(nameof(dbUser), "Database user cannot be null");
 
             if ((dbUser.Username == user.Username || dbUser.Email == user.Email) && dbUser.Password == user.Password)
@@ -346,9 +346,9 @@ namespace WayMatcherBL.Services
 
             if (existingUser != null)
             {
-                if (existingUser.StatusId == (int)Status.Inactive)
+                if (existingUser.StatusId == (int)State.Inactive)
                 {
-                    existingUser.StatusId = (int)Status.Active;
+                    existingUser.StatusId = (int)State.Active;
                     _databaseService.UpdateUser(existingUser);
                     return true;
                 }
@@ -388,7 +388,7 @@ namespace WayMatcherBL.Services
             if (rate == null)
                 throw new ArgumentNullException("Rating cannot be null");
 
-            if (_databaseService.GetRating(rate).RatingId == rate.RatingId)
+            if (_databaseService.GetRating(rate) != null)
                 return _databaseService.UpdateRating(rate);
             else
                 return _databaseService.InsertRating(rate);

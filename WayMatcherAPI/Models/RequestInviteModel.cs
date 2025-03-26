@@ -4,8 +4,8 @@ namespace WayMatcherAPI.Models
 {
     public class RequestInviteModel
     {
-        public UserDto User { get; set; }
-        public EventDto Event { get; set; }
+        public int UserId { get; set; }
+        public int EventId { get; set; }
         public bool IsPilot { get; set; }
     }
 }

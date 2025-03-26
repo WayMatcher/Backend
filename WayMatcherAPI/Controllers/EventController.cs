@@ -12,10 +12,12 @@ namespace WayMatcherAPI.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
+        private readonly IUserService _userService;
 
-        public EventController(IEventService eventService)
+        public EventController(IEventService eventService, IUserService userService)
         {
             _eventService = eventService;
+            _userService = userService;
         }
 
         [HttpPost("CreateEvent")]
@@ -28,7 +30,7 @@ namespace WayMatcherAPI.Controllers
                     UserId = requestEvent.User.UserId,
                     CronSchedule = requestEvent.Schedule
                 };
-                
+
                 var result = _eventService.CreateEvent(requestEvent.Event, requestEvent.StopList, requestEvent.User, schedule);
 
                 if (result != null)
@@ -98,14 +100,14 @@ namespace WayMatcherAPI.Controllers
         {
             try
             {
-                InviteDto inviteDto = new InviteDto()
+                var inviteDto = new InviteDto()
                 {
-                    EventId = invite.Event.EventId,
-                    User = invite.User,
-                    IsRequest = true,
+                    EventId = invite.EventId,
+                    User = _userService.GetUser(new UserDto() { UserId = invite.UserId }),
+                    IsRequest = false,
                 };
 
-                if(invite.IsPilot)
+                if (invite.IsPilot)
                     inviteDto.eventRole = EventRole.Pilot;
                 else
                     inviteDto.eventRole = EventRole.Passenger;
@@ -136,11 +138,10 @@ namespace WayMatcherAPI.Controllers
             {
                 var inviteDto = new InviteDto()
                 {
-                    EventId = invite.Event.EventId,
-                    User = invite.User,
+                    EventId = invite.EventId,
+                    User = _userService.GetUser(new UserDto() { UserId = invite.UserId }),
                     IsRequest = false,
                 };
-
 
                 if (invite.IsPilot)
                     inviteDto.eventRole = EventRole.Pilot;
@@ -288,7 +289,7 @@ namespace WayMatcherAPI.Controllers
             {
                 var result = _eventService.GetUserEventList(user);
                 if (result != null)
-                    return Ok(result); 
+                    return Ok(result);
                 else
                     return NotFound("Event not found or invalid input.");
             }

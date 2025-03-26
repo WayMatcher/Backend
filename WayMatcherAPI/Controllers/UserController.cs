@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WayMatcherAPI.Models;
 using WayMatcherBL.DtoModels;
+using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
 using WayMatcherBL.Models;
@@ -207,7 +208,7 @@ namespace WayMatcherAPI.Controllers
                     RatingValue = rateUser.RatingValue,
                     RatedUserId = rateUser.RatedUserId,
                     UserWhoRatedId = rateUser.UserWhoRatedId,
-                    StatusId = rateUser.StatusId
+                    StatusId = (int)State.Active
                 };
 
                 var result = _userService.RateUser(rate);
@@ -229,14 +230,15 @@ namespace WayMatcherAPI.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-        [HttpPost("GetRatedUser")]
-        public IActionResult GetUserRating([FromBody] UserDto user)
+
+        [HttpGet("GetUserRating")]
+        public IActionResult GetUserRating([FromQuery] int userId)
         {
             try
             {
                 var rating = new RatingDto
                 {
-                    RatedUserId = user.UserId ?? -1
+                    RatedUserId = userId
                 };
 
                 var result = _userService.UserRating(rating);

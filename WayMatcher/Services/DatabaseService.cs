@@ -59,7 +59,7 @@ namespace WayMatcherBL.Services
         public List<AddressDto> GetActiveAddresses()
         {
             var addressList = new List<AddressDto>();
-            foreach (var address in _dbContext.Addresses.Where(a => a.Status.StatusDescription.Equals(Status.Active.GetDescription())).ToList())
+            foreach (var address in _dbContext.Addresses.Where(a => a.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 addressList.Add(_mapper.ConvertAddressToDto(address));
             }
@@ -92,7 +92,7 @@ namespace WayMatcherBL.Services
         {
             var userList = new List<UserDto>();
 
-            foreach (var user in _dbContext.Users.Where(u => u.Status.StatusDescription.Equals(Status.Active.GetDescription())).ToList())
+            foreach (var user in _dbContext.Users.Where(u => u.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 var userDto = _mapper.ConvertUserToDto(user);
                 if (userDto.Address == null)
@@ -113,7 +113,7 @@ namespace WayMatcherBL.Services
         {
             var vehicleList = new List<VehicleDto>();
 
-            foreach (var vehicle in _dbContext.Vehicles.Where(v => v.Status.StatusDescription.Equals(Status.Active.GetDescription())).ToList())
+            foreach (var vehicle in _dbContext.Vehicles.Where(v => v.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 vehicleList.Add(_mapper.ConvertVehicleToDto(vehicle));
             }
@@ -133,14 +133,14 @@ namespace WayMatcherBL.Services
             {
                 if (isPilot == true)
                 {
-                    foreach (var eventItem in _dbContext.VwPilotEvents.ToList().Where(e => e.StatusId == (int)Enums.Status.Active))
+                    foreach (var eventItem in _dbContext.VwPilotEvents.ToList().Where(e => e.StatusId == (int)Enums.State.Active))
                     {
                         eventList.Add(_mapper.ConvertVwPilotEventToDto(eventItem));
                     }
                 }
                 else
                 {
-                    foreach (var eventItem in _dbContext.VwPassengerEvents.ToList().Where(e => e.StatusId == (int)Enums.Status.Active))
+                    foreach (var eventItem in _dbContext.VwPassengerEvents.ToList().Where(e => e.StatusId == (int)Enums.State.Active))
                     {
                         eventList.Add(_mapper.ConvertVwPassengerEventToDto(eventItem));
                     }
@@ -148,7 +148,7 @@ namespace WayMatcherBL.Services
             }
             else
             {
-                foreach (var eventItem in _dbContext.Events.ToList().Where(e => e.StatusId == (int)Enums.Status.Active))
+                foreach (var eventItem in _dbContext.Events.ToList().Where(e => e.StatusId == (int)Enums.State.Active))
                 {
                     eventList.Add(_mapper.ConvertEventToDto(eventItem));
                 }
@@ -245,7 +245,7 @@ namespace WayMatcherBL.Services
         public List<InviteDto> GetInviteList(EventDto eventDto)
         {
             var inviteList = new List<InviteDto>();
-            var invites = _dbContext.Invites.Where(i => i.EventId == eventDto.EventId && i.ConfirmationStatusId == (int)Status.Pending).ToList();
+            var invites = _dbContext.Invites.Where(i => i.EventId == eventDto.EventId && i.ConfirmationStatusId == (int)State.Pending).ToList();
             foreach (var invite in invites)
             {
                 var inviteDto = _mapper.ConvertInviteToDto(invite);
@@ -369,7 +369,7 @@ namespace WayMatcherBL.Services
         /// <returns>A <see cref="RatingDto"/>.</returns>
         public RatingDto GetRating(RatingDto rating)
         {
-            var ratingItem = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
+            var ratingItem = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId || r.RatedUserId == rating.RatedUserId && r.UserWhoRatedId == rating.UserWhoRatedId);
             if (ratingItem == null)
                 return null;
 
@@ -496,7 +496,7 @@ namespace WayMatcherBL.Services
 
             var addressEntity = _mapper.ConvertAddressDtoToEntity(addressModel);
 
-            addressEntity.StatusId = (int)Enums.Status.Active;
+            addressEntity.StatusId = (int)Enums.State.Active;
             addressEntity.AddressId = 0;
 
             _dbContext.Addresses.Add(addressEntity);
@@ -518,7 +518,7 @@ namespace WayMatcherBL.Services
             var eventEntity = _mapper.ConvertEventDtoToEntity(eventModel);
 
             eventEntity.Status = new Models.Status();
-            eventEntity.Status.StatusDescription = Enums.Status.Active.GetDescription();
+            eventEntity.Status.StatusDescription = Enums.State.Active.GetDescription();
 
             _dbContext.Events.Add(eventEntity);
             return _dbContext.SaveChanges() > 0;
@@ -553,7 +553,7 @@ namespace WayMatcherBL.Services
 
             var userEntity = _mapper.ConvertUserDtoToEntity(userModel);
 
-            userEntity.StatusId = (int)Enums.Status.Active;
+            userEntity.StatusId = (int)Enums.State.Active;
             userEntity.AddressId = userModel.Address.AddressId;
             userEntity.Address = null;
 
@@ -576,7 +576,7 @@ namespace WayMatcherBL.Services
 
             vehicleEntity.VehicleId = 0;
 
-            vehicleEntity.StatusId = (int)Enums.Status.Active;
+            vehicleEntity.StatusId = (int)Enums.State.Active;
 
             _dbContext.Vehicles.Add(vehicleEntity);
             return _dbContext.SaveChanges() > 0;
@@ -595,7 +595,7 @@ namespace WayMatcherBL.Services
 
             var vehicleMappingEntity = _mapper.ConvertVehicleMappingDtoToEntity(vehicleMapping);
 
-            vehicleMappingEntity.StatusId = (int)Enums.Status.Active;
+            vehicleMappingEntity.StatusId = (int)Enums.State.Active;
 
             _dbContext.VehicleMappings.Add(vehicleMappingEntity);
             return _dbContext.SaveChanges() > 0;
@@ -677,7 +677,7 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the rating was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertRating(RatingDto rating)
         {
-            var existingRating = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
+            var existingRating = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId || r.RatedUserId == rating.RatedUserId && r.UserWhoRatedId == rating.UserWhoRatedId);
             if (existingRating != null)
                 throw new ArgumentException("A rating with the same ID already exists.");
 
@@ -905,7 +905,7 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the rating was updated successfully; otherwise, <c>false</c>.</returns>
         public bool UpdateRating(RatingDto rating)
         {
-            var ratingEntity = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
+            var ratingEntity = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId || r.RatedUserId == rating.RatedUserId && r.UserWhoRatedId == rating.UserWhoRatedId);
 
             if (ratingEntity == null && rating.UserWhoRatedId != ratingEntity.UserWhoRatedId)
                 return false;

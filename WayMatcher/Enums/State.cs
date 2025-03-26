@@ -5,7 +5,7 @@ namespace WayMatcherBL.Enums
     /// <summary>
     /// Represents the various states that an entity can be in.
     /// </summary>
-    public enum Status
+    public enum State
     {
         /// <summary>
         /// The entity is active.
