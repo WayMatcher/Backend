@@ -490,6 +490,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the address was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertAddress(AddressDto addressModel)
         {
+            var existingAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == addressModel.AddressId);
+            if (existingAddress != null)
+                throw new ArgumentException("An address with the same ID already exists.");
+
             var addressEntity = _mapper.ConvertAddressDtoToEntity(addressModel);
 
             addressEntity.StatusId = (int)State.Active;
@@ -507,6 +511,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the event was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertEvent(EventDto eventModel)
         {
+            var existingEvent = _dbContext.Events.FirstOrDefault(e => e.EventId == eventModel.EventId);
+            if (existingEvent != null)
+                throw new ArgumentException("An event with the same ID already exists.");
+
             var eventEntity = _mapper.ConvertEventDtoToEntity(eventModel);
 
             eventEntity.Status = new Status();
@@ -523,6 +531,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the schedule was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertSchedule(ScheduleDto scheduleModel)
         {
+            var existingSchedule = _dbContext.Schedules.FirstOrDefault(s => s.ScheduleId == scheduleModel.ScheduleId);
+            if (existingSchedule != null)
+                throw new ArgumentException("A schedule with the same ID already exists.");
+
             var scheduleEntity = _mapper.ConvertScheduleDtoToEntity(scheduleModel);
             _dbContext.Schedules.Add(scheduleEntity);
             return _dbContext.SaveChanges() > 0;
@@ -535,6 +547,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the user was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertUser(UserDto userModel)
         {
+            var existingUser = _dbContext.Users.FirstOrDefault(u => u.EMail == userModel.Email || u.Username == userModel.Username);
+            if (existingUser != null)
+                throw new ArgumentException("A user with the same email or username already exists.");
+
             var userEntity = _mapper.ConvertUserDtoToEntity(userModel);
 
             userEntity.StatusId = (int)State.Active;
@@ -552,6 +568,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the vehicle was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertVehicle(VehicleDto vehicleModel)
         {
+            var existingVehicle = _dbContext.Vehicles.FirstOrDefault(v => v.VehicleId == vehicleModel.VehicleId);
+            if (existingVehicle != null)
+                throw new ArgumentException("A vehicle with the same ID already exists.");
+
             var vehicleEntity = _mapper.ConvertVehicleDtoToEntity(vehicleModel);
 
             vehicleEntity.VehicleId = 0;
@@ -569,6 +589,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the vehicle mapping was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertVehicleMapping(VehicleMappingDto vehicleMapping)
         {
+            var existingVehicleMapping = _dbContext.VehicleMappings.FirstOrDefault(vm => vm.VehicleMappingId == vehicleMapping.VehicleMappingId);
+            if (existingVehicleMapping != null)
+                throw new ArgumentException("A vehicle mapping with the same ID already exists.");
+
             var vehicleMappingEntity = _mapper.ConvertVehicleMappingDtoToEntity(vehicleMapping);
 
             vehicleMappingEntity.StatusId = (int)State.Active;
@@ -584,6 +608,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the stop was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertStop(StopDto stop)
         {
+            var existingStop = _dbContext.Stops.FirstOrDefault(s => s.StopId == stop.StopId);
+            if (existingStop != null)
+                throw new ArgumentException("A stop with the same ID already exists.");
+
             var stopEntity = _mapper.ConvertStopDtoToEntity(stop);
 
             _dbContext.Stops.Add(stopEntity);
@@ -598,6 +626,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the invite was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertToInvite(InviteDto invite)
         {
+            var existingInvite = _dbContext.Invites.FirstOrDefault(i => i.InviteId == invite.InviteId);
+            if (existingInvite != null)
+                throw new ArgumentException("An invite with the same ID already exists.");
+
             var inviteEntity = _mapper.ConvertInviteDtoToEntity(invite);
 
             _dbContext.Invites.Add(inviteEntity);
@@ -611,6 +643,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the event member was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertToEventMember(EventMemberDto eventMember)
         {
+            var existingEventMember = _dbContext.EventMembers.FirstOrDefault(em => em.MemberId == eventMember.MemberId);
+            if (existingEventMember != null)
+                throw new ArgumentException("An event member with the same ID already exists.");
+
             var eventMemberEntity = _mapper.ConvertEventMemberDtoToEntity(eventMember);
 
             _dbContext.EventMembers.Add(eventMemberEntity);
@@ -624,6 +660,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the chat message was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertChatMessage(ChatMessageDto chatMessage)
         {
+            var existingChatMessage = _dbContext.ChatMessages.FirstOrDefault(cm => cm.ChatMessageId == chatMessage.ChatMessageId);
+            if (existingChatMessage != null)
+                throw new ArgumentException("A chat message with the same ID already exists.");
+
             var chatMessageEntity = _mapper.ConvertChatMessageDtoToEntity(chatMessage);
 
             _dbContext.ChatMessages.Add(chatMessageEntity);
@@ -637,6 +677,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the rating was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertRating(RatingDto rating)
         {
+            var existingRating = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId);
+            if (existingRating != null)
+                throw new ArgumentException("A rating with the same ID already exists.");
+
             var ratingEntity = _mapper.ConvertRatingDtoToEntity(rating);
 
             _dbContext.Ratings.Add(ratingEntity);
@@ -651,6 +695,10 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the notification was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertNotification(NotificationDto notification)
         {
+            var existingNotification = _dbContext.Notifications.FirstOrDefault(n => n.NotificationId == notification.NotificationId);
+            if (existingNotification != null)
+                throw new ArgumentException("A notification with the same ID already exists.");
+
             var notificationEntity = _mapper.ConvertNotificationDtoToEntity(notification);
 
             _dbContext.Notifications.Add(notificationEntity);
@@ -754,49 +802,49 @@ namespace WayMatcherBL.Services
         /// <summary>
         /// Updates an existing user.
         /// </summary>
-        /// <param name="userModel">The user details.</param>
+        /// <param name="updateUserDto">The user details.</param>
         /// <returns><c>true</c> if the user was updated successfully; otherwise, <c>false</c>.</returns>
-        public bool UpdateUser(UserDto userModel)
+        public bool UpdateUser(UserDto updateUserDto)
         {
-            var userEntity = _dbContext.Users.FirstOrDefault(u => u.UserId == userModel.UserId);
+            var userEntity = _dbContext.Users.FirstOrDefault(u => u.UserId == GetUser(updateUserDto).UserId);
             if (userEntity == null)
                 return false;
 
-            if (!string.IsNullOrEmpty(userModel.Firstname))
-                userEntity.Firstname = userModel.Firstname;
+            if (!string.IsNullOrEmpty(updateUserDto.Firstname))
+                userEntity.Firstname = updateUserDto.Firstname;
 
-            if (!string.IsNullOrEmpty(userModel.Name))
-                userEntity.Name = userModel.Name;
+            if (!string.IsNullOrEmpty(updateUserDto.Name))
+                userEntity.Name = updateUserDto.Name;
 
-            if (!string.IsNullOrEmpty(userModel.Username))
-                userEntity.Username = userModel.Username;
+            if (!string.IsNullOrEmpty(updateUserDto.Username))
+                userEntity.Username = updateUserDto.Username;
 
-            if (!string.IsNullOrEmpty(userModel.Password))
-                userEntity.Password = userModel.Password;
+            if (!string.IsNullOrEmpty(updateUserDto.Password))
+                userEntity.Password = updateUserDto.Password;
 
-            if (!string.IsNullOrEmpty(userModel.Email))
-                userEntity.EMail = userModel.Email;
+            if (!string.IsNullOrEmpty(updateUserDto.Email))
+                userEntity.EMail = updateUserDto.Email;
 
-            if (!string.IsNullOrEmpty(userModel.Telephone))
-                userEntity.Telephone = userModel.Telephone;
+            if (!string.IsNullOrEmpty(updateUserDto.Telephone))
+                userEntity.Telephone = updateUserDto.Telephone;
 
-            if (!string.IsNullOrEmpty(userModel.AdditionalDescription))
-                userEntity.AdditionalDescription = userModel.AdditionalDescription;
+            if (!string.IsNullOrEmpty(updateUserDto.AdditionalDescription))
+                userEntity.AdditionalDescription = updateUserDto.AdditionalDescription;
 
-            if (userModel.LicenseVerified.HasValue)
-                userEntity.LicenseVerified = userModel.LicenseVerified;
+            if (updateUserDto.LicenseVerified.HasValue)
+                userEntity.LicenseVerified = updateUserDto.LicenseVerified;
 
-            if (userModel.ProfilePicture != null && userModel.ProfilePicture.Length > 0)
-                userEntity.ProfilePicture = userModel.ProfilePicture;
+            if (updateUserDto.ProfilePicture != null && updateUserDto.ProfilePicture.Length > 0)
+                userEntity.ProfilePicture = updateUserDto.ProfilePicture;
 
-            if (userModel.CreationDate.HasValue)
-                userEntity.CreationDate = userModel.CreationDate;
+            if(updateUserDto.Address != null && updateUserDto.Address.AddressId != -1)
+                userEntity.AddressId = updateUserDto.Address.AddressId;
 
-            if (!string.IsNullOrEmpty(userModel.MfAtoken))
-                userEntity.MfAtoken = userModel.MfAtoken;
+            if (!string.IsNullOrEmpty(updateUserDto.MfAtoken))
+                userEntity.MfAtoken = updateUserDto.MfAtoken;
 
-            if (userModel.StatusId.HasValue)
-                userEntity.StatusId = userModel.StatusId;
+            if (updateUserDto.StatusId.HasValue)
+                userEntity.StatusId = updateUserDto.StatusId;
 
             return _dbContext.SaveChanges() > 0;
         }

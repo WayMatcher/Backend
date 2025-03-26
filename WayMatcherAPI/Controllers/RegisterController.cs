@@ -19,7 +19,7 @@ namespace WayMatcherAPI.Controllers
         }
 
         [HttpPost("NewUser")]
-        public IActionResult NewUser([FromBody] RequestRegisterUser user)
+        public IActionResult NewUser([FromBody] RequestUserChange user)
         {
             try
             {
@@ -59,6 +59,10 @@ namespace WayMatcherAPI.Controllers
                     return BadRequest(result);
             }
             catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }

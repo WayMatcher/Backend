@@ -17,43 +17,41 @@ namespace WayMatcherAPI.Controllers
         {
             _userService = userService;
         }
-        private bool UpdateUserDetails(RequestRegisterUser userEdit)
-        {
-            var vehicleList = new List<VehicleDto>();
-            var vehicleMappingList = new List<VehicleMappingDto>();
-
-            foreach (var vehicle in userEdit.VehicleList)
-            {
-                var vehicleDto = new VehicleDto()
-                {
-                    VehicleId = vehicle.VehicleId ?? -1,
-                    Model = vehicle.Model,
-                    Seats = vehicle.Seats,
-                    YearOfManufacture = vehicle.YearOfManufacture,
-                    ManufacturerName = vehicle.ManufacturerName
-                };
-
-                var vehicleMappingDto = new VehicleMappingDto()
-                {
-                    FuelMilage = vehicle.FuelMilage,
-                    AdditionalInfo = vehicle.AdditionalInfo,
-                    LicensePlate = vehicle.LicensePlate,
-                    VehicleId = vehicle.VehicleId ?? -1,
-                };
-
-                vehicleList.Add(vehicleDto);
-                vehicleMappingList.Add(vehicleMappingDto);
-            }
-
-            return _userService.ConfigurateAddress(userEdit.User) && _userService.ConfigurateVehicle(userEdit.User, vehicleList, vehicleMappingList) && _userService.ConfigurateUser(userEdit.User);
-        }
 
         [HttpPost("EditUser")]
-        public IActionResult EditUser([FromBody] RequestRegisterUser userEdit)
+        public IActionResult EditUser([FromBody] RequestUserChange userEdit)
         {
             try
             {
-                var result = UpdateUserDetails(userEdit);
+                var vehicleList = new List<VehicleDto>();
+                var vehicleMappingList = new List<VehicleMappingDto>();
+
+                foreach (var vehicle in userEdit.VehicleList)
+                {
+                    var vehicleDto = new VehicleDto()
+                    {
+                        VehicleId = vehicle.VehicleId ?? -1,
+                        Model = vehicle.Model,
+                        Seats = vehicle.Seats,
+                        YearOfManufacture = vehicle.YearOfManufacture,
+                        ManufacturerName = vehicle.ManufacturerName
+                    };
+
+                    var vehicleMappingDto = new VehicleMappingDto()
+                    {
+                        VehicleId = vehicle.VehicleId ?? -1,
+                        FuelMilage = vehicle.FuelMilage,
+                        AdditionalInfo = vehicle.AdditionalInfo,
+                        LicensePlate = vehicle.LicensePlate,
+                    };
+
+                    vehicleList.Add(vehicleDto);
+                    vehicleMappingList.Add(vehicleMappingDto);
+                }
+
+                userEdit.User.Password = userEdit.Password;
+
+                var result = _userService.ConfigurateVehicle(userEdit.User, vehicleList, vehicleMappingList) && _userService.ConfigurateUser(userEdit.User);
                 if (result)
                     return Ok(result);
                 else
@@ -63,24 +61,7 @@ namespace WayMatcherAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error: " + ex.Message);
-            }
-        }
-
-        [HttpPost("ChangePassword")]
-        public IActionResult SendPasswordEmail([FromBody] UserDto user)
-        {
-            try
-            {
-                var result = _userService.ChangePassword(user);
-                if (result)
-                    return Ok(result);
-                else
-                    return StatusCode(500, "An error occurred while sending the Password E-Mail.");
-            }
-            catch (ArgumentNullException ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -102,6 +83,10 @@ namespace WayMatcherAPI.Controllers
                     return StatusCode(500, "An error occurred while deleting the user.");
             }
             catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -133,6 +118,10 @@ namespace WayMatcherAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -158,6 +147,10 @@ namespace WayMatcherAPI.Controllers
                     return NotFound("Address not found.");
             }
             catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -193,6 +186,10 @@ namespace WayMatcherAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -223,6 +220,10 @@ namespace WayMatcherAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -248,6 +249,10 @@ namespace WayMatcherAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -269,6 +274,10 @@ namespace WayMatcherAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -287,6 +296,10 @@ namespace WayMatcherAPI.Controllers
                     return NotFound("No notifications found.");
             }
             catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }

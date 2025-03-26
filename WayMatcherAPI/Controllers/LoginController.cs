@@ -39,6 +39,10 @@ namespace WayMatcherAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -54,6 +58,35 @@ namespace WayMatcherAPI.Controllers
                 return Ok("Password reset email sent.");
             }
             catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword([FromBody] UserDto user)
+        {
+            try
+            {
+                var result = _userService.ChangePassword(user);
+                if (result)
+                    return Ok(result);
+                else
+                    return StatusCode(500, "An error occurred while changing Password user.");
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }

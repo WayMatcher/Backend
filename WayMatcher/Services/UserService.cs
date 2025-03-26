@@ -52,11 +52,7 @@ namespace WayMatcherBL.Services
             };
             _emailService.SendEmail(email);
 
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hashBytes = sha256.ComputeHash(numberBytes);
-                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-            }
+            return HashString(randomNumber.ToString());
         }
 
         /// <summary>
@@ -123,6 +119,21 @@ namespace WayMatcherBL.Services
         }
 
         /// <summary>
+        /// Hashes the input string using SHA-256.
+        /// </summary>
+        /// <param name="input">The input string to hash.</param>
+        /// <returns>The hashed string.</returns>
+        private string HashString(string input)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            }
+        }
+
+        /// <summary>
         /// Sends an email to the user to change their password.
         /// </summary>
         /// <param name="user">The user DTO.</param>
@@ -130,8 +141,11 @@ namespace WayMatcherBL.Services
         {
             var email = new EmailDto()
             {
-                Subject = "Change Password",
-                Body = "<html>\r\n  <head>\r\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n    <style>\r\n      body {\r\n        font-family: Arial, sans-serif;\r\n        background-color: #f4f4f4;\r\n        margin: 0;\r\n        padding: 0;\r\n      }\r\n      .container {\r\n        max-width: 600px;\r\n        margin: 20px auto;\r\n        background: #ffffff;\r\n        padding: 20px;\r\n        border-radius: 8px;\r\n        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\r\n      }\r\n      .header {\r\n        text-align: center;\r\n        font-size: 24px;\r\n        font-weight: bold;\r\n        color: #333;\r\n      }\r\n      .content {\r\n        font-size: 16px;\r\n        color: #555;\r\n        line-height: 1.6;\r\n      }\r\n      .button {\r\n        display: inline-block;\r\n        padding: 12px 20px;\r\n        margin-top: 20px;\r\n        background: #007bff;\r\n        color: #ffffff;\r\n        text-decoration: none;\r\n        border-radius: 5px;\r\n        font-weight: bold;\r\n      }\r\n      .footer {\r\n        margin-top: 20px;\r\n        font-size: 14px;\r\n        color: #888;\r\n        text-align: center;\r\n      }\r\n    </style>\r\n  </head>\r\n  <body>\r\n    <div class=\"container\">\r\n      <div class=\"header\">Reset Your Password</div>\r\n      <hr>\r\n      <div class=\"content\">\r\n        <p>Hello,</p>\r\n        <p>We received a request to reset your password. Click the button below to proceed:</p>\r\n        <p style=\"text-align: center;\">\r\n          <a href=\"{{ RESET_LINK with user id or something to identify again }}\" class=\"button\">Reset Password</a>\r\n        </p>\r\n        <br>\r\n        <p>If you did not request this, please ignore this email.</p>\r\n      </div>\r\n      <hr>\r\n    </div>\r\n  </body>\r\n</html>\r\n", //send https with hashedUser/jwttoken? and create template for email #TODO
+                Subject = $"Change Password for {user.Username}",
+                Body = $@"<html>
+<head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Password Reset Request</h1><h5 class=""text-teal-700"">We've received a request to reset your password</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">We received a request to reset your account password. If this was you, please click the link below to change your password.</p><p class=""text-gray-700"">If you did not request a password reset, you can safely ignore this email.</p></div><hr>
+<a class=""btn btn-primary"" href=""{HashString(user.Username)}"" target=""_blank"">Reset Your Password</a>
+</div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
             };
@@ -142,30 +156,19 @@ namespace WayMatcherBL.Services
         /// Changes the password for the specified user.
         /// </summary>
         /// <param name="user">The user DTO.</param>
-        /// <returns>True if the password was changed successfully; otherwise, false.</returns>
+        /// <returns>True if the password was changed successfully; otherwise, <c>false</c>.</returns>
         public bool ChangePassword(UserDto user)
         {
-            user = _databaseService.GetUser(user);
-
             if (user.Password == null)
-                return false;
+                throw new ArgumentNullException("Password cannot be null");
 
-            return _databaseService.UpdateUser(user);
-        }
+            var userDto = _databaseService.GetActiveUsers().FirstOrDefault(u => HashString(u.Username) == user.Username);
 
-        /// <summary>
-        /// Configures the address for the specified user.
-        /// </summary>
-        /// <param name="user">The user DTO.</param>
-        /// <returns>True if the address was configured successfully; otherwise, false.</returns>
-        public bool ConfigurateAddress(UserDto user)
-        {
-            if (user == null || user.Address == null)
-                return false;
+            if (userDto == null)
+                throw new ArgumentNullException("User cannot be null");
 
-            user.Address.AddressId = GetAddressId(user.Address);
-
-            return _databaseService.UpdateUser(user);
+            userDto.Password = user.Password;
+            return _databaseService.UpdateUser(userDto);
         }
 
         /// <summary>
@@ -176,7 +179,9 @@ namespace WayMatcherBL.Services
         public bool ConfigurateUser(UserDto user)
         {
             if (user == null)
-                return false;
+                throw new ArgumentNullException("User cannot be null");
+
+            user.Address.AddressId = GetAddressId(user.Address);
 
             return _databaseService.UpdateUser(user);
         }
@@ -226,6 +231,10 @@ namespace WayMatcherBL.Services
         /// <returns>True if the user was deleted successfully; otherwise, false.</returns>
         public bool DeleteUser(UserDto user)
         {
+            if (user == null)
+                throw new ArgumentNullException("User cannot be null");
+
+            user.Address.AddressId = GetAddressId(user.Address);
             user.StatusId = (int)State.Inactive;
             return _databaseService.UpdateUser(user);
         }
@@ -280,7 +289,7 @@ namespace WayMatcherBL.Services
 
             var dbUser = _databaseService.GetUser(user);
 
-            if (dbUser == null)
+            if (dbUser == null || dbUser.StatusId == (int)State.Inactive)
                 throw new ArgumentNullException(nameof(dbUser), "Database user cannot be null");
 
             if ((dbUser.Username == user.Username || dbUser.Email == user.Email) && dbUser.Password == user.Password)
@@ -331,7 +340,21 @@ namespace WayMatcherBL.Services
         {
             user.Address.AddressId = GetAddressId(user.Address);
 
-            if (_databaseService.InsertUser(user))
+            var existingUser = _databaseService.GetUser(user);
+
+            if (existingUser != null)
+            {
+                if (existingUser.StatusId == (int)State.Inactive)
+                {
+                    existingUser.StatusId = (int)State.Active;
+                    _databaseService.UpdateUser(existingUser);
+                    return true;
+                }
+                else
+                    throw new Exception("User already exists and is active");
+            }
+
+            else if (_databaseService.InsertUser(user))
             {
                 var userId = GetUser(user).UserId;
 
@@ -350,7 +373,7 @@ namespace WayMatcherBL.Services
 
                 return true;
             }
-            throw new ArgumentNullException("User cannot be null");
+            throw new Exception("User could not be registered");
         }
 
         /// <summary>

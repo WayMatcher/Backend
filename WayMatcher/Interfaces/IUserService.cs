@@ -69,13 +69,6 @@ namespace WayMatcherBL.Interfaces
         public bool ConfigurateVehicle(UserDto user, List<VehicleDto> vehicleList, List<VehicleMappingDto> vehicleMappingList);
 
         /// <summary>
-        /// Configures the address of a user.
-        /// </summary>
-        /// <param name="user">The user to configure the address for.</param>
-        /// <returns>True if the address was successfully configured; otherwise, false.</returns>
-        public bool ConfigurateAddress(UserDto user);
-
-        /// <summary>
         /// Gets a user.
         /// </summary>
         /// <param name="user">The user to get.</param>
