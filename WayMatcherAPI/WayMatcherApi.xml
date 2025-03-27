@@ -314,12 +314,12 @@
             Represents a request model for event member information.
             </summary>
         </member>
-        <member name="P:WayMatcherAPI.Models.RequestEventMember.Event">
+        <member name="P:WayMatcherAPI.Models.RequestEventMember.EventID">
             <summary>
             Gets or sets the event information.
             </summary>
         </member>
-        <member name="P:WayMatcherAPI.Models.RequestEventMember.User">
+        <member name="P:WayMatcherAPI.Models.RequestEventMember.UserID">
             <summary>
             Gets or sets the user information.
             </summary>
