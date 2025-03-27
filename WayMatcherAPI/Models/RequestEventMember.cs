@@ -10,12 +10,12 @@ namespace WayMatcherAPI.Models
         /// <summary>
         /// Gets or sets the event information.
         /// </summary>
-        public EventDto Event { get; set; }
+        public int EventID { get; set; }
 
         /// <summary>
         /// Gets or sets the user information.
         /// </summary>
-        public UserDto User { get; set; }
+        public int UserID { get; set; }
 
         /// <summary>
         /// Gets or sets the role of the user in the event.
