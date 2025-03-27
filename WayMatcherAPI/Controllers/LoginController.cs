@@ -49,11 +49,17 @@ namespace WayMatcherAPI.Controllers
         /// <param name="user">The user DTO.</param>
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
         [HttpPost("ForgotPassword")]
-        public IActionResult ForgotPassword([FromBody] UserDto user)
+        public IActionResult ForgotPassword([FromBody] RequestUser user)
         {
             return HandleRequest(() =>
             {
-                _userService.SendChangePasswordMail(user);
+                var userDto = new UserDto
+                {
+                    Email = user.Email,
+                    Username = user.Username,
+                    UserId = user.UserId
+                };
+                _userService.SendChangePasswordMail(userDto);
                 return Ok("Password reset email sent.");
             });
         }
@@ -64,11 +70,16 @@ namespace WayMatcherAPI.Controllers
         /// <param name="user">The user DTO.</param>
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
         [HttpPost("ChangePassword")]
-        public IActionResult ChangePassword([FromBody] UserDto user)
+        public IActionResult ChangePassword([FromBody] RequestPassword password)
         {
             return HandleRequest(() =>
             {
-                var result = _userService.ChangePassword(user);
+                var userDto = new UserDto
+                {
+                    Username = password.HashedUsername,
+                    Password = password.Password,
+                };
+                var result = _userService.ChangePassword(userDto);
                 return result ? Ok(result) : StatusCode(500, "An error occurred while changing the password.");
             });
         }
