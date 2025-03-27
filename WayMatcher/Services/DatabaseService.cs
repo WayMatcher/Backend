@@ -322,6 +322,7 @@ namespace WayMatcherBL.Services
             eventDto.Status = GetStatus(eventItem.StatusId ?? -1);
             eventDto.Owner = GetEventOwner(eventDto);
             eventDto.StopList = GetStopList(eventDto);
+            eventDto.EventMembers = GetEventMemberList(eventDto);
 
             return eventDto;
         }
@@ -692,6 +693,10 @@ namespace WayMatcherBL.Services
                 _dbContext.Users.Attach(eventMemberEntity.User);
 
             eventMemberEntity.Status = null;
+            eventMemberEntity.User = null;
+            eventMemberEntity.StatusId = eventMember.Status.StatusId;
+            eventMemberEntity.UserId = eventMember.User.UserId;
+            eventMemberEntity.EventMemberTypeId = (int)eventMember.EventRole;
 
             _dbContext.EventMembers.Add(eventMemberEntity);
             return _dbContext.SaveChanges() > 0;

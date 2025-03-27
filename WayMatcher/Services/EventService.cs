@@ -222,69 +222,6 @@ namespace WayMatcherBL.Services
         /// <param name="user">The user DTO.</param>
         /// <returns>The created event DTO.</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
-        //public EventDto CreateEvent(EventDto eventDto, UserDto user)
-        //{
-        //    if (eventDto == null || user == null || eventDto.StopList.IsNullOrEmpty() || eventDto.Schedule == null)
-        //        throw new ArgumentNullException("Objects cannot be null");
-
-        //    if (!PlanSchedule(eventDto.Schedule))
-        //        throw new ArgumentNullException("Schedule could not be planned");
-
-        //    eventDto.ScheduleId = eventDto.Schedule.ScheduleId;
-        //    eventDto.Owner = user;
-
-        //    var eventDb = _databaseService.InsertEvent(eventDto);
-
-        //    if (eventDb == null)
-        //        throw new ArgumentNullException("Event could not be created");
-
-        //    foreach (var stop in eventDto.StopList)
-        //    {
-        //        stop.Address.AddressId = GetAddressId(stop.Address);
-        //        stop.EventId = eventDb.EventId ?? -1;
-
-        //        AddStop(stop);
-        //    }
-
-        //    var retrievedUser = _databaseService.GetUser(user);
-        //    if (retrievedUser == null)
-        //        throw new ArgumentNullException("User could not be retrieved from the database");
-
-        //    var eventMember = new EventMemberDto()
-        //    {
-        //        EventId = eventDb.EventId ?? -1,
-        //        User = retrievedUser,
-        //        Status = new StatusDto() { StatusId = (int)State.Active }
-        //    };
-
-        //    if (eventDto.EventTypeId == (int)EventRole.Passenger)
-        //        eventMember.EventRole = EventRole.Passenger;
-        //    else
-        //        eventMember.EventRole = EventRole.Pilot;
-
-        //    AddEventMember(eventMember);
-
-        //    var email = new EmailDto()
-        //    {
-        //        Subject = $"Way: {eventDb.EventId} created",
-        //        Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Confirmation</h1><h5 class=""text-teal-700"">Your Way has been successfully set up!</h5><hr><div class=""space-y-3"">
-        //<p class=""text-gray-700"">Dear {user.Username},</p>
-        //<p class=""text-gray-700"">We are pleased to inform you that your Way has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
-        //        To = user.Email,
-        //        IsHtml = true
-        //    };
-        //    _emailService.SendEmail(email);
-
-        //    return eventDb;
-        //}
-
-        /// <summary>
-        /// Creates a new event.
-        /// </summary>
-        /// <param name="eventDto">The event DTO.</param>
-        /// <param name="user">The user DTO.</param>
-        /// <returns>The created event DTO.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
         public EventDto CreateEvent(EventDto eventDto, UserDto user)
         {
             if (eventDto == null || user == null || eventDto.StopList.IsNullOrEmpty() || eventDto.Schedule == null)
@@ -296,7 +233,6 @@ namespace WayMatcherBL.Services
             var eventDb = _databaseService.InsertEvent(eventDto);
             if (eventDb == null)
                 throw new ArgumentNullException("Event could not be created");
-
 
             AddStopsToEvent(eventDto.StopList, eventDb.EventId ?? -1);
             AddEventOwnerAsMember(eventDb.EventId ?? -1, user, eventDto.EventTypeId);
@@ -428,8 +364,6 @@ namespace WayMatcherBL.Services
         {
             if (eventMemberDto == null)
                 throw new ArgumentNullException("Event member cannot be null");
-
-            eventMemberDto.Status.StatusId = (int)State.Active;
 
             if (!_databaseService.InsertToEventMember(eventMemberDto))
                 throw new ArgumentNullException("Event member could not be added");
