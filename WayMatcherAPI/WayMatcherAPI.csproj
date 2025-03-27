@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>C:\Users\christian.rudigier\OneDrive - Landesberufsschule 4\Documents\11_Projekt\QuellcodeDoc\WayMatcherApi.xml</DocumentationFile>
+    <DocumentationFile>WayMatcherApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
