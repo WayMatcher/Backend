@@ -123,14 +123,14 @@
             <param name="userLogin">The user login request model.</param>
             <returns>An <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/> representing the result of the operation.</returns>
         </member>
-        <member name="M:WayMatcherAPI.Controllers.LoginController.ForgotPassword(WayMatcherBL.LogicModels.UserDto)">
+        <member name="M:WayMatcherAPI.Controllers.LoginController.ForgotPassword(WayMatcherAPI.Models.RequestUser)">
             <summary>
             Sends a password reset email to the user.
             </summary>
             <param name="user">The user DTO.</param>
             <returns>An <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/> representing the result of the operation.</returns>
         </member>
-        <member name="M:WayMatcherAPI.Controllers.LoginController.ChangePassword(WayMatcherBL.LogicModels.UserDto)">
+        <member name="M:WayMatcherAPI.Controllers.LoginController.ChangePassword(WayMatcherAPI.Models.RequestPassword)">
             <summary>
             Changes the password of the user.
             </summary>

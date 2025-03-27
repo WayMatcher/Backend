@@ -141,6 +141,7 @@ namespace WayMatcherBL.Services
         /// <param name="user">The user DTO.</param>
         public void SendChangePasswordMail(UserDto user)
         {
+            user = _databaseService.GetUser(user);
             var email = new EmailDto()
             {
                 Subject = $"Change Password for {user.Username}",
