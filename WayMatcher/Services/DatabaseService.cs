@@ -946,7 +946,7 @@ namespace WayMatcherBL.Services
                 eventMemberEntity.EventId = eventMember.EventId;
 
             if (eventMember.Status.StatusId != -1)
-                eventMemberEntity.Status.StatusId = eventMember.Status.StatusId;
+                eventMemberEntity.StatusId = eventMember.Status.StatusId;
 
             return _dbContext.SaveChanges() > 0;
         }
