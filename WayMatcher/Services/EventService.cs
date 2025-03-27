@@ -41,7 +41,7 @@ namespace WayMatcherBL.Services
 
             if (existingSchedule != null)
                 return existingSchedule;
-            
+
 
             return _databaseService.InsertSchedule(schedule);
         }
@@ -310,7 +310,6 @@ namespace WayMatcherBL.Services
             return userEvents;
         }
 
-
         /// <summary>
         /// Sends an event invite.
         /// </summary>
@@ -334,9 +333,9 @@ namespace WayMatcherBL.Services
             {
                 email.Subject = $"You have been Invited to a Way: {invite.EventId} as a {invite.eventRole.GetDescription()}!";
                 email.Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">You're Invited!</h1><h5 class=""text-teal-700"">You have been invited to a Way!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">We are excited to inform you that you have been invited to join us for a Way </p><p class=""text-gray-700"">Please click the link below to confirm your attendance.</p><p class=""text-gray-700"">We hope to see you there!</p></div><hr>
-<a class=""btn btn-primary"" href=""{invite.User.UserId}{invite.EventId}{(int)invite.eventRole}"" target=""_blank"">Confirm Your Attendance</a>
+<a class=""btn btn-primary"" href=""http://localhost:4000/requests/accept?userId={invite.User.UserId}&eventId={invite.EventId}&eventRole={(int)invite.eventRole}"" target=""_blank"">Confirm Your Attendance</a>
 </div></div></div></body></html>";
-                //add link to confirm attendance
+                //TODO: localhost should be replaced with the actual domain
                 email.To = invite.User.Email;
             }
             else
@@ -344,9 +343,9 @@ namespace WayMatcherBL.Services
                 email.Subject = $"Way ({invite.EventId}) Request from User: {invite.User.Username} as a {invite.eventRole.GetDescription()}";
                 email.Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Request to Join the Way</h1><h5 class=""text-teal-700"">A user has requested to join the Way!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">A user has expressed interest in joining the Way. Please review their request and consider granting access.</p><p class=""text-gray-700"">Here is the message from the user:</p>
 <blockquote class=""text-gray-700 bg-gray-100 p-3 rounded"">{invite.Message}</blockquote><p class=""text-gray-700"">To accept or decline this request, please follow the link below.</p></div><hr>
-<a class=""btn btn-primary"" href=""{invite.User.UserId}{invite.EventId}{(int)invite.eventRole}"" target=""_blank"">Review Request</a>
+<a class=""btn btn-primary"" href=""http://localhost:4000/invites/accept?userId={invite.User.UserId}&eventId={invite.EventId}&eventRole={(int)invite.eventRole}"" target=""_blank"">Review Request</a>
 </div></div></div></body></html>";
-                //add link to confirm attendance
+                //TODO: localhost should be replaced with the actual domain
                 email.To = _databaseService.GetEventOwner(new EventDto() { EventId = invite.EventId ?? -1 }).Email;
             }
             _emailService.SendEmail(email);
@@ -368,16 +367,23 @@ namespace WayMatcherBL.Services
             if (!_databaseService.InsertToEventMember(eventMemberDto))
                 throw new ArgumentNullException("Event member could not be added");
 
+            var eventDto = _databaseService.GetEvent(new EventDto() { EventId = eventMemberDto.EventId });
+            eventDto.FreeSeats = eventDto.FreeSeats - 1;
+            _databaseService.UpdateEvent(new EventDto() { EventId = eventMemberDto.EventId });
+
+            // Retrieve the user after inserting the event member
             var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.User.UserId });
+            if (user == null)
+                throw new ArgumentNullException("User could not be retrieved from the database");
+
             var email = new EmailDto()
             {
                 Subject = $"Way: {eventMemberDto.EventId} joined",
                 Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Join Confirmation</h1><h5 class=""text-teal-700"">You've successfully joined the Way!</h5><hr><div class=""space-y-3"">
-<p class=""text-gray-700"">Dear {eventMemberDto.User.Username},</p>
-<p class=""text-gray-700"">We are excited to inform you that you've successfully joined the Way. We look forward to your participation and hope you have a great experience.</p></div><hr></div></div></div></body></html>",
+        <p class=""text-gray-700"">Dear {eventMemberDto.User.Username},</p>
+        <p class=""text-gray-700"">We are excited to inform you that you've successfully joined the Way. We look forward to your participation and hope you have a great experience.</p></div><hr></div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
-
             };
             _emailService.SendEmail(email);
 

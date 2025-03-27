@@ -115,6 +115,9 @@ namespace WayMatcherAPI.Controllers
                     User = new UserDto() { UserId = member.UserID },
                     EventRole = member.EventRole == (int)EventRole.Pilot ? EventRole.Pilot : EventRole.Passenger,
                 };
+                eventMemberDto.Status = new StatusDto();
+                eventMemberDto.Status.StatusId = (int)State.Active;
+
                 return _eventService.AddEventMember(eventMemberDto) ? Ok("Member added.") : BadRequest();
             });
         }

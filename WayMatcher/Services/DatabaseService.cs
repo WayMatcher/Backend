@@ -1,4 +1,6 @@
-﻿using WayMatcherBL.DtoModels;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
 using WayMatcherBL.LogicModels;
@@ -351,7 +353,7 @@ namespace WayMatcherBL.Services
         /// <returns>A <see cref="UserDto"/>.</returns>
         public UserDto GetUser(UserDto userDto)
         {
-            var user = _dbContext.Users.FirstOrDefault(u => u.EMail == userDto.Email || u.Username == userDto.Username || u.UserId == userDto.UserId);
+            var user = _dbContext.Users.AsNoTracking().FirstOrDefault(u => u.EMail.Equals(userDto.Email) || u.Username.Equals(userDto.Username) || u.UserId.Equals(userDto.UserId));
 
             if (user == null)
                 return null;
@@ -679,7 +681,7 @@ namespace WayMatcherBL.Services
         /// <returns><c>true</c> if the event member was inserted successfully; otherwise, <c>false</c>.</returns>
         public bool InsertToEventMember(EventMemberDto eventMember)
         {
-            var existingEventMember = _dbContext.EventMembers.FirstOrDefault(em => em.MemberId == eventMember.MemberId);
+            var existingEventMember = _dbContext.EventMembers.AsNoTracking().FirstOrDefault(em => em.MemberId == eventMember.MemberId);
             if (existingEventMember != null)
                 throw new ArgumentException("An event member with the same ID already exists.");
 
@@ -688,7 +690,6 @@ namespace WayMatcherBL.Services
             var trackedUser = _dbContext.Users.Local.FirstOrDefault(u => u.UserId == eventMemberEntity.User.UserId);
             if (trackedUser != null)
                 eventMemberEntity.User = trackedUser;
-
             else
                 _dbContext.Users.Attach(eventMemberEntity.User);
 
@@ -699,7 +700,12 @@ namespace WayMatcherBL.Services
             eventMemberEntity.EventMemberTypeId = (int)eventMember.EventRole;
 
             _dbContext.EventMembers.Add(eventMemberEntity);
-            return _dbContext.SaveChanges() > 0;
+            var result = _dbContext.SaveChanges() > 0;
+
+            // Detach the entity to ensure the context is not tracking it anymore
+            _dbContext.Entry(eventMemberEntity).State = EntityState.Detached;
+
+            return result;
         }
 
         /// <summary>

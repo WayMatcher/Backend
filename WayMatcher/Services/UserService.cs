@@ -45,7 +45,7 @@ namespace WayMatcherBL.Services
 
             EmailDto email = new EmailDto()
             {
-                Subject = "WayMatcher | MFA Code for User: " + GetUser(user),
+                Subject = "WayMatcher | MFA Code for User: " + GetUser(user).Username,
                 Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Multi-Factor Authentication (MFA) Verification</h1><h5 class=""text-teal-700"">Secure your account with an extra layer of protection</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">To complete your login process, please enter the verification code below:</p>
     <h2 class=""text-teal-700"">{randomNumber}</h2>
     <p class=""text-gray-700"">If you did not request this code, please disregard this email or contact our support team immediately.</p><p class=""text-gray-700"">For added security, this code will expire in 10 minutes.</p></div><hr><p class=""text-gray-700"">Thank you for helping us keep your account secure.</p><a class=""btn btn-primary"" href=""https://support.yourcompany.com"" target=""_blank"">Contact Support</a></div></div></div></body></html>",
@@ -146,11 +146,12 @@ namespace WayMatcherBL.Services
                 Subject = $"Change Password for {user.Username}",
                 Body = $@"<html>
     <head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Password Reset Request</h1><h5 class=""text-teal-700"">We've received a request to reset your password</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">We received a request to reset your account password. If this was you, please click the link below to change your password.</p><p class=""text-gray-700"">If you did not request a password reset, you can safely ignore this email.</p></div><hr>
-    <a class=""btn btn-primary"" href=""{HashString(user.Username)}"" target=""_blank"">Reset Your Password</a>
+    <a class=""btn btn-primary"" href=""http://localhost:4000/password/change?hash={HashString(user.Username)}"" target=""_blank"">Reset Your Password</a>
     </div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
             };
+            //TODO: localhost should be replaced with the actual domain
             _emailService.SendEmail(email);
         }
 

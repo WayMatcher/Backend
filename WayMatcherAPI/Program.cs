@@ -26,8 +26,8 @@ namespace WayMatcherAPI
                 .EnableSensitiveDataLogging());
 
             builder.Services.AddSingleton<ConfigurationService>();
-            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDatabaseService, DatabaseService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IEventService, EventService>();
 
