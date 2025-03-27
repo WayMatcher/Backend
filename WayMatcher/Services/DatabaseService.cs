@@ -320,6 +320,8 @@ namespace WayMatcherBL.Services
             }
             eventDto = _mapper.ConvertEventToDto(eventItem);
             eventDto.Status = GetStatus(eventItem.StatusId ?? -1);
+            eventDto.Owner = GetEventOwner(eventDto);
+            eventDto.StopList = GetStopList(eventDto);
 
             return eventDto;
         }
@@ -533,12 +535,14 @@ namespace WayMatcherBL.Services
             var eventEntity = _mapper.ConvertEventDtoToEntity(eventModel);
 
             eventEntity.Status = null;
+            eventEntity.Schedule = null;
             eventEntity.StatusId = (int)State.Active;
+            eventEntity.EventOwnerId = eventModel.Owner.UserId;
+            eventEntity.ScheduleId = eventModel.Schedule.ScheduleId;
 
             _dbContext.Events.Add(eventEntity);
             _dbContext.SaveChanges();
 
-            // Retrieve the saved event entity
             var savedEvent = _dbContext.Events.FirstOrDefault(e => e.EventId == eventEntity.EventId);
             return _mapper.ConvertEventToDto(savedEvent);
         }
@@ -675,7 +679,7 @@ namespace WayMatcherBL.Services
             var trackedUser = _dbContext.Users.Local.FirstOrDefault(u => u.UserId == eventMemberEntity.User.UserId);
             if (trackedUser != null)
                 eventMemberEntity.User = trackedUser;
-            
+
             else
                 _dbContext.Users.Attach(eventMemberEntity.User);
 

@@ -67,6 +67,63 @@ namespace WayMatcherBL.Services
         }
 
         /// <summary>
+        /// Adds stops to the event.
+        /// </summary>
+        /// <param name="stops">The list of stops.</param>
+        /// <param name="eventId">The event ID.</param>
+        private void AddStopsToEvent(List<StopDto> stops, int eventId)
+        {
+            foreach (var stop in stops)
+            {
+                stop.Address.AddressId = GetAddressId(stop.Address);
+                stop.EventId = eventId;
+                AddStop(stop);
+            }
+        }
+
+        /// <summary>
+        /// Adds the event owner as a member of the event.
+        /// </summary>
+        /// <param name="eventId">The event ID.</param>
+        /// <param name="user">The user DTO.</param>
+        /// <param name="eventTypeId">The event type ID.</param>
+        private void AddEventOwnerAsMember(int eventId, UserDto user, int? eventTypeId)
+        {
+            var retrievedUser = _databaseService.GetUser(user);
+            if (retrievedUser == null)
+                throw new ArgumentNullException("User could not be retrieved from the database");
+
+            var eventMember = new EventMemberDto()
+            {
+                EventId = eventId,
+                User = retrievedUser,
+                Status = new StatusDto() { StatusId = (int)State.Active },
+                EventRole = eventTypeId == (int)EventRole.Passenger ? EventRole.Passenger : EventRole.Pilot
+            };
+
+            AddEventMember(eventMember);
+        }
+
+        /// <summary>
+        /// Sends an event creation email to the user.
+        /// </summary>
+        /// <param name="user">The user DTO.</param>
+        /// <param name="eventId">The event ID.</param>
+        private void SendEventCreationEmail(UserDto user, int eventId)
+        {
+            var email = new EmailDto()
+            {
+                Subject = $"Way: {eventId} created",
+                Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Confirmation</h1><h5 class=""text-teal-700"">Your Way has been successfully set up!</h5><hr><div class=""space-y-3"">
+<p class=""text-gray-700"">Dear {user.Username},</p>
+<p class=""text-gray-700"">We are pleased to inform you that your Way has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
+                To = user.Email,
+                IsHtml = true
+            };
+            _emailService.SendEmail(email);
+        }
+
+        /// <summary>
         /// Adds a stop to an event.
         /// </summary>
         /// <param name="stop">The stop DTO.</param>
@@ -163,61 +220,93 @@ namespace WayMatcherBL.Services
         /// <summary>
         /// Creates a new event.
         /// </summary>
-        /// <param name="eventDto">The event DTO.</param>
+        /// <param name="newEventDto">The event DTO.</param>
         /// <param name="user">The user DTO.</param>
         /// <returns>The created event DTO.</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
-        public EventDto CreateEvent(EventDto eventDto, UserDto user)
+        //public EventDto CreateEvent(EventDto eventDto, UserDto user)
+        //{
+        //    if (eventDto == null || user == null || eventDto.StopList.IsNullOrEmpty() || eventDto.Schedule == null)
+        //        throw new ArgumentNullException("Objects cannot be null");
+
+        //    if (!PlanSchedule(eventDto.Schedule))
+        //        throw new ArgumentNullException("Schedule could not be planned");
+
+        //    eventDto.ScheduleId = eventDto.Schedule.ScheduleId;
+        //    eventDto.Owner = user;
+
+        //    var eventDb = _databaseService.InsertEvent(eventDto);
+
+        //    if (eventDb == null)
+        //        throw new ArgumentNullException("Event could not be created");
+
+        //    foreach (var stop in eventDto.StopList)
+        //    {
+        //        stop.Address.AddressId = GetAddressId(stop.Address);
+        //        stop.EventId = eventDb.EventId ?? -1;
+
+        //        AddStop(stop);
+        //    }
+
+        //    var retrievedUser = _databaseService.GetUser(user);
+        //    if (retrievedUser == null)
+        //        throw new ArgumentNullException("User could not be retrieved from the database");
+
+        //    var eventMember = new EventMemberDto()
+        //    {
+        //        EventId = eventDb.EventId ?? -1,
+        //        User = retrievedUser,
+        //        Status = new StatusDto() { StatusId = (int)State.Active }
+        //    };
+
+        //    if (eventDto.EventTypeId == (int)EventRole.Passenger)
+        //        eventMember.EventRole = EventRole.Passenger;
+        //    else
+        //        eventMember.EventRole = EventRole.Pilot;
+
+        //    AddEventMember(eventMember);
+
+        //    var email = new EmailDto()
+        //    {
+        //        Subject = $"Way: {eventDb.EventId} created",
+        //        Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Confirmation</h1><h5 class=""text-teal-700"">Your Way has been successfully set up!</h5><hr><div class=""space-y-3"">
+        //<p class=""text-gray-700"">Dear {user.Username},</p>
+        //<p class=""text-gray-700"">We are pleased to inform you that your Way has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
+        //        To = user.Email,
+        //        IsHtml = true
+        //    };
+        //    _emailService.SendEmail(email);
+
+        //    return eventDb;
+        //}
+
+        /// <summary>
+        /// Creates a new event.
+        /// </summary>
+        /// <param name="newEventDto">The event DTO.</param>
+        /// <param name="user">The user DTO.</param>
+        /// <returns>The created event DTO.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
+        public EventDto CreateEvent(EventDto newEventDto, UserDto user)
         {
-            if (eventDto == null || user == null || eventDto.StopList.IsNullOrEmpty() || eventDto.Schedule == null)
+            if (newEventDto == null || user == null || newEventDto.StopList.IsNullOrEmpty() || newEventDto.Schedule == null)
                 throw new ArgumentNullException("Objects cannot be null");
 
-            if (!PlanSchedule(eventDto.Schedule))
+            if (!PlanSchedule(newEventDto.Schedule))
                 throw new ArgumentNullException("Schedule could not be planned");
 
-            eventDto.ScheduleId = eventDto.Schedule.ScheduleId;
+            newEventDto.ScheduleId = newEventDto.Schedule.ScheduleId;
+            newEventDto.Owner = user;
 
-            var eventDb = _databaseService.InsertEvent(eventDto);
-
+            var eventDb = _databaseService.InsertEvent(newEventDto);
             if (eventDb == null)
                 throw new ArgumentNullException("Event could not be created");
 
-            foreach (var stop in eventDto.StopList)
-            {
-                stop.Address.AddressId = GetAddressId(stop.Address);
-                stop.EventId = eventDb.EventId ?? -1;
+            eventDb = _databaseService.GetEvent(eventDb);
 
-                AddStop(stop);
-            }
-
-            var retrievedUser = _databaseService.GetUser(user);
-            if (retrievedUser == null)
-                throw new ArgumentNullException("User could not be retrieved from the database");
-
-            var eventMember = new EventMemberDto()
-            {
-                EventId = eventDb.EventId ?? -1,
-                User = retrievedUser,
-                Status = new StatusDto() { StatusId = (int)State.Active }
-            };
-
-            if (eventDto.EventTypeId == (int)EventRole.Passenger)
-                eventMember.EventRole = EventRole.Passenger;
-            else
-                eventMember.EventRole = EventRole.Pilot;
-
-            AddEventMember(eventMember);
-
-            var email = new EmailDto()
-            {
-                Subject = $"Way: {eventDb.EventId} created",
-                Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Confirmation</h1><h5 class=""text-teal-700"">Your Way has been successfully set up!</h5><hr><div class=""space-y-3"">
-        <p class=""text-gray-700"">Dear {user.Username},</p>
-        <p class=""text-gray-700"">We are pleased to inform you that your Way has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
-                To = user.Email,
-                IsHtml = true
-            };
-            _emailService.SendEmail(email);
+            AddStopsToEvent(eventDb.StopList, eventDb.EventId ?? -1);
+            AddEventOwnerAsMember(eventDb.EventId ?? -1, user, eventDb.EventTypeId);
+            SendEventCreationEmail(user, eventDb.EventId ?? -1);
 
             return eventDb;
         }
@@ -274,7 +363,7 @@ namespace WayMatcherBL.Services
                 throw new ArgumentNullException("User cannot be null");
 
             var userEvents = new List<EventDto>();
-            var eventMembers = _databaseService.GetEventMemberList(new EventDto { EventId = user.UserId ?? -1});
+            var eventMembers = _databaseService.GetEventMemberList(new EventDto { EventId = user.UserId ?? -1 });
 
             foreach (var eventMember in eventMembers)
             {

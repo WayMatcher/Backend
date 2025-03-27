@@ -1908,6 +1908,28 @@
             <param name="address">The address DTO.</param>
             <returns>The address identifier.</returns>
         </member>
+        <member name="M:WayMatcherBL.Services.EventService.AddStopsToEvent(System.Collections.Generic.List{WayMatcherBL.DtoModels.StopDto},System.Int32)">
+            <summary>
+            Adds stops to the event.
+            </summary>
+            <param name="stops">The list of stops.</param>
+            <param name="eventId">The event ID.</param>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.AddEventOwnerAsMember(System.Int32,WayMatcherBL.LogicModels.UserDto,System.Nullable{System.Int32})">
+            <summary>
+            Adds the event owner as a member of the event.
+            </summary>
+            <param name="eventId">The event ID.</param>
+            <param name="user">The user DTO.</param>
+            <param name="eventTypeId">The event type ID.</param>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.SendEventCreationEmail(WayMatcherBL.LogicModels.UserDto,System.Int32)">
+            <summary>
+            Sends an event creation email to the user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <param name="eventId">The event ID.</param>
+        </member>
         <member name="M:WayMatcherBL.Services.EventService.AddStop(WayMatcherBL.DtoModels.StopDto)">
             <summary>
             Adds a stop to an event.
@@ -1946,7 +1968,7 @@
             <summary>
             Creates a new event.
             </summary>
-            <param name="eventDto">The event DTO.</param>
+            <param name="newEventDto">The event DTO.</param>
             <param name="user">The user DTO.</param>
             <returns>The created event DTO.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
