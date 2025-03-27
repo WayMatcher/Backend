@@ -672,6 +672,15 @@ namespace WayMatcherBL.Services
 
             var eventMemberEntity = _mapper.ConvertEventMemberDtoToEntity(eventMember);
 
+            var trackedUser = _dbContext.Users.Local.FirstOrDefault(u => u.UserId == eventMemberEntity.User.UserId);
+            if (trackedUser != null)
+                eventMemberEntity.User = trackedUser;
+            
+            else
+                _dbContext.Users.Attach(eventMemberEntity.User);
+
+            eventMemberEntity.Status = null;
+
             _dbContext.EventMembers.Add(eventMemberEntity);
             return _dbContext.SaveChanges() > 0;
         }
