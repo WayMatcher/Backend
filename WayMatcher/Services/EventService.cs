@@ -76,7 +76,7 @@ namespace WayMatcherBL.Services
             var stopList = _databaseService.GetStopList(eventDto);
 
             if (!stopList.Contains(stop))
-                throw new ArgumentNullException("Stop already exists");
+                return false;
 
             return _databaseService.InsertStop(stop);
         }
@@ -155,40 +155,41 @@ namespace WayMatcherBL.Services
         /// Creates a new event.
         /// </summary>
         /// <param name="eventDto">The event DTO.</param>
-        /// <param name="stopList">The list of stops.</param>
         /// <param name="user">The user DTO.</param>
-        /// <param name="schedule">The schedule DTO.</param>
         /// <returns>The created event DTO.</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
-        public EventDto CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user, ScheduleDto schedule)
+        public EventDto CreateEvent(EventDto eventDto, UserDto user)
         {
-            if (eventDto == null || user == null || stopList.IsNullOrEmpty() || schedule == null)
+            if (eventDto == null || user == null || eventDto.StopList.IsNullOrEmpty() || eventDto.Schedule == null)
                 throw new ArgumentNullException("Objects cannot be null");
 
-            if (!PlanSchedule(schedule))
+            if (!PlanSchedule(eventDto.Schedule))
                 throw new ArgumentNullException("Schedule could not be planned");
 
-            eventDto.ScheduleId = _databaseService.GetScheduleId(schedule);
+            eventDto.ScheduleId = _databaseService.GetScheduleId(eventDto.Schedule);
 
-            if (!_databaseService.InsertEvent(eventDto))
+            var eventDb = _databaseService.InsertEvent(eventDto);
+
+            if (eventDb == null)
                 throw new ArgumentNullException("Event could not be created");
 
-            foreach (var stop in stopList)
+            foreach (var stop in eventDto.StopList)
             {
                 stop.Address.AddressId = GetAddressId(stop.Address);
-                stop.EventId = _databaseService.GetEvent(eventDto).EventId ?? -1;
+                stop.EventId = eventDb.EventId ?? -1;
 
                 AddStop(stop);
             }
 
-
+            var retrievedUser = _databaseService.GetUser(user);
+            if (retrievedUser == null)
+                throw new ArgumentNullException("User could not be retrieved from the database");
 
             var eventMember = new EventMemberDto()
             {
-                EventId = _databaseService.GetEvent(eventDto).EventId ?? -1,
-                User = _databaseService.GetUser(user),
+                EventId = eventDb.EventId ?? -1,
+                User = retrievedUser,
                 Status = new StatusDto() { StatusId = (int)State.Active }
-
             };
 
             if (eventDto.EventTypeId == (int)EventRole.Passenger)

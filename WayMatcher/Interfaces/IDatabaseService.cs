@@ -143,7 +143,7 @@ namespace WayMatcherBL.Interfaces
         /// </summary>
         /// <param name="eventModel">The event DTO to insert.</param>
         /// <returns>True if the event was successfully inserted; otherwise, false.</returns>
-        public bool InsertEvent(EventDto eventModel);
+        public EventDto InsertEvent(EventDto eventModel);
 
         /// <summary>
         /// Updates an existing event in the database.

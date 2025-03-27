@@ -1,0 +1,2212 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WayMatcherBL</name>
+    </assembly>
+    <members>
+        <member name="T:WayMatcherBL.LogicModels.AddressDto">
+            <summary>
+            Data Transfer Object (DTO) for addresses.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.AddressId">
+            <summary>
+            Gets or sets the unique identifier for the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.City">
+            <summary>
+            Gets or sets the city of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.PostalCode">
+            <summary>
+            Gets or sets the postal code of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.Street">
+            <summary>
+            Gets or sets the street of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.Country">
+            <summary>
+            Gets or sets the country of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.CountryCode">
+            <summary>
+            Gets or sets the country code of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.Region">
+            <summary>
+            Gets or sets the region of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.State">
+            <summary>
+            Gets or sets the state of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.Longitude">
+            <summary>
+            Gets or sets the longitude of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.Latitude">
+            <summary>
+            Gets or sets the latitude of the address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.AddressLine1">
+            <summary>
+            Gets or sets the first address line.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.AddressLine2">
+            <summary>
+            Gets or sets the second address line.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.AddressDto.StatusId">
+            <summary>
+            Gets or sets the status identifier for the address.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.LogicModels.EventDto">
+            <summary>
+            Data Transfer Object (DTO) for events.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.EventId">
+            <summary>
+            Gets or sets the unique identifier for the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.EventTypeId">
+            <summary>
+            Gets or sets the type identifier for the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.FreeSeats">
+            <summary>
+            Gets or sets the number of free seats available for the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.Description">
+            <summary>
+            Gets or sets the description of the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.StartTimestamp">
+            <summary>
+            Gets or sets the start timestamp of the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.EventMembers">
+            <summary>
+            Gets or sets the list of event members.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.InviteList">
+            <summary>
+            Gets or sets the list of invites for the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.StopList">
+            <summary>
+            Gets or sets the list of stops for the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.Schedule">
+            <summary>
+            Gets or sets the schedule for the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.ScheduleId">
+            <summary>
+            Gets or sets the schedule identifier for the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.Status">
+            <summary>
+            Gets or sets the status of the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.EventDto.Owner">
+            <summary>
+            Gets or sets the schedule for the event.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.LogicModels.ScheduleDto">
+            <summary>
+            Data Transfer Object (DTO) for schedules.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.ScheduleDto.ScheduleId">
+            <summary>
+            Gets or sets the unique identifier for the schedule.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.ScheduleDto.UserId">
+            <summary>
+            Gets or sets the unique identifier for the user associated with the schedule.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.ScheduleDto.CronSchedule">
+            <summary>
+            Gets or sets the cron expression for the schedule.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.LogicModels.UserDto">
+            <summary>
+            Data Transfer Object (DTO) for users.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.UserId">
+            <summary>
+            Gets or sets the unique identifier for the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.Firstname">
+            <summary>
+            Gets or sets the first name of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.Name">
+            <summary>
+            Gets or sets the last name of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.Username">
+            <summary>
+            Gets or sets the username of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.Password">
+            <summary>
+            Gets or sets the password of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.Email">
+            <summary>
+            Gets or sets the email of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.Telephone">
+            <summary>
+            Gets or sets the telephone number of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.AdditionalDescription">
+            <summary>
+            Gets or sets additional description about the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.LicenseVerified">
+            <summary>
+            Gets or sets a value indicating whether the user's license is verified.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.ProfilePicture">
+            <summary>
+            Gets or sets the profile picture of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.CreationDate">
+            <summary>
+            Gets or sets the creation date of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.Address">
+            <summary>
+            Gets or sets the address of the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.RoleId">
+            <summary>
+            Gets or sets the role identifier for the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.StatusId">
+            <summary>
+            Gets or sets the status identifier for the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.MfAtoken">
+            <summary>
+            Gets or sets the MFA token for the user.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.UserDto.JWT">
+            <summary>
+            Gets or sets the JWT for the user.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.LogicModels.VehicleDto">
+            <summary>
+            Data Transfer Object (DTO) for vehicles.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.VehicleDto.VehicleId">
+            <summary>
+            Gets or sets the unique identifier for the vehicle.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.VehicleDto.Model">
+            <summary>
+            Gets or sets the model of the vehicle.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.VehicleDto.Seats">
+            <summary>
+            Gets or sets the number of seats in the vehicle.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.VehicleDto.YearOfManufacture">
+            <summary>
+            Gets or sets the year the vehicle was manufactured.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.LogicModels.VehicleDto.ManufacturerName">
+            <summary>
+            Gets or sets the name of the vehicle manufacturer.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.ChatMessageDto">
+            <summary>
+            Data Transfer Object (DTO) for chat messages.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.ChatMessageDto.ChatMessageId">
+            <summary>
+            Gets or sets the unique identifier for the chat message.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.ChatMessageDto.Message">
+            <summary>
+            Gets or sets the content of the chat message.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.ChatMessageDto.Timestamp">
+            <summary>
+            Gets or sets the timestamp of when the chat message was sent.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.ChatMessageDto.UserId">
+            <summary>
+            Gets or sets the unique identifier of the user who sent the chat message.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.ChatMessageDto.EventId">
+            <summary>
+            Gets or sets the unique identifier of the event associated with the chat message.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.EmailDto">
+            <summary>
+            Data Transfer Object (DTO) for email messages.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailDto.Username">
+            <summary>
+            Gets or sets the username of the sender.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailDto.To">
+            <summary>
+            Gets or sets the recipient email address.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailDto.Subject">
+            <summary>
+            Gets or sets the subject of the email.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailDto.Body">
+            <summary>
+            Gets or sets the body of the email.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailDto.IsHtml">
+            <summary>
+            Gets or sets a value indicating whether the email body is in HTML format.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.EmailServerDto">
+            <summary>
+            Data Transfer Object (DTO) for email server configuration.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailServerDto.Host">
+            <summary>
+            Gets or sets the host address of the email server.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailServerDto.Port">
+            <summary>
+            Gets or sets the port number of the email server.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailServerDto.Username">
+            <summary>
+            Gets or sets the username for the email server authentication.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EmailServerDto.Password">
+            <summary>
+            Gets or sets the password for the email server authentication.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.EventMemberDto">
+            <summary>
+            Data Transfer Object (DTO) for event members.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EventMemberDto.MemberId">
+            <summary>
+            Gets or sets the unique identifier for the event member.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EventMemberDto.EventRole">
+            <summary>
+            Gets or sets the role of the event member.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EventMemberDto.User">
+            <summary>
+            Gets or sets the user associated with the event member.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EventMemberDto.EventId">
+            <summary>
+            Gets or sets the unique identifier for the event associated with the event member.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.EventMemberDto.Status">
+            <summary>
+            Gets or sets the status of the event member.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.FilterDto">
+            <summary>
+            Data Transfer Object (DTO) for filtering criteria.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.FilterDto.StartTime">
+            <summary>
+            Gets or sets the start time schedule for the filter.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.FilterDto.StopLocation">
+            <summary>
+            Gets or sets the stop location address for the filter.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.FilterDto.DestinationLocation">
+            <summary>
+            Gets or sets the destination location address for the filter.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.InviteDto">
+            <summary>
+            Data Transfer Object (DTO) for invites.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.InviteDto.InviteId">
+            <summary>
+            Gets or sets the unique identifier for the invite.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.InviteDto.StatusId">
+            <summary>
+            Gets or sets the confirmation status identifier for the invite.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.InviteDto.IsRequest">
+            <summary>
+            Gets or sets a value indicating whether the invite is a request.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.InviteDto.eventRole">
+            <summary>
+            Gets or sets the role of the user in the event.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.InviteDto.EventId">
+            <summary>
+            Gets or sets the unique identifier for the event associated with the invite.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.InviteDto.User">
+            <summary>
+            Gets or sets the user associated with the invite.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.InviteDto.Message">
+            <summary>
+            Gets or sets the message associated with the invite.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.NotificationDto">
+            <summary>
+            Data Transfer Object (DTO) for notifications.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.NotificationDto.NotificationId">
+            <summary>
+            Gets or sets the unique identifier for the notification.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.NotificationDto.Read">
+            <summary>
+            Gets or sets a value indicating whether the notification has been read.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.NotificationDto.Message">
+            <summary>
+            Gets or sets the message of the notification.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.NotificationDto.EntityType">
+            <summary>
+            Gets or sets the type of the entity associated with the notification.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.NotificationDto.EntityId">
+            <summary>
+            Gets or sets the unique identifier of the entity associated with the notification.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.NotificationDto.UserId">
+            <summary>
+            Gets or sets the unique identifier of the user associated with the notification.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.RatingDto">
+            <summary>
+            Data Transfer Object (DTO) for ratings.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.RatingDto.RatingId">
+            <summary>
+            Gets or sets the unique identifier for the rating.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.RatingDto.RatingText">
+            <summary>
+            Gets or sets the text of the rating.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.RatingDto.RatingValue">
+            <summary>
+            Gets or sets the value of the rating.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.RatingDto.RatedUserId">
+            <summary>
+            Gets or sets the unique identifier of the user who is being rated.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.RatingDto.UserWhoRatedId">
+            <summary>
+            Gets or sets the unique identifier of the user who provided the rating.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.RatingDto.StatusId">
+            <summary>
+            Gets or sets the status identifier for the rating.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.StatusDto">
+            <summary>
+            Data Transfer Object (DTO) for status information.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.StatusDto.StatusId">
+            <summary>
+            Gets or sets the unique identifier for the status.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.StatusDto.StatusDescription">
+            <summary>
+            Gets or sets the description of the status.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.StopDto">
+            <summary>
+            Data Transfer Object (DTO) for stops.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.StopDto.StopId">
+            <summary>
+            Gets or sets the unique identifier for the stop.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.StopDto.StopSequenceNumber">
+            <summary>
+            Gets or sets the sequence number of the stop.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.StopDto.Address">
+            <summary>
+            Gets or sets the address of the stop.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.StopDto.EventId">
+            <summary>
+            Gets or sets the unique identifier for the event associated with the stop.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.DtoModels.VehicleMappingDto">
+            <summary>
+            Data Transfer Object (DTO) for vehicle mappings.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.VehicleMappingDto.VehicleMappingId">
+            <summary>
+            Gets or sets the unique identifier for the vehicle mapping.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.VehicleMappingDto.FuelMilage">
+            <summary>
+            Gets or sets the fuel mileage of the vehicle.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.VehicleMappingDto.AdditionalInfo">
+            <summary>
+            Gets or sets additional information about the vehicle.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.VehicleMappingDto.LicensePlate">
+            <summary>
+            Gets or sets the license plate of the vehicle.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.VehicleMappingDto.VehicleId">
+            <summary>
+            Gets or sets the unique identifier for the vehicle.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.VehicleMappingDto.UserId">
+            <summary>
+            Gets or sets the unique identifier for the user associated with the vehicle.
+            </summary>
+        </member>
+        <member name="P:WayMatcherBL.DtoModels.VehicleMappingDto.StatusId">
+            <summary>
+            Gets or sets the status identifier for the vehicle mapping.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.Enums.EnumUtils">
+            <summary>
+            Utility class for working with enums.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Enums.EnumUtils.GetDescription(System.Enum)">
+            <summary>
+            Gets the description attribute of an enum value.
+            </summary>
+            <param name="value">The enum value.</param>
+            <returns>The description of the enum value, or the enum value as a string if no description is found.</returns>
+        </member>
+        <member name="T:WayMatcherBL.Enums.EventRole">
+            <summary>
+            Represents the roles that a user can have in an event.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.EventRole.Pilot">
+            <summary>
+            The user is a pilot.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.EventRole.Passenger">
+            <summary>
+            The user is a passenger.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.Enums.RESTCode">
+            <summary>
+            Represents the various REST response codes.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.RESTCode.Success">
+            <summary>
+            The request was successful.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.RESTCode.DbObjectNotFound">
+            <summary>
+            The requested database object was not found.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.RESTCode.InternalServerError">
+            <summary>
+            An internal server error occurred.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.RESTCode.ObjectNull">
+            <summary>
+            The provided object is null.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.Enums.State">
+            <summary>
+            Represents the various states that an entity can be in.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.State.Active">
+            <summary>
+            The entity is active.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.State.Inactive">
+            <summary>
+            The entity is inactive.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.State.Banned">
+            <summary>
+            The entity is banned.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.State.Expired">
+            <summary>
+            The entity is expired.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.State.Completed">
+            <summary>
+            The entity is completed.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.State.Cancelled">
+            <summary>
+            The entity is cancelled.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.State.Pending">
+            <summary>
+            The entity is pending.
+            </summary>
+        </member>
+        <member name="F:WayMatcherBL.Enums.State.Unread">
+            <summary>
+            The entity is unread.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.Interfaces.IDatabaseService">
+            <summary>
+            Defines the contract for database-related operations.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Inserts a new user into the database.
+            </summary>
+            <param name="userModel">The user DTO to insert.</param>
+            <returns>True if the user was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Updates an existing user in the database.
+            </summary>
+            <param name="userModel">The user DTO to update.</param>
+            <returns>True if the user was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets a user from the database.
+            </summary>
+            <param name="user">The user DTO to get.</param>
+            <returns>The user DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetActiveUsers">
+            <summary>
+            Gets the list of active users from the database.
+            </summary>
+            <returns>The list of active user DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertAddress(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Inserts a new address into the database.
+            </summary>
+            <param name="address">The address DTO to insert.</param>
+            <returns>True if the address was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateAddress(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Updates an existing address in the database.
+            </summary>
+            <param name="address">The address DTO to update.</param>
+            <returns>True if the address was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetAddress(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Gets an address from the database.
+            </summary>
+            <param name="address">The address DTO to get.</param>
+            <returns>The address DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetAddress(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the address of a user from the database.
+            </summary>
+            <param name="user">The user DTO whose address is to be retrieved.</param>
+            <returns>The address DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetActiveAddresses">
+            <summary>
+            Gets the list of active addresses from the database.
+            </summary>
+            <returns>The list of active address DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertVehicle(WayMatcherBL.LogicModels.VehicleDto)">
+            <summary>
+            Inserts a new vehicle into the database.
+            </summary>
+            <param name="vehicleModel">The vehicle DTO to insert.</param>
+            <returns>True if the vehicle was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateVehicle(WayMatcherBL.LogicModels.VehicleDto)">
+            <summary>
+            Updates an existing vehicle in the database.
+            </summary>
+            <param name="vehicleModel">The vehicle DTO to update.</param>
+            <returns>True if the vehicle was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetVehicleById(System.Int32)">
+            <summary>
+            Gets a vehicle by its ID from the database.
+            </summary>
+            <param name="id">The ID of the vehicle to get.</param>
+            <returns>The vehicle DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetActiveVehicles">
+            <summary>
+            Gets the list of active vehicles from the database.
+            </summary>
+            <returns>The list of active vehicle DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetVehicleId(WayMatcherBL.LogicModels.VehicleDto)">
+            <summary>
+            Gets the ID of a vehicle from the database.
+            </summary>
+            <param name="vehicleModel">The vehicle DTO to get the ID for.</param>
+            <returns>The ID of the vehicle.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertSchedule(WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Inserts a new schedule into the database.
+            </summary>
+            <param name="scheduleModel">The schedule DTO to insert.</param>
+            <returns>True if the schedule was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateSchedule(WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Updates an existing schedule in the database.
+            </summary>
+            <param name="scheduleModel">The schedule DTO to update.</param>
+            <returns>True if the schedule was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetScheduleById(System.Int32)">
+            <summary>
+            Gets a schedule by its ID from the database.
+            </summary>
+            <param name="id">The ID of the schedule to get.</param>
+            <returns>The schedule DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetUserSchedules(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of schedules associated with a user from the database.
+            </summary>
+            <param name="user">The user DTO whose schedules are to be retrieved.</param>
+            <returns>The list of schedule DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetScheduleId(WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Gets the ID of a schedule from the database.
+            </summary>
+            <param name="scheduleModel">The schedule DTO to get the ID for.</param>
+            <returns>The ID of the schedule.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Inserts a new event into the database.
+            </summary>
+            <param name="eventModel">The event DTO to insert.</param>
+            <returns>True if the event was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Updates an existing event in the database.
+            </summary>
+            <param name="eventModel">The event DTO to update.</param>
+            <returns>True if the event was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets an event from the database.
+            </summary>
+            <param name="eventDto">The event DTO to get.</param>
+            <returns>The event DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetEventList(System.Nullable{System.Boolean})">
+            <summary>
+            Gets the list of events from the database.
+            </summary>
+            <param name="isPilot">The filter to apply to the event list.</param>
+            <returns>The list of event DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetEventId(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the ID of an event from the database.
+            </summary>
+            <param name="eventModel">The event DTO to get the ID for.</param>
+            <returns>The ID of the event.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetUserVehicles(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of vehicles associated with a user from the database.
+            </summary>
+            <param name="user">The user DTO whose vehicles are to be retrieved.</param>
+            <returns>The list of vehicle DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertVehicleMapping(WayMatcherBL.DtoModels.VehicleMappingDto)">
+            <summary>
+            Inserts a new vehicle mapping into the database.
+            </summary>
+            <param name="vehicleMapping">The vehicle mapping DTO to insert.</param>
+            <returns>True if the vehicle mapping was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertStop(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Inserts a new stop into the database.
+            </summary>
+            <param name="stop">The stop DTO to insert.</param>
+            <returns>True if the stop was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.DeleteStop(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Deletes a stop from the database.
+            </summary>
+            <param name="stop">The stop DTO to delete.</param>
+            <returns>True if the stop was successfully deleted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetStopList(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the list of stops associated with an event from the database.
+            </summary>
+            <param name="eventDto">The event DTO whose stops are to be retrieved.</param>
+            <returns>The list of stop DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertToInvite(WayMatcherBL.DtoModels.InviteDto)">
+            <summary>
+            Inserts a new invite into the database.
+            </summary>
+            <param name="invite">The invite DTO to insert.</param>
+            <returns>True if the invite was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateInvite(WayMatcherBL.DtoModels.InviteDto)">
+            <summary>
+            Updates an existing invite in the database.
+            </summary>
+            <param name="invite">The invite DTO to update.</param>
+            <returns>True if the invite was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetInviteList(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the list of invites associated with an event from the database.
+            </summary>
+            <param name="eventDto">The event DTO whose invites are to be retrieved.</param>
+            <returns>The list of invite DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertToEventMember(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Inserts a new event member into the database.
+            </summary>
+            <param name="eventMember">The event member DTO to insert.</param>
+            <returns>True if the event member was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateEventMember(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Updates an existing event member in the database.
+            </summary>
+            <param name="eventMember">The event member DTO to update.</param>
+            <returns>True if the event member was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetEventOwner(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the owner of an event from the database.
+            </summary>
+            <param name="eventDto">The event DTO whose owner is to be retrieved.</param>
+            <returns>The user DTO of the event owner.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetEventMemberList(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the list of event members associated with an event from the database.
+            </summary>
+            <param name="eventDto">The event DTO whose members are to be retrieved.</param>
+            <returns>The list of event member DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertChatMessage(WayMatcherBL.DtoModels.ChatMessageDto)">
+            <summary>
+            Inserts a new chat message into the database.
+            </summary>
+            <param name="textMessage">The chat message DTO to insert.</param>
+            <returns>True if the chat message was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetChatMessageList(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Gets the list of chat messages associated with an event member from the database.
+            </summary>
+            <param name="eventMember">The event member DTO whose chat messages are to be retrieved.</param>
+            <returns>The list of chat message DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertRating(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Inserts a new rating into the database.
+            </summary>
+            <param name="rating">The rating DTO to insert.</param>
+            <returns>True if the rating was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateRating(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Updates an existing rating in the database.
+            </summary>
+            <param name="rating">The rating DTO to update.</param>
+            <returns>True if the rating was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetRatingList(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of ratings associated with a user from the database.
+            </summary>
+            <param name="user">The user DTO whose ratings are to be retrieved.</param>
+            <returns>The list of rating DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetRating(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Gets a rating from the database.
+            </summary>
+            <param name="rating">The rating DTO to get.</param>
+            <returns>The rating DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.InsertNotification(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Inserts a new notification into the database.
+            </summary>
+            <param name="notification">The notification DTO to insert.</param>
+            <returns>True if the notification was successfully inserted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetNotificationList(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of notifications associated with a user from the database.
+            </summary>
+            <param name="user">The user DTO whose notifications are to be retrieved.</param>
+            <returns>The list of notification DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.UpdateNotification(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Updates the read status of an existing notification.
+            </summary>
+            <param name="notification">The notification DTO containing the updated read status.</param>
+            <returns><c>true</c> if the notification was successfully updated; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="T:WayMatcherBL.Interfaces.IEmailService">
+            <summary>
+            Defines the contract for email-related operations.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEmailService.SendEmail(WayMatcherBL.DtoModels.EmailDto)">
+            <summary>
+            Sends an email.
+            </summary>
+            <param name="email">The email DTO containing the email details.</param>
+        </member>
+        <member name="T:WayMatcherBL.Interfaces.IEventService">
+            <summary>
+            Defines the contract for event-related operations.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.CreateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Creates a new event.
+            </summary>
+            <param name="eventDto">The event DTO to create.</param>
+            <param name="user">The user creating the event.</param>
+            <returns>The created event DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Updates an existing event.
+            </summary>
+            <param name="eventDto">The event DTO to update.</param>
+            <param name="schedule">The schedule associated with the event.</param>
+            <returns>The updated event DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.CancelEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Cancels an event.
+            </summary>
+            <param name="eventDto">The event DTO to cancel.</param>
+            <returns>True if the event was successfully canceled; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.EventInvite(WayMatcherBL.DtoModels.InviteDto)">
+            <summary>
+            Sends an event invite.
+            </summary>
+            <param name="invite">The invite DTO to send.</param>
+            <returns>True if the invite was successfully sent; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.AddEventMember(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Adds a member to an event.
+            </summary>
+            <param name="eventMember">The event member DTO to add.</param>
+            <returns>True if the member was successfully added; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.DeleteEventMember(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Deletes a member from an event.
+            </summary>
+            <param name="eventMember">The event member DTO to delete.</param>
+            <returns>True if the member was successfully deleted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.AddStop(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Adds a stop to an event.
+            </summary>
+            <param name="stop">The stop DTO to add.</param>
+            <returns>True if the stop was successfully added; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.RemoveStops(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Removes stops from an event.
+            </summary>
+            <param name="stop">The stop DTO to remove.</param>
+            <returns>True if the stops were successfully removed; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.GetEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets an event.
+            </summary>
+            <param name="eventDto">The event DTO to get.</param>
+            <returns>The event DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.GetUserEventList(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of events associated with a user.
+            </summary>
+            <param name="user">The user whose events are to be retrieved.</param>
+            <returns>The list of event DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.GetEventList(System.Nullable{System.Boolean})">
+            <summary>
+            Gets the list of events.
+            </summary>
+            <param name="filter">The filter to apply to the event list.</param>
+            <returns>The list of event DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.CalculateDistance">
+            <summary>
+            Calculates the distance for all stops.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.CalculateFuelConsumption">
+            <summary>
+            Calculates the fuel consumption for all stops and the car.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.CalculateTime">
+            <summary>
+            Calculates the time for all stops.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.SendChatMessage(WayMatcherBL.DtoModels.ChatMessageDto)">
+            <summary>
+            Sends a chat message.
+            </summary>
+            <param name="message">The chat message DTO to send.</param>
+            <returns>True if the message was successfully sent; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.GetChatMessage(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Gets the list of chat messages for an event member.
+            </summary>
+            <param name="eventMember">The event member DTO whose messages are to be retrieved.</param>
+            <returns>The list of chat message DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IEventService.GetUserToInvite(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the list of users to invite to an event.
+            </summary>
+            <param name="eventDto">The event DTO for which to get the users to invite.</param>
+            <returns>The list of user DTOs.</returns>
+        </member>
+        <member name="T:WayMatcherBL.Interfaces.IUserService">
+            <summary>
+            Defines the contract for user-related operations.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.RegisterUser(WayMatcherBL.LogicModels.UserDto,System.Collections.Generic.List{WayMatcherBL.LogicModels.VehicleDto},System.Collections.Generic.List{WayMatcherBL.DtoModels.VehicleMappingDto})">
+            <summary>
+            Registers a new user with the specified vehicles and vehicle mappings.
+            </summary>
+            <param name="user">The user to register.</param>
+            <param name="vehicleList">The list of vehicles associated with the user.</param>
+            <param name="vehicleMappingList">The list of vehicle mappings associated with the user.</param>
+            <returns>True if the user was successfully registered; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.LoginUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Logs in a user.
+            </summary>
+            <param name="user">The user to log in.</param>
+            <returns>The logged-in user DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.AcceptMfA(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Accepts multi-factor authentication for a user.
+            </summary>
+            <param name="user">The user to authenticate.</param>
+            <returns>The authenticated user DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.DeleteUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Deletes a user.
+            </summary>
+            <param name="user">The user to delete.</param>
+            <returns>True if the user was successfully deleted; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.ConfigurateUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Configures a user.
+            </summary>
+            <param name="user">The user to configure.</param>
+            <returns>True if the user was successfully configured; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.SendChangePasswordMail(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Sends a change password email to a user.
+            </summary>
+            <param name="user">The user to send the email to.</param>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.ChangePassword(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Changes the password of a user.
+            </summary>
+            <param name="user">The user whose password is to be changed.</param>
+            <returns>True if the password was successfully changed; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.ConfigurateVehicle(WayMatcherBL.LogicModels.UserDto,System.Collections.Generic.List{WayMatcherBL.LogicModels.VehicleDto},System.Collections.Generic.List{WayMatcherBL.DtoModels.VehicleMappingDto})">
+            <summary>
+            Configures vehicles and vehicle mappings for a user.
+            </summary>
+            <param name="user">The user to configure the vehicles for.</param>
+            <param name="vehicleList">The list of vehicles to configure.</param>
+            <param name="vehicleMappingList">The list of vehicle mappings to configure.</param>
+            <returns>True if the vehicles and vehicle mappings were successfully configured; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.GetUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets a user.
+            </summary>
+            <param name="user">The user to get.</param>
+            <returns>The user DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.GetAddress(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the address of a user.
+            </summary>
+            <param name="user">The user whose address is to be retrieved.</param>
+            <returns>The address DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.GetUserVehicleList(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of vehicles associated with a user.
+            </summary>
+            <param name="user">The user whose vehicles are to be retrieved.</param>
+            <returns>The list of vehicle DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.GetActiveUsers">
+            <summary>
+            Gets the list of active users.
+            </summary>
+            <returns>The list of active user DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.RateUser(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Rates a user.
+            </summary>
+            <param name="rate">The rating to be given.</param>
+            <returns>True if the user was successfully rated; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.UserRating(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Gets the rating of a user.
+            </summary>
+            <param name="rate">The rating DTO containing the user to be rated.</param>
+            <returns>The rating value.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.SendNotification(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Sends a notification to a user.
+            </summary>
+            <param name="notification">The notification to be sent.</param>
+            <returns>True if the notification was successfully sent; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.GetNotification(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of notifications for a user.
+            </summary>
+            <param name="user">The user whose notifications are to be retrieved.</param>
+            <returns>The list of notification DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Interfaces.IUserService.UpdateNotification(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Updates the notification object.
+            </summary>
+            <param name="notification">The notification to update.</param>"
+            <returns>True if the notification status was successfully updated; otherwise, false.</returns>
+        </member>
+        <member name="T:WayMatcherBL.Mapper.ModelMapper">
+            <summary>
+            Provides mapping configurations and methods for converting between entity and DTO models.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WayMatcherBL.Mapper.ModelMapper"/> class.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertAddressToDto(WayMatcherBL.Models.Address)">
+            <summary>
+            Converts an <see cref="T:WayMatcherBL.Models.Address"/> entity to an <see cref="T:WayMatcherBL.LogicModels.AddressDto"/>.
+            </summary>
+            <param name="address">The address entity to convert.</param>
+            <returns>The converted address DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertAddressDtoToEntity(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Converts an <see cref="T:WayMatcherBL.LogicModels.AddressDto"/> to an <see cref="T:WayMatcherBL.Models.Address"/> entity.
+            </summary>
+            <param name="addressDto">The address DTO to convert.</param>
+            <returns>The converted address entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertEventToDto(WayMatcherBL.Models.Event)">
+            <summary>
+            Converts an <see cref="T:WayMatcherBL.Models.Event"/> entity to an <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.
+            </summary>
+            <param name="eventItem">The event entity to convert.</param>
+            <returns>The converted event DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertVwPilotEventToDto(WayMatcherBL.Models.VwPilotEvent)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.VwPilotEvent"/> entity to an <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.
+            </summary>
+            <param name="vwPilot">The pilot event entity to convert.</param>
+            <returns>The converted event DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertVwPassengerEventToDto(WayMatcherBL.Models.VwPassengerEvent)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.VwPassengerEvent"/> entity to an <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.
+            </summary>
+            <param name="vwPassenger">The passenger event entity to convert.</param>
+            <returns>The converted event DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertEventDtoToEntity(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Converts an <see cref="T:WayMatcherBL.LogicModels.EventDto"/> to an <see cref="T:WayMatcherBL.Models.Event"/> entity.
+            </summary>
+            <param name="eventDto">The event DTO to convert.</param>
+            <returns>The converted event entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertScheduleToDto(WayMatcherBL.Models.Schedule)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.Schedule"/> entity to a <see cref="T:WayMatcherBL.LogicModels.ScheduleDto"/>.
+            </summary>
+            <param name="schedule">The schedule entity to convert.</param>
+            <returns>The converted schedule DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertScheduleDtoToEntity(WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.LogicModels.ScheduleDto"/> to a <see cref="T:WayMatcherBL.Models.Schedule"/> entity.
+            </summary>
+            <param name="scheduleDto">The schedule DTO to convert.</param>
+            <returns>The converted schedule entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertUserToDto(WayMatcherBL.Models.User)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.User"/> entity to a <see cref="T:WayMatcherBL.LogicModels.UserDto"/>.
+            </summary>
+            <param name="user">The user entity to convert.</param>
+            <returns>The converted user DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertUserDtoToEntity(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.LogicModels.UserDto"/> to a <see cref="T:WayMatcherBL.Models.User"/> entity.
+            </summary>
+            <param name="userDto">The user DTO to convert.</param>
+            <returns>The converted user entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertVehicleToDto(WayMatcherBL.Models.Vehicle)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.Vehicle"/> entity to a <see cref="T:WayMatcherBL.LogicModels.VehicleDto"/>.
+            </summary>
+            <param name="vehicle">The vehicle entity to convert.</param>
+            <returns>The converted vehicle DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertVehicleDtoToEntity(WayMatcherBL.LogicModels.VehicleDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.LogicModels.VehicleDto"/> to a <see cref="T:WayMatcherBL.Models.Vehicle"/> entity.
+            </summary>
+            <param name="vehicleDto">The vehicle DTO to convert.</param>
+            <returns>The converted vehicle entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertVehicleMappingToDto(WayMatcherBL.Models.VehicleMapping)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.VehicleMapping"/> entity to a <see cref="T:WayMatcherBL.DtoModels.VehicleMappingDto"/>.
+            </summary>
+            <param name="vehicle">The vehicle mapping entity to convert.</param>
+            <returns>The converted vehicle mapping DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertVehicleMappingDtoToEntity(WayMatcherBL.DtoModels.VehicleMappingDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.DtoModels.VehicleMappingDto"/> to a <see cref="T:WayMatcherBL.Models.VehicleMapping"/> entity.
+            </summary>
+            <param name="vehicleDto">The vehicle mapping DTO to convert.</param>
+            <returns>The converted vehicle mapping entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertStopToDto(WayMatcherBL.Models.Stop)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.Stop"/> entity to a <see cref="T:WayMatcherBL.DtoModels.StopDto"/>.
+            </summary>
+            <param name="stop">The stop entity to convert.</param>
+            <returns>The converted stop DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertStopDtoToEntity(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.DtoModels.StopDto"/> to a <see cref="T:WayMatcherBL.Models.Stop"/> entity.
+            </summary>
+            <param name="stopDto">The stop DTO to convert.</param>
+            <returns>The converted stop entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertInviteToDto(WayMatcherBL.Models.Invite)">
+            <summary>
+            Converts an <see cref="T:WayMatcherBL.Models.Invite"/> entity to an <see cref="T:WayMatcherBL.DtoModels.InviteDto"/>.
+            </summary>
+            <param name="invite">The invite entity to convert.</param>
+            <returns>The converted invite DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertInviteDtoToEntity(WayMatcherBL.DtoModels.InviteDto)">
+            <summary>
+            Converts an <see cref="T:WayMatcherBL.DtoModels.InviteDto"/> to an <see cref="T:WayMatcherBL.Models.Invite"/> entity.
+            </summary>
+            <param name="inviteDto">The invite DTO to convert.</param>
+            <returns>The converted invite entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertEventMemberToDto(WayMatcherBL.Models.EventMember)">
+            <summary>
+            Converts an <see cref="T:WayMatcherBL.Models.EventMember"/> entity to an <see cref="T:WayMatcherBL.DtoModels.EventMemberDto"/>.
+            </summary>
+            <param name="eventMember">The event member entity to convert.</param>
+            <returns>The converted event member DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertEventMemberDtoToEntity(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Converts an <see cref="T:WayMatcherBL.DtoModels.EventMemberDto"/> to an <see cref="T:WayMatcherBL.Models.EventMember"/> entity.
+            </summary>
+            <param name="eventMemberDto">The event member DTO to convert.</param>
+            <returns>The converted event member entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertChatMessageToDto(WayMatcherBL.Models.ChatMessage)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.ChatMessage"/> entity to a <see cref="T:WayMatcherBL.DtoModels.ChatMessageDto"/>.
+            </summary>
+            <param name="chatMessage">The chat message entity to convert.</param>
+            <returns>The converted chat message DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertChatMessageDtoToEntity(WayMatcherBL.DtoModels.ChatMessageDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.DtoModels.ChatMessageDto"/> to a <see cref="T:WayMatcherBL.Models.ChatMessage"/> entity.
+            </summary>
+            <param name="chatMessageDto">The chat message DTO to convert.</param>
+            <returns>The converted chat message entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertRatingToDto(WayMatcherBL.Models.Rating)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.Rating"/> entity to a <see cref="T:WayMatcherBL.DtoModels.RatingDto"/>.
+            </summary>
+            <param name="rating">The rating entity to convert.</param>
+            <returns>The converted rating DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertRatingDtoToEntity(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.DtoModels.RatingDto"/> to a <see cref="T:WayMatcherBL.Models.Rating"/> entity.
+            </summary>
+            <param name="ratingDto">The rating DTO to convert.</param>
+            <returns>The converted rating entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertNotificationToDto(WayMatcherBL.Models.Notification)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.Notification"/> entity to a <see cref="T:WayMatcherBL.DtoModels.NotificationDto"/>.
+            </summary>
+            <param name="notification">The notification entity to convert.</param>
+            <returns>The converted notification DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertNotificationDtoToEntity(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.DtoModels.NotificationDto"/> to a <see cref="T:WayMatcherBL.Models.Notification"/> entity.
+            </summary>
+            <param name="notificationDto">The notification DTO to convert.</param>
+            <returns>The converted notification entity.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertStatusToDto(WayMatcherBL.Models.Status)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.Status"/> entity to a <see cref="T:WayMatcherBL.DtoModels.StatusDto"/>.
+            </summary>
+            <param name="status">The status entity to convert.</param>
+            <returns>The converted status DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertStatusDtoToEntity(WayMatcherBL.DtoModels.StatusDto)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.DtoModels.StatusDto"/> to a <see cref="T:WayMatcherBL.Models.Status"/> entity.
+            </summary>
+            <param name="statusDto">The status DTO to convert.</param>
+            <returns>The converted status entity.</returns>
+        </member>
+        <member name="T:WayMatcherBL.Services.ConfigurationService">
+            <summary>
+            Provides configuration services for the application.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Services.ConfigurationService.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WayMatcherBL.Services.ConfigurationService"/> class.
+            </summary>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown when the appsettings.json file is not found.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.ConfigurationService.FindFile(System.String,System.String)">
+            <summary>
+            Finds a file in the specified directory or its subdirectories.
+            </summary>
+            <param name="directory">The directory to search in.</param>
+            <param name="fileName">The name of the file to find.</param>
+            <returns>The file path if found; otherwise, null.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.ConfigurationService.GetConnectionString(System.String)">
+            <summary>
+            Retrieves the connection string for the specified name.
+            </summary>
+            <param name="name">The name of the connection string.</param>
+            <returns>The connection string.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.ConfigurationService.GetEmailServer">
+            <summary>
+            Retrieves the email server settings.
+            </summary>
+            <returns>The email server settings.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.ConfigurationService.GetSecretKey">
+            <summary>
+            Retrieves the secret key for JWT.
+            </summary>
+            <returns>The secret key.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.ConfigurationService.GetCertificate">
+            <summary>
+            Retrieves the certificate path for HTTPS.
+            </summary>
+            <returns>The certificate path.</returns>
+        </member>
+        <member name="T:WayMatcherBL.Services.DatabaseService">
+            <summary>
+            Provides database operations for various entities.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.#ctor(WayMatcherBL.Models.WayMatcherContext,WayMatcherBL.Mapper.ModelMapper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WayMatcherBL.Services.DatabaseService"/> class.
+            </summary>
+            <param name="dbContext">The database context.</param>
+            <param name="mapper">The model mapper.</param>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetSchedules">
+            <summary>
+            Gets the list of schedules.
+            </summary>
+            <returns>A list of <see cref="T:WayMatcherBL.LogicModels.ScheduleDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetStatus(System.Int32)">
+            <summary>
+            Gets the status by ID.
+            </summary>
+            <param name="id">The status ID.</param>
+            <returns>A <see cref="T:WayMatcherBL.DtoModels.StatusDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetActiveAddresses">
+            <summary>
+            Gets the list of active addresses.
+            </summary>
+            <returns>A list of <see cref="T:WayMatcherBL.LogicModels.AddressDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetUserSchedules(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of schedules for a user.
+            </summary>
+            <param name="user">The user.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.LogicModels.ScheduleDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetActiveUsers">
+            <summary>
+            Gets the list of active users.
+            </summary>
+            <returns>A list of <see cref="T:WayMatcherBL.LogicModels.UserDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetActiveVehicles">
+            <summary>
+            Gets the list of active vehicles.
+            </summary>
+            <returns>A list of <see cref="T:WayMatcherBL.LogicModels.VehicleDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetEventList(System.Nullable{System.Boolean})">
+            <summary>
+            Gets the list of events.
+            </summary>
+            <param name="isPilot">Indicates if the events are for pilots.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetEventMemberList(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the list of event members.
+            </summary>
+            <param name="eventDto">The event.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.DtoModels.EventMemberDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetRatingList(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of ratings for a user.
+            </summary>
+            <param name="user">The user.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.DtoModels.RatingDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetUserVehicles(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of vehicles for a user.
+            </summary>
+            <param name="user">The user.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.LogicModels.VehicleDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetNotificationList(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the list of notifications for a user.
+            </summary>
+            <param name="user">The user.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.DtoModels.NotificationDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetInviteList(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the list of invites for an event.
+            </summary>
+            <param name="eventDto">The event.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.DtoModels.InviteDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetAddress(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Gets the address by address details.
+            </summary>
+            <param name="address">The address details.</param>
+            <returns>A <see cref="T:WayMatcherBL.LogicModels.AddressDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetAddress(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the address by user details.
+            </summary>
+            <param name="user">The user details.</param>
+            <returns>A <see cref="T:WayMatcherBL.LogicModels.AddressDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the event by event details.
+            </summary>
+            <param name="eventDto">The event details.</param>
+            <returns>A <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetScheduleById(System.Int32)">
+            <summary>
+            Gets the schedule by ID.
+            </summary>
+            <param name="id">The schedule ID.</param>
+            <returns>A <see cref="T:WayMatcherBL.LogicModels.ScheduleDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the user by user details.
+            </summary>
+            <param name="userDto">The user details.</param>
+            <returns>A <see cref="T:WayMatcherBL.LogicModels.UserDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetVehicleById(System.Int32)">
+            <summary>
+            Gets the vehicle by ID.
+            </summary>
+            <param name="id">The vehicle ID.</param>
+            <returns>A <see cref="T:WayMatcherBL.LogicModels.VehicleDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetRating(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Gets the rating by rating details.
+            </summary>
+            <param name="rating">The rating details.</param>
+            <returns>A <see cref="T:WayMatcherBL.DtoModels.RatingDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetEventId(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the event ID by event details.
+            </summary>
+            <param name="eventModel">The event details.</param>
+            <returns>The event ID.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetScheduleId(WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Gets the schedule ID by schedule details.
+            </summary>
+            <param name="scheduleModel">The schedule details.</param>
+            <returns>The schedule ID.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetVehicleId(WayMatcherBL.LogicModels.VehicleDto)">
+            <summary>
+            Gets the vehicle ID by vehicle details.
+            </summary>
+            <param name="vehicleModel">The vehicle details.</param>
+            <returns>The vehicle ID.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetStopList(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the list of stops for an event.
+            </summary>
+            <param name="eventDto">The event.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.DtoModels.StopDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetChatMessageList(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Gets the list of chat messages for an event member.
+            </summary>
+            <param name="eventMember">The event member.</param>
+            <returns>A list of <see cref="T:WayMatcherBL.DtoModels.ChatMessageDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetEventOwner(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets the event owner by event details.
+            </summary>
+            <param name="eventDto">The event details.</param>
+            <returns>A <see cref="T:WayMatcherBL.LogicModels.UserDto"/> representing the event owner.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertAddress(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Inserts a new address.
+            </summary>
+            <param name="addressModel">The address details.</param>
+            <returns><c>true</c> if the address was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Inserts a new event.
+            </summary>
+            <param name="eventModel">The event details.</param>
+            <returns>The created <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertSchedule(WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Inserts a new schedule.
+            </summary>
+            <param name="scheduleModel">The schedule details.</param>
+            <returns><c>true</c> if the schedule was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Inserts a new user.
+            </summary>
+            <param name="userModel">The user details.</param>
+            <returns><c>true</c> if the user was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertVehicle(WayMatcherBL.LogicModels.VehicleDto)">
+            <summary>
+            Inserts a new vehicle.
+            </summary>
+            <param name="vehicleModel">The vehicle details.</param>
+            <returns><c>true</c> if the vehicle was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertVehicleMapping(WayMatcherBL.DtoModels.VehicleMappingDto)">
+            <summary>
+            Inserts a new vehicle mapping.
+            </summary>
+            <param name="vehicleMapping">The vehicle mapping details.</param>
+            <returns><c>true</c> if the vehicle mapping was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertStop(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Inserts a new stop.
+            </summary>
+            <param name="stop">The stop details.</param>
+            <returns><c>true</c> if the stop was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertToInvite(WayMatcherBL.DtoModels.InviteDto)">
+            <summary>
+            Inserts a new invite.
+            </summary>
+            <param name="invite">The invite details.</param>
+            <returns><c>true</c> if the invite was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertToEventMember(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Inserts a new event member.
+            </summary>
+            <param name="eventMember">The event member details.</param>
+            <returns><c>true</c> if the event member was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertChatMessage(WayMatcherBL.DtoModels.ChatMessageDto)">
+            <summary>
+            Inserts a new chat message.
+            </summary>
+            <param name="chatMessage">The chat message details.</param>
+            <returns><c>true</c> if the chat message was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertRating(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Inserts a new rating.
+            </summary>
+            <param name="rating">The rating details.</param>
+            <returns><c>true</c> if the rating was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.InsertNotification(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Inserts a new notification.
+            </summary>
+            <param name="notification">The notification details.</param>
+            <returns><c>true</c> if the notification was inserted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateAddress(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Updates an existing address.
+            </summary>
+            <param name="addressModel">The address details.</param>
+            <returns><c>true</c> if the address was updated successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Updates an existing event.
+            </summary>
+            <param name="eventModel">The event details.</param>
+            <returns><c>true</c> if the event was updated successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateSchedule(WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Updates an existing schedule.
+            </summary>
+            <param name="scheduleModel">The schedule details.</param>
+            <returns><c>true</c> if the schedule was updated successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Updates an existing user.
+            </summary>
+            <param name="updateUserDto">The user details.</param>
+            <returns><c>true</c> if the user was updated successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateVehicle(WayMatcherBL.LogicModels.VehicleDto)">
+            <summary>
+            Updates an existing vehicle.
+            </summary>
+            <param name="vehicleModel">The vehicle details.</param>
+            <returns><c>true</c> if the vehicle was updated successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateEventMember(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Updates an existing event member.
+            </summary>
+            <param name="eventMember">The event member details.</param>
+            <returns><c>true</c> if the event member was updated successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateRating(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Updates an existing rating.
+            </summary>
+            <param name="rating">The rating details.</param>
+            <returns><c>true</c> if the rating was updated successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateInvite(WayMatcherBL.DtoModels.InviteDto)">
+            <summary>
+            Updates an existing invite.
+            </summary>
+            <param name="invite">The invite details.</param>
+            <returns><c>true</c> if the invite was updated successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.UpdateNotification(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Updates the read status of an existing notification.
+            </summary>
+            <param name="notification">The notification DTO containing the updated read status.</param>
+            <returns><c>true</c> if the notification was successfully updated; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.DatabaseService.DeleteStop(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Deletes an existing stop.
+            </summary>
+            <param name="stop">The stop details.</param>
+            <returns><c>true</c> if the stop was deleted successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="T:WayMatcherBL.Services.EmailService">
+            <summary>
+            Provides email sending services.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Services.EmailService.#ctor(WayMatcherBL.Services.ConfigurationService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WayMatcherBL.Services.EmailService"/> class.
+            </summary>
+            <param name="configurationService">The configuration service to retrieve email server settings.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when email server settings are null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when the email server host is null or empty.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EmailService.SendEmail(WayMatcherBL.DtoModels.EmailDto)">
+            <summary>
+            Sends an email.
+            </summary>
+            <param name="email">The email DTO containing the email details.</param>
+        </member>
+        <member name="M:WayMatcherBL.Services.EmailService.Dispose">
+            <summary>
+            Disposes the SMTP client.
+            </summary>
+        </member>
+        <member name="T:WayMatcherBL.Services.EventService">
+            <summary>
+            Provides services for managing events, including creation, updating, cancellation, and member management.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.#ctor(WayMatcherBL.Interfaces.IDatabaseService,WayMatcherBL.Interfaces.IEmailService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WayMatcherBL.Services.EventService"/> class.
+            </summary>
+            <param name="databaseService">The database service.</param>
+            <param name="emailService">The email service.</param>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.PlanSchedule(WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Plans the schedule.
+            </summary>
+            <param name="schedule">The schedule DTO.</param>
+            <returns><c>true</c> if the schedule was successfully planned; otherwise, <c>false</c>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the schedule is null.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.GetAddressId(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Gets the address identifier.
+            </summary>
+            <param name="address">The address DTO.</param>
+            <returns>The address identifier.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.AddStop(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Adds a stop to an event.
+            </summary>
+            <param name="stop">The stop DTO.</param>
+            <returns><c>true</c> if the stop was successfully added; otherwise, <c>false</c>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the stop is null or already exists.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.CalculateDistance">
+            <summary>
+            Calculates the distance for an event.
+            </summary>
+            <exception cref="T:System.NotImplementedException">Thrown when the method is not implemented.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.CalculateFuelConsumption">
+            <summary>
+            Calculates the fuel consumption for an event.
+            </summary>
+            <exception cref="T:System.NotImplementedException">Thrown when the method is not implemented.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.CalculateTime">
+            <summary>
+            Calculates the time for an event.
+            </summary>
+            <exception cref="T:System.NotImplementedException">Thrown when the method is not implemented.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.CancelEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Cancels an event.
+            </summary>
+            <param name="eventDto">The event DTO.</param>
+            <returns><c>true</c> if the event was successfully cancelled; otherwise, <c>false</c>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the event is null or a stop/member could not be removed.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.CreateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Creates a new event.
+            </summary>
+            <param name="eventDto">The event DTO.</param>
+            <param name="user">The user DTO.</param>
+            <returns>The created event DTO.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.GetEvent(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets an event by its DTO.
+            </summary>
+            <param name="eventDto">The event DTO.</param>
+            <returns>The event DTO with additional details.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the event is null or has an invalid ID.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.GetEventList(System.Nullable{System.Boolean})">
+            <summary>
+            Gets a list of events.
+            </summary>
+            <param name="isPilot">Filter for pilot events.</param>
+            <returns>A list of event DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.GetUserEventList(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets a list of events for a user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>A list of event DTOs.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the user is null.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.EventInvite(WayMatcherBL.DtoModels.InviteDto)">
+            <summary>
+            Sends an event invite.
+            </summary>
+            <param name="invite">The invite DTO.</param>
+            <returns><c>true</c> if the invite was successfully sent; otherwise, <c>false</c>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the invite or user is null.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.AddEventMember(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Adds an event member.
+            </summary>
+            <param name="eventMemberDto">The event member DTO.</param>
+            <returns><c>true</c> if the event member was successfully added; otherwise, <c>false</c>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the event member is null or could not be added.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.DeleteEventMember(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Deletes an event member.
+            </summary>
+            <param name="eventMemberDto">The event member DTO.</param>
+            <returns><c>true</c> if the event member was successfully deleted; otherwise, <c>false</c>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the event member is null.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.RemoveStops(WayMatcherBL.DtoModels.StopDto)">
+            <summary>
+            Removes a stop from an event.
+            </summary>
+            <param name="stop">The stop DTO.</param>
+            <returns><c>true</c> if the stop was successfully removed; otherwise, <c>false</c>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the stop is null.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.ScheduleDto)">
+            <summary>
+            Updates an event with a new schedule.
+            </summary>
+            <param name="eventDto">The event DTO.</param>
+            <param name="schedule">The schedule DTO.</param>
+            <returns>The updated event DTO.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the event or schedule is null.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.SendChatMessage(WayMatcherBL.DtoModels.ChatMessageDto)">
+            <summary>
+            Sends a chat message.
+            </summary>
+            <param name="message">The chat message DTO.</param>
+            <returns><c>true</c> if the message was successfully sent; otherwise, <c>false</c>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the message is null.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.GetChatMessage(WayMatcherBL.DtoModels.EventMemberDto)">
+            <summary>
+            Gets chat messages for an event member.
+            </summary>
+            <param name="eventMember">The event member DTO.</param>
+            <returns>A list of chat message DTOs.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the event member is null.</exception>
+        </member>
+        <member name="M:WayMatcherBL.Services.EventService.GetUserToInvite(WayMatcherBL.LogicModels.EventDto)">
+            <summary>
+            Gets a list of users to invite to an event.
+            </summary>
+            <param name="eventDto">The event DTO.</param>
+            <returns>A list of user DTOs.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when the event is null.</exception>
+        </member>
+        <member name="T:WayMatcherBL.Services.UserService">
+            <summary>
+            Service class for managing user-related operations, including authentication, notifications, and user data handling.
+            </summary>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.#ctor(WayMatcherBL.Interfaces.IDatabaseService,WayMatcherBL.Interfaces.IEmailService,WayMatcherBL.Services.ConfigurationService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WayMatcherBL.Services.UserService"/> class.
+            </summary>
+            <param name="databaseService">Service for database operations.</param>
+            <param name="emailService">Service for sending emails.</param>
+            <param name="configuration">Service for retrieving configuration settings.</param>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GenerateMfA(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Generates an MFA code for the user and sends it via email.
+            </summary>
+            <param name="user">User DTO containing user information.</param>
+            <returns>The hashed MFA code.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GenerateJWT(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Generates a JWT token for the authenticated user.
+            </summary>
+            <param name="user">User DTO containing user information.</param>
+            <returns>A string representing the generated JWT token.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GetVehicleId(WayMatcherBL.LogicModels.VehicleDto)">
+            <summary>
+            Gets the vehicle ID for the specified vehicle.
+            </summary>
+            <param name="vehicle">The vehicle DTO.</param>
+            <returns>The vehicle ID.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GetAddressId(WayMatcherBL.LogicModels.AddressDto)">
+            <summary>
+            Gets the address ID for the specified address.
+            </summary>
+            <param name="address">The address DTO.</param>
+            <returns>The address ID.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.HashString(System.String)">
+            <summary>
+            Hashes the input string using SHA-256.
+            </summary>
+            <param name="input">The input string to hash.</param>
+            <returns>The hashed string.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.SendChangePasswordMail(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Sends an email to the user to change their password.
+            </summary>
+            <param name="user">The user DTO.</param>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.ChangePassword(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Changes the password for the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>True if the password was changed successfully; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.ConfigurateUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Configures the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>True if the user was configured successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.ConfigurateVehicle(WayMatcherBL.LogicModels.UserDto,System.Collections.Generic.List{WayMatcherBL.LogicModels.VehicleDto},System.Collections.Generic.List{WayMatcherBL.DtoModels.VehicleMappingDto})">
+            <summary>
+            Configures vehicles and vehicle mappings for the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <param name="vehicleList">The list of vehicles to configure.</param>
+            <param name="vehicleMappingList">The list of vehicle mappings to configure.</param>
+            <returns>True if the vehicles and vehicle mappings were successfully configured; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.DeleteUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Deletes the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>True if the user was deleted successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GetActiveUsers">
+            <summary>
+            Gets a list of active users.
+            </summary>
+            <returns>A list of active users.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GetUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>The user DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GetAddress(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets the address for the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>The address DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GetUserVehicleList(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets a list of vehicles for the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>A list of vehicle DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.LoginUser(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Logs in the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>The logged-in user DTO.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.AcceptMfA(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Accepts the MFA code for the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>The user DTO with the generated JWT.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.RegisterUser(WayMatcherBL.LogicModels.UserDto,System.Collections.Generic.List{WayMatcherBL.LogicModels.VehicleDto},System.Collections.Generic.List{WayMatcherBL.DtoModels.VehicleMappingDto})">
+            <summary>
+            Registers a new user and their vehicles and vehicle mappings.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <param name="vehicleList">A list of vehicle DTOs.</param>
+            <param name="vehicleMappingList">A list of vehicle mappings associated with the user.</param>
+            <returns>True if the user was successfully registered; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.RateUser(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Rates the specified user.
+            </summary>
+            <param name="rate">The rating DTO.</param>
+            <returns>True if the rating was successful; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.UserRating(WayMatcherBL.DtoModels.RatingDto)">
+            <summary>
+            Gets the average rating for the specified user.
+            </summary>
+            <param name="rate">The rating DTO.</param>
+            <returns>The average rating value.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.SendNotification(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Sends a notification to the specified user.
+            </summary>
+            <param name="notification">The notification DTO.</param>
+            <returns>True if the notification was sent successfully; otherwise, false.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.GetNotification(WayMatcherBL.LogicModels.UserDto)">
+            <summary>
+            Gets a list of notifications for the specified user.
+            </summary>
+            <param name="user">The user DTO.</param>
+            <returns>A list of notification DTOs.</returns>
+        </member>
+        <member name="M:WayMatcherBL.Services.UserService.UpdateNotification(WayMatcherBL.DtoModels.NotificationDto)">
+            <summary>
+            Updates the read status of an existing notification.
+            </summary>
+            <param name="notification">The notification DTO containing the updated read status.</param>
+            <returns><c>true</c> if the notification was successfully updated; otherwise, <c>false</c>.</returns>
+        </member>
+    </members>
+</doc>

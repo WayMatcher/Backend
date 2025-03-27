@@ -12,11 +12,9 @@ namespace WayMatcherBL.Interfaces
         /// Creates a new event.
         /// </summary>
         /// <param name="eventDto">The event DTO to create.</param>
-        /// <param name="stopList">The list of stops associated with the event.</param>
         /// <param name="user">The user creating the event.</param>
-        /// <param name="scheduleDto">The schedule associated with the event.</param>
         /// <returns>The created event DTO.</returns>
-        public EventDto CreateEvent(EventDto eventDto, List<StopDto> stopList, UserDto user, ScheduleDto scheduleDto);
+        public EventDto CreateEvent(EventDto eventDto, UserDto user);
 
         /// <summary>
         /// Updates an existing event.

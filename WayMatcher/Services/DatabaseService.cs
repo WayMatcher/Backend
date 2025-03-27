@@ -523,8 +523,8 @@ namespace WayMatcherBL.Services
         /// Inserts a new event.
         /// </summary>
         /// <param name="eventModel">The event details.</param>
-        /// <returns><c>true</c> if the event was inserted successfully; otherwise, <c>false</c>.</returns>
-        public bool InsertEvent(EventDto eventModel)
+        /// <returns>The created <see cref="EventDto"/>.</returns>
+        public EventDto InsertEvent(EventDto eventModel)
         {
             var existingEvent = _dbContext.Events.FirstOrDefault(e => e.EventId == eventModel.EventId);
             if (existingEvent != null)
@@ -536,7 +536,11 @@ namespace WayMatcherBL.Services
             eventEntity.Status.StatusDescription = Enums.State.Active.GetDescription();
 
             _dbContext.Events.Add(eventEntity);
-            return _dbContext.SaveChanges() > 0;
+            _dbContext.SaveChanges();
+
+            // Retrieve the saved event entity
+            var savedEvent = _dbContext.Events.FirstOrDefault(e => e.EventId == eventEntity.EventId);
+            return _mapper.ConvertEventToDto(savedEvent);
         }
 
         /// <summary>
