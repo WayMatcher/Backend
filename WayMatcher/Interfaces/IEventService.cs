@@ -20,9 +20,8 @@ namespace WayMatcherBL.Interfaces
         /// Updates an existing event.
         /// </summary>
         /// <param name="eventDto">The event DTO to update.</param>
-        /// <param name="schedule">The schedule associated with the event.</param>
         /// <returns>The updated event DTO.</returns>
-        public EventDto UpdateEvent(EventDto eventDto, ScheduleDto schedule);
+        public EventDto UpdateEvent(EventDto eventDto);
 
         /// <summary>
         /// Cancels an event.

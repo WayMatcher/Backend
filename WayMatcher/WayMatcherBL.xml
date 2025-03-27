@@ -1037,12 +1037,11 @@
             <param name="user">The user creating the event.</param>
             <returns>The created event DTO.</returns>
         </member>
-        <member name="M:WayMatcherBL.Interfaces.IEventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.ScheduleDto)">
+        <member name="M:WayMatcherBL.Interfaces.IEventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto)">
             <summary>
             Updates an existing event.
             </summary>
             <param name="eventDto">The event DTO to update.</param>
-            <param name="schedule">The schedule associated with the event.</param>
             <returns>The updated event DTO.</returns>
         </member>
         <member name="M:WayMatcherBL.Interfaces.IEventService.CancelEvent(WayMatcherBL.LogicModels.EventDto)">
@@ -2028,12 +2027,11 @@
             <returns><c>true</c> if the stop was successfully removed; otherwise, <c>false</c>.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown when the stop is null.</exception>
         </member>
-        <member name="M:WayMatcherBL.Services.EventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.ScheduleDto)">
+        <member name="M:WayMatcherBL.Services.EventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto)">
             <summary>
             Updates an event with a new schedule.
             </summary>
             <param name="eventDto">The event DTO.</param>
-            <param name="schedule">The schedule DTO.</param>
             <returns>The updated event DTO.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown when the event or schedule is null.</exception>
         </member>

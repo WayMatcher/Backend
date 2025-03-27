@@ -431,15 +431,14 @@ namespace WayMatcherBL.Services
         /// Updates an event with a new schedule.
         /// </summary>
         /// <param name="eventDto">The event DTO.</param>
-        /// <param name="schedule">The schedule DTO.</param>
         /// <returns>The updated event DTO.</returns>
         /// <exception cref="ArgumentNullException">Thrown when the event or schedule is null.</exception>
-        public EventDto UpdateEvent(EventDto eventDto, ScheduleDto schedule)
+        public EventDto UpdateEvent(EventDto eventDto)
         {
-            if (eventDto == null || schedule == null)
+            if (eventDto == null || eventDto.Schedule == null)
                 throw new ArgumentNullException("Objects cannot be null");
 
-            eventDto.ScheduleId = _databaseService.GetScheduleId(schedule);
+            eventDto.ScheduleId = _databaseService.GetScheduleId(eventDto.Schedule);
 
             if (!_databaseService.UpdateEvent(eventDto))
                 throw new ArgumentNullException("Event could not be updated");

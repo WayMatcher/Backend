@@ -50,7 +50,7 @@ namespace WayMatcherAPI.Controllers
         {
             return HandleRequest(() =>
             {
-                var result = _eventService.UpdateEvent(requestEvent.Event, requestEvent.Event.Schedule);
+                var result = _eventService.UpdateEvent(requestEvent.Event);
                 return result != null ? Ok(result) : NotFound("Event not found or invalid input.");
             });
         }
@@ -104,8 +104,8 @@ namespace WayMatcherAPI.Controllers
         /// </summary>
         /// <param name="member">The request event member model.</param>
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
-        [HttpGet("AddEventMember")]
-        public IActionResult AddEventMember([FromQuery] RequestEventMember member)
+        [HttpPost("AddEventMember")]
+        public IActionResult AddEventMember([FromBody] RequestEventMember member)
         {
             return HandleRequest(() =>
             {
