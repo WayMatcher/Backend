@@ -532,8 +532,8 @@ namespace WayMatcherBL.Services
 
             var eventEntity = _mapper.ConvertEventDtoToEntity(eventModel);
 
-            eventEntity.Status = new Models.Status();
-            eventEntity.Status.StatusDescription = Enums.State.Active.GetDescription();
+            eventEntity.Status = null;
+            eventEntity.StatusId = (int)State.Active;
 
             _dbContext.Events.Add(eventEntity);
             _dbContext.SaveChanges();
