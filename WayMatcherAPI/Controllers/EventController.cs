@@ -113,7 +113,7 @@ namespace WayMatcherAPI.Controllers
                 {
                     EventId = member.Event.EventId ?? -1,
                     User = member.User,
-                    EventRole = EventRole.Passenger,
+                    EventRole = member.EventRole == (int)EventRole.Pilot ? EventRole.Pilot : EventRole.Passenger,
                 };
                 return _eventService.AddEventMember(eventMemberDto) ? Ok("Member added.") : BadRequest();
             });
