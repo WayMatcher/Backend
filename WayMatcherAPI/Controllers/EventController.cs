@@ -35,14 +35,7 @@ namespace WayMatcherAPI.Controllers
         {
             return HandleRequest(() =>
             {
-                var schedule = new ScheduleDto
-                {
-                    UserId = requestEvent.User.UserId,
-                    CronSchedule = requestEvent.Schedule
-                };
-
-                var result = _eventService.CreateEvent(requestEvent.Event, requestEvent.StopList, requestEvent.User, schedule);
-
+                var result = _eventService.CreateEvent(requestEvent.Event, requestEvent.Event.StopList, requestEvent.User, requestEvent.Event.Schedule);
                 return result != null ? Ok(result) : NotFound("Event not found or invalid input.");
             });
         }
@@ -57,13 +50,7 @@ namespace WayMatcherAPI.Controllers
         {
             return HandleRequest(() =>
             {
-                var schedule = new ScheduleDto
-                {
-                    UserId = requestEvent.User.UserId,
-                    CronSchedule = requestEvent.Schedule
-                };
-
-                var result = _eventService.UpdateEvent(requestEvent.Event, schedule);
+                var result = _eventService.UpdateEvent(requestEvent.Event, requestEvent.Event.Schedule);
                 return result != null ? Ok(result) : NotFound("Event not found or invalid input.");
             });
         }
@@ -124,7 +111,7 @@ namespace WayMatcherAPI.Controllers
             {
                 var eventMemberDto = new EventMemberDto
                 {
-                    EventId = member.Event.EventId,
+                    EventId = member.Event.EventId ?? -1,
                     User = member.User,
                     EventRole = EventRole.Passenger,
                 };

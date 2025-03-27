@@ -176,7 +176,7 @@ namespace WayMatcherBL.Services
             foreach (var stop in stopList)
             {
                 stop.Address.AddressId = GetAddressId(stop.Address);
-                stop.EventId = _databaseService.GetEvent(eventDto).EventId;
+                stop.EventId = _databaseService.GetEvent(eventDto).EventId ?? -1;
 
                 AddStop(stop);
             }
@@ -185,7 +185,7 @@ namespace WayMatcherBL.Services
 
             var eventMember = new EventMemberDto()
             {
-                EventId = _databaseService.GetEvent(eventDto).EventId,
+                EventId = _databaseService.GetEvent(eventDto).EventId ?? -1,
                 User = _databaseService.GetUser(user),
                 Status = new StatusDto() { StatusId = (int)State.Active }
 

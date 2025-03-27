@@ -10,7 +10,7 @@ namespace WayMatcherBL.LogicModels
         /// <summary>
         /// Gets or sets the unique identifier for the event.
         /// </summary>
-        public int EventId { get; set; }
+        public int? EventId { get; set; }
 
         /// <summary>
         /// Gets or sets the type identifier for the event.
