@@ -183,6 +183,7 @@ namespace WayMatcherBL.Services
             if (eventDto == null)
                 throw new ArgumentNullException("Event cannot be null");
 
+            eventDto = _databaseService.GetEvent(eventDto);
             eventDto.Status.StatusId = (int)State.Cancelled;
 
             foreach (var stop in _databaseService.GetStopList(eventDto))
@@ -368,8 +369,12 @@ namespace WayMatcherBL.Services
                 throw new ArgumentNullException("Event member could not be added");
 
             var eventDto = _databaseService.GetEvent(new EventDto() { EventId = eventMemberDto.EventId });
-            eventDto.FreeSeats = eventDto.FreeSeats - 1;
-            _databaseService.UpdateEvent(new EventDto() { EventId = eventMemberDto.EventId });
+            var owner = _databaseService.GetEventOwner(eventDto);
+            if (owner.UserId != eventMemberDto.User.UserId)
+            {
+                eventDto.FreeSeats = eventDto.FreeSeats - 1;
+                _databaseService.UpdateEvent(new EventDto() { EventId = eventMemberDto.EventId });
+            }
 
             // Retrieve the user after inserting the event member
             var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.User.UserId });

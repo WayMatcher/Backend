@@ -61,11 +61,15 @@ namespace WayMatcherAPI.Controllers
         /// <param name="requestEvent">The request event model.</param>
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
         [HttpPost("DeleteEvent")]
-        public IActionResult DeleteEvent([FromBody] RequestEvent requestEvent)
+        public IActionResult DeleteEvent([FromBody] int eventId)
         {
             return HandleRequest(() =>
             {
-                return _eventService.CancelEvent(requestEvent.Event) ? Ok("Event deleted.") : NotFound("Event not found or invalid input.");
+                var eventDto = new EventDto
+                {
+                    EventId = eventId
+                };
+                return _eventService.CancelEvent(eventDto) ? Ok("Event deleted.") : NotFound("Event not found or invalid input.");
             });
         }
 

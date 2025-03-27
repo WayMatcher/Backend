@@ -413,8 +413,10 @@ namespace WayMatcherBL.Services
             };
 
             var ratings = _databaseService.GetRatingList(user);
+            if(ratings.Count == 0)
+                return 0;
 
-            if (ratings == null || ratings.Count == 0)
+            if (ratings == null)
                 throw new ArgumentNullException("No ratings found for user");
 
             return ratings.Average(r => r.RatingValue);

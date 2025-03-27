@@ -25,7 +25,7 @@
             <param name="requestEvent">The request event model.</param>
             <returns>An <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/> representing the result of the operation.</returns>
         </member>
-        <member name="M:WayMatcherAPI.Controllers.EventController.DeleteEvent(WayMatcherAPI.Models.RequestEvent)">
+        <member name="M:WayMatcherAPI.Controllers.EventController.DeleteEvent(System.Int32)">
             <summary>
             Deletes an event.
             </summary>
