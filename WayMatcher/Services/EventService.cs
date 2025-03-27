@@ -36,6 +36,15 @@ namespace WayMatcherBL.Services
         {
             if (schedule == null)
                 throw new ArgumentNullException(nameof(schedule));
+
+            var existingSchedule = _databaseService.GetUserSchedules(new UserDto { UserId = schedule.UserId }).FirstOrDefault(s => s.CronSchedule == schedule.CronSchedule);
+
+            if (existingSchedule != null)
+            {
+                schedule.ScheduleId = existingSchedule.ScheduleId;
+                return true;
+            }
+
             return _databaseService.InsertSchedule(schedule);
         }
 
@@ -166,7 +175,7 @@ namespace WayMatcherBL.Services
             if (!PlanSchedule(eventDto.Schedule))
                 throw new ArgumentNullException("Schedule could not be planned");
 
-            eventDto.ScheduleId = _databaseService.GetScheduleId(eventDto.Schedule);
+            eventDto.ScheduleId = eventDto.Schedule.ScheduleId;
 
             var eventDb = _databaseService.InsertEvent(eventDto);
 
@@ -203,8 +212,8 @@ namespace WayMatcherBL.Services
             {
                 Subject = $"Way: {eventDb.EventId} created",
                 Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Confirmation</h1><h5 class=""text-teal-700"">Your Way has been successfully set up!</h5><hr><div class=""space-y-3"">
-<p class=""text-gray-700"">Dear {user.Username},</p>
-<p class=""text-gray-700"">We are pleased to inform you that your Way has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
+        <p class=""text-gray-700"">Dear {user.Username},</p>
+        <p class=""text-gray-700"">We are pleased to inform you that your Way has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
             };
