@@ -313,6 +313,11 @@ namespace WayMatcherBL.Interfaces
         /// <returns>The list of notification DTOs.</returns>
         public List<NotificationDto> GetNotificationList(UserDto user);
 
-        //public void LogAudit(AuditDto audit);
+        /// <summary>
+        /// Updates the read status of an existing notification.
+        /// </summary>
+        /// <param name="notification">The notification DTO containing the updated read status.</param>
+        /// <returns><c>true</c> if the notification was successfully updated; otherwise, <c>false</c>.</returns>
+        public bool UpdateNotification(NotificationDto notification);
     }
 }

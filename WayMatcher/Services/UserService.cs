@@ -11,7 +11,7 @@ using WayMatcherBL.LogicModels;
 namespace WayMatcherBL.Services
 {
     /// <summary>
-    /// Service class for managing user-related operations.
+    /// Service class for managing user-related operations, including authentication, notifications, and user data handling.
     /// </summary>
     public class UserService : IUserService
     {
@@ -22,9 +22,9 @@ namespace WayMatcherBL.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="UserService"/> class.
         /// </summary>
-        /// <param name="databaseService">The database service.</param>
-        /// <param name="emailService">The email service.</param>
-        /// <param name="configuration">The configuration service.</param>
+        /// <param name="databaseService">Service for database operations.</param>
+        /// <param name="emailService">Service for sending emails.</param>
+        /// <param name="configuration">Service for retrieving configuration settings.</param>
         public UserService(IDatabaseService databaseService, IEmailService emailService, ConfigurationService configuration)
         {
             _databaseService = databaseService;
@@ -33,9 +33,9 @@ namespace WayMatcherBL.Services
         }
 
         /// <summary>
-        /// Generates a Multi-Factor Authentication (MFA) code for the user and sends it via email.
+        /// Generates an MFA code for the user and sends it via email.
         /// </summary>
-        /// <param name="user">The user DTO.</param>
+        /// <param name="user">User DTO containing user information.</param>
         /// <returns>The hashed MFA code.</returns>
         private string GenerateMfA(UserDto user)
         {
@@ -47,8 +47,8 @@ namespace WayMatcherBL.Services
             {
                 Subject = "WayMatcher | MFA Code for User: " + GetUser(user),
                 Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Multi-Factor Authentication (MFA) Verification</h1><h5 class=""text-teal-700"">Secure your account with an extra layer of protection</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">To complete your login process, please enter the verification code below:</p>
-<h2 class=""text-teal-700"">{randomNumber}</h2>
-<p class=""text-gray-700"">If you did not request this code, please disregard this email or contact our support team immediately.</p><p class=""text-gray-700"">For added security, this code will expire in 10 minutes.</p></div><hr><p class=""text-gray-700"">Thank you for helping us keep your account secure.</p><a class=""btn btn-primary"" href=""https://support.yourcompany.com"" target=""_blank"">Contact Support</a></div></div></div></body></html>",
+    <h2 class=""text-teal-700"">{randomNumber}</h2>
+    <p class=""text-gray-700"">If you did not request this code, please disregard this email or contact our support team immediately.</p><p class=""text-gray-700"">For added security, this code will expire in 10 minutes.</p></div><hr><p class=""text-gray-700"">Thank you for helping us keep your account secure.</p><a class=""btn btn-primary"" href=""https://support.yourcompany.com"" target=""_blank"">Contact Support</a></div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
             };
@@ -58,10 +58,10 @@ namespace WayMatcherBL.Services
         }
 
         /// <summary>
-        /// Generates a JSON Web Token (JWT) for the user.
+        /// Generates a JWT token for the authenticated user.
         /// </summary>
-        /// <param name="user">The user DTO.</param>
-        /// <returns>The generated JWT.</returns>
+        /// <param name="user">User DTO containing user information.</param>
+        /// <returns>A string representing the generated JWT token.</returns>
         private string GenerateJWT(UserDto user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSecretKey()));
@@ -69,10 +69,10 @@ namespace WayMatcherBL.Services
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                };
 
             var token = new JwtSecurityToken(
                 issuer: "yourdomain.com",
@@ -145,9 +145,9 @@ namespace WayMatcherBL.Services
             {
                 Subject = $"Change Password for {user.Username}",
                 Body = $@"<html>
-<head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Password Reset Request</h1><h5 class=""text-teal-700"">We've received a request to reset your password</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">We received a request to reset your account password. If this was you, please click the link below to change your password.</p><p class=""text-gray-700"">If you did not request a password reset, you can safely ignore this email.</p></div><hr>
-<a class=""btn btn-primary"" href=""{HashString(user.Username)}"" target=""_blank"">Reset Your Password</a>
-</div></div></div></body></html>",
+    <head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Password Reset Request</h1><h5 class=""text-teal-700"">We've received a request to reset your password</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">We received a request to reset your account password. If this was you, please click the link below to change your password.</p><p class=""text-gray-700"">If you did not request a password reset, you can safely ignore this email.</p></div><hr>
+    <a class=""btn btn-primary"" href=""{HashString(user.Username)}"" target=""_blank"">Reset Your Password</a>
+    </div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
             };
@@ -259,6 +259,7 @@ namespace WayMatcherBL.Services
         {
             return _databaseService.GetUser(user);
         }
+
         /// <summary>
         /// Gets the address for the specified user.
         /// </summary>
@@ -441,6 +442,18 @@ namespace WayMatcherBL.Services
                 throw new ArgumentNullException("User cannot be null");
 
             return _databaseService.GetNotificationList(user);
+        }
+
+        /// <summary>
+        /// Updates the read status of an existing notification.
+        /// </summary>
+        /// <param name="notification">The notification DTO containing the updated read status.</param>
+        /// <returns><c>true</c> if the notification was successfully updated; otherwise, <c>false</c>.</returns>
+        public bool UpdateNotification(NotificationDto notification)
+        {
+            if (notification == null)
+                throw new ArgumentNullException("Notification cannot be null");
+            return _databaseService.UpdateNotification(notification);
         }
     }
 }

@@ -59,6 +59,7 @@ namespace WayMatcherBL.Services
         public List<AddressDto> GetActiveAddresses()
         {
             var addressList = new List<AddressDto>();
+
             foreach (var address in _dbContext.Addresses.Where(a => a.Status.StatusDescription.Equals(State.Active.GetDescription())).ToList())
             {
                 addressList.Add(_mapper.ConvertAddressToDto(address));
@@ -153,6 +154,7 @@ namespace WayMatcherBL.Services
                     eventList.Add(_mapper.ConvertEventToDto(eventItem));
                 }
             }
+
             return eventList;
         }
 
@@ -194,10 +196,12 @@ namespace WayMatcherBL.Services
         {
             var ratingList = new List<RatingDto>();
             var ratings = _dbContext.Ratings.Where(r => r.RatedUserId == user.UserId).ToList();
+
             foreach (var rating in ratings)
             {
                 ratingList.Add(_mapper.ConvertRatingToDto(rating));
             }
+
             return ratingList;
         }
 
@@ -246,6 +250,7 @@ namespace WayMatcherBL.Services
         {
             var inviteList = new List<InviteDto>();
             var invites = _dbContext.Invites.Where(i => i.EventId == eventDto.EventId && i.StatusId == (int)State.Pending).ToList();
+
             foreach (var invite in invites)
             {
                 var inviteDto = _mapper.ConvertInviteToDto(invite);
@@ -256,6 +261,7 @@ namespace WayMatcherBL.Services
 
                 inviteList.Add(inviteDto);
             }
+
             return inviteList;
         }
 
@@ -267,6 +273,7 @@ namespace WayMatcherBL.Services
         public AddressDto GetAddress(AddressDto address)
         {
             var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == address.AddressId || a.Longitude == address.Longitude && a.Latitude == address.Latitude && a.City == address.City && a.PostalCode == address.PostalCode && a.Country == address.Country);
+
             if (dbAddress == null)
             {
                 dbAddress = new Address()
@@ -286,10 +293,12 @@ namespace WayMatcherBL.Services
         public AddressDto GetAddress(UserDto user)
         {
             var dbUser = _dbContext.Users.FirstOrDefault(u => u.EMail == user.Email || u.Username == user.Username || u.UserId == user.UserId);
+
             if (dbUser == null)
                 return null;
 
             var dbAddress = _dbContext.Addresses.FirstOrDefault(a => a.AddressId == dbUser.AddressId);
+
             if (dbAddress == null)
                 return null;
 
@@ -304,6 +313,7 @@ namespace WayMatcherBL.Services
         public EventDto GetEvent(EventDto eventDto)
         {
             var eventItem = _dbContext.Events.FirstOrDefault(e => e.EventId == eventDto.EventId);
+
             if (eventItem == null)
             {
                 return null;
@@ -322,10 +332,12 @@ namespace WayMatcherBL.Services
         public ScheduleDto GetScheduleById(int id)
         {
             var schedule = _dbContext.Schedules.FirstOrDefault(s => s.ScheduleId == id);
+
             if (schedule == null)
             {
                 return null;
             }
+
             return _mapper.ConvertScheduleToDto(schedule);
         }
 
@@ -355,10 +367,12 @@ namespace WayMatcherBL.Services
         public VehicleDto GetVehicleById(int id)
         {
             var vehicle = _dbContext.Vehicles.FirstOrDefault(v => v.VehicleId == id);
+
             if (vehicle == null)
             {
                 return null;
             }
+
             return _mapper.ConvertVehicleToDto(vehicle);
         }
 
@@ -370,6 +384,7 @@ namespace WayMatcherBL.Services
         public RatingDto GetRating(RatingDto rating)
         {
             var ratingItem = _dbContext.Ratings.FirstOrDefault(r => r.RatingId == rating.RatingId || r.RatedUserId == rating.RatedUserId && r.UserWhoRatedId == rating.UserWhoRatedId);
+
             if (ratingItem == null)
                 return null;
 
@@ -384,10 +399,12 @@ namespace WayMatcherBL.Services
         public int GetEventId(EventDto eventModel)
         {
             var eventItem = _dbContext.Events.FirstOrDefault(e => e.Description == eventModel.Description && e.EventTypeId == eventModel.EventTypeId && e.FreeSeats == eventModel.FreeSeats && e.StartTimestamp == eventModel.StartTimestamp);
+
             if (eventItem == null)
             {
                 return -1;
             }
+
             return eventItem.EventId;
         }
 
@@ -399,10 +416,12 @@ namespace WayMatcherBL.Services
         public int GetScheduleId(ScheduleDto scheduleModel)
         {
             var schedule = _dbContext.Schedules.FirstOrDefault(s => s.CronSchedule == scheduleModel.CronSchedule);
+
             if (schedule == null)
             {
                 return -1;
             }
+
             return schedule.ScheduleId;
         }
 
@@ -414,10 +433,12 @@ namespace WayMatcherBL.Services
         public int GetVehicleId(VehicleDto vehicleModel)
         {
             var vehicle = _dbContext.Vehicles.FirstOrDefault(v => v.Model == vehicleModel.Model && v.Seats == vehicleModel.Seats);
+
             if (vehicle == null)
             {
                 return -1;
             }
+
             return vehicle.VehicleId;
         }
 
@@ -470,16 +491,11 @@ namespace WayMatcherBL.Services
         public UserDto GetEventOwner(EventDto eventDto)
         {
             var eventOwnerId = _dbContext.Events.Where(e => e.EventId.Equals(eventDto.EventId)).FirstOrDefault().EventOwnerId;
-
-            var user = new UserDto()
-            {
-                UserId = eventOwnerId ?? -1
-            };
-
-            var eventOwner = GetUser(user);
+            var eventOwner = GetUser(new UserDto() { UserId = eventOwnerId ?? -1 });
 
             if (eventOwner == null)
                 return null;
+
             return eventOwner;
         }
 
@@ -500,7 +516,6 @@ namespace WayMatcherBL.Services
             addressEntity.AddressId = 0;
 
             _dbContext.Addresses.Add(addressEntity);
-
             return _dbContext.SaveChanges() > 0;
         }
 
@@ -536,6 +551,7 @@ namespace WayMatcherBL.Services
                 throw new ArgumentException("A schedule with the same ID already exists.");
 
             var scheduleEntity = _mapper.ConvertScheduleDtoToEntity(scheduleModel);
+
             _dbContext.Schedules.Add(scheduleEntity);
             return _dbContext.SaveChanges() > 0;
         }
@@ -575,7 +591,6 @@ namespace WayMatcherBL.Services
             var vehicleEntity = _mapper.ConvertVehicleDtoToEntity(vehicleModel);
 
             vehicleEntity.VehicleId = 0;
-
             vehicleEntity.StatusId = (int)Enums.State.Active;
 
             _dbContext.Vehicles.Add(vehicleEntity);
@@ -631,12 +646,12 @@ namespace WayMatcherBL.Services
                 throw new ArgumentException("An invite with the same ID already exists.");
 
             var inviteEntity = _mapper.ConvertInviteDtoToEntity(invite);
+
             inviteEntity.UserId = invite.User.UserId;
             inviteEntity.User = null;
             inviteEntity.Status = null;
 
             _dbContext.Invites.Add(inviteEntity);
-            
             return _dbContext.SaveChanges() > 0;
         }
 
@@ -688,7 +703,6 @@ namespace WayMatcherBL.Services
             var ratingEntity = _mapper.ConvertRatingDtoToEntity(rating);
 
             _dbContext.Ratings.Add(ratingEntity);
-
             return _dbContext.SaveChanges() > 0;
         }
 
@@ -706,7 +720,6 @@ namespace WayMatcherBL.Services
             var notificationEntity = _mapper.ConvertNotificationDtoToEntity(notification);
 
             _dbContext.Notifications.Add(notificationEntity);
-
             return _dbContext.SaveChanges() > 0;
         }
 
@@ -841,7 +854,7 @@ namespace WayMatcherBL.Services
             if (updateUserDto.ProfilePicture != null && updateUserDto.ProfilePicture.Length > 0)
                 userEntity.ProfilePicture = updateUserDto.ProfilePicture;
 
-            if(updateUserDto.Address != null && updateUserDto.Address.AddressId != -1)
+            if (updateUserDto.Address != null && updateUserDto.Address.AddressId != -1)
                 userEntity.AddressId = updateUserDto.Address.AddressId;
 
             if (!string.IsNullOrEmpty(updateUserDto.MfAtoken))
@@ -936,8 +949,27 @@ namespace WayMatcherBL.Services
             var inviteEntity = _dbContext.Invites.FirstOrDefault(i => i.InviteId == invite.InviteId);
             if (inviteEntity == null)
                 return false;
+
             if (invite.StatusId != -1)
                 inviteEntity.StatusId = invite.StatusId ?? -1;
+
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        /// <summary>
+        /// Updates the read status of an existing notification.
+        /// </summary>
+        /// <param name="notification">The notification DTO containing the updated read status.</param>
+        /// <returns><c>true</c> if the notification was successfully updated; otherwise, <c>false</c>.</returns>
+        public bool UpdateNotification(NotificationDto notification)
+        {
+            var notificationEntity = _dbContext.Notifications.FirstOrDefault(n => n.NotificationId == notification.NotificationId);
+            if (notificationEntity == null)
+                return false;
+
+            if (notification.Read != null)
+                notificationEntity.Read = notification.Read;
+
             return _dbContext.SaveChanges() > 0;
         }
 

@@ -122,5 +122,12 @@ namespace WayMatcherBL.Interfaces
         /// <param name="user">The user whose notifications are to be retrieved.</param>
         /// <returns>The list of notification DTOs.</returns>
         public List<NotificationDto> GetNotification(UserDto user);
+
+        /// <summary>
+        /// Updates the notification object.
+        /// </summary>
+        /// <param name="notification">The notification to update.</param>"
+        /// <returns>True if the notification status was successfully updated; otherwise, false.</returns>
+        public bool UpdateNotification(NotificationDto notification);
     }
 }

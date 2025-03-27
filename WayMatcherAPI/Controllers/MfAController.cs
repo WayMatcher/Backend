@@ -11,15 +11,24 @@ namespace WayMatcherAPI.Controllers
     {
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MfAController"/> class.
+        /// </summary>
+        /// <param name="userService">The user service.</param>
         public MfAController(IUserService userService)
         {
             _userService = userService;
         }
 
+        /// <summary>
+        /// Accepts the MFA input from the user.
+        /// </summary>
+        /// <param name="mfaModel">The MFA request model.</param>
+        /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
         [HttpPost("MfAInput")]
         public IActionResult MfAInput([FromBody] RequestMFAModel mfaModel)
         {
-            try
+            return HandleRequest(() =>
             {
                 var user = new UserDto
                 {
@@ -29,10 +38,20 @@ namespace WayMatcherAPI.Controllers
 
                 var result = _userService.AcceptMfA(user);
 
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound(result);
+                return result != null ? Ok(result) : NotFound(result);
+            });
+        }
+
+        /// <summary>
+        /// Handles the request and returns the appropriate response.
+        /// </summary>
+        /// <param name="action">The action to execute.</param>
+        /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
+        private IActionResult HandleRequest(Func<IActionResult> action)
+        {
+            try
+            {
+                return action();
             }
             catch (ArgumentNullException ex)
             {

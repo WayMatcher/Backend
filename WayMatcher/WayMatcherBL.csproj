@@ -4,6 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>C:\Users\christian.rudigier\OneDrive - Landesberufsschule 4\Documents\11_Projekt\QuellcodeDoc\WayMatcherBL.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
