@@ -1893,7 +1893,7 @@
             <param name="databaseService">The database service.</param>
             <param name="emailService">The email service.</param>
         </member>
-        <member name="M:WayMatcherBL.Services.EventService.PlanSchedule(WayMatcherBL.LogicModels.ScheduleDto)">
+        <member name="M:WayMatcherBL.Services.EventService.GetSchedule(WayMatcherBL.LogicModels.ScheduleDto)">
             <summary>
             Plans the schedule.
             </summary>
@@ -1968,7 +1968,7 @@
             <summary>
             Creates a new event.
             </summary>
-            <param name="newEventDto">The event DTO.</param>
+            <param name="eventDto">The event DTO.</param>
             <param name="user">The user DTO.</param>
             <returns>The created event DTO.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>

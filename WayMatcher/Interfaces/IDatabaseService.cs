@@ -108,7 +108,7 @@ namespace WayMatcherBL.Interfaces
         /// </summary>
         /// <param name="scheduleModel">The schedule DTO to insert.</param>
         /// <returns>True if the schedule was successfully inserted; otherwise, false.</returns>
-        public bool InsertSchedule(ScheduleDto scheduleModel);
+        public ScheduleDto InsertSchedule(ScheduleDto scheduleModel);
 
         /// <summary>
         /// Updates an existing schedule in the database.

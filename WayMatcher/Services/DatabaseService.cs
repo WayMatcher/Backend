@@ -552,7 +552,7 @@ namespace WayMatcherBL.Services
         /// </summary>
         /// <param name="scheduleModel">The schedule details.</param>
         /// <returns><c>true</c> if the schedule was inserted successfully; otherwise, <c>false</c>.</returns>
-        public bool InsertSchedule(ScheduleDto scheduleModel)
+        public ScheduleDto InsertSchedule(ScheduleDto scheduleModel)
         {
             var existingSchedule = _dbContext.Schedules.FirstOrDefault(s => s.ScheduleId == scheduleModel.ScheduleId);
             if (existingSchedule != null)
@@ -561,7 +561,10 @@ namespace WayMatcherBL.Services
             var scheduleEntity = _mapper.ConvertScheduleDtoToEntity(scheduleModel);
 
             _dbContext.Schedules.Add(scheduleEntity);
-            return _dbContext.SaveChanges() > 0;
+            _dbContext.SaveChanges();
+
+            var savedSchedule = _dbContext.Schedules.FirstOrDefault(s => s.CronSchedule == scheduleEntity.CronSchedule);
+            return _mapper.ConvertScheduleToDto(savedSchedule);
         }
 
         /// <summary>
@@ -636,6 +639,11 @@ namespace WayMatcherBL.Services
                 throw new ArgumentException("A stop with the same ID already exists.");
 
             var stopEntity = _mapper.ConvertStopDtoToEntity(stop);
+
+            stopEntity.Address = null;
+            stopEntity.Event = null;
+            stopEntity.AddressId = stop.Address.AddressId;
+            stopEntity.EventId = stop.EventId;
 
             _dbContext.Stops.Add(stopEntity);
 

@@ -32,7 +32,7 @@ namespace WayMatcherBL.Services
         /// <param name="schedule">The schedule DTO.</param>
         /// <returns><c>true</c> if the schedule was successfully planned; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when the schedule is null.</exception>
-        private bool PlanSchedule(ScheduleDto schedule)
+        private ScheduleDto GetSchedule(ScheduleDto schedule)
         {
             if (schedule == null)
                 throw new ArgumentNullException(nameof(schedule));
@@ -40,10 +40,8 @@ namespace WayMatcherBL.Services
             var existingSchedule = _databaseService.GetUserSchedules(new UserDto { UserId = schedule.UserId }).FirstOrDefault(s => s.CronSchedule == schedule.CronSchedule);
 
             if (existingSchedule != null)
-            {
-                schedule.ScheduleId = existingSchedule.ScheduleId;
-                return true;
-            }
+                return existingSchedule;
+            
 
             return _databaseService.InsertSchedule(schedule);
         }
@@ -141,7 +139,7 @@ namespace WayMatcherBL.Services
 
             var stopList = _databaseService.GetStopList(eventDto);
 
-            if (!stopList.Contains(stop))
+            if (stopList.Contains(stop))
                 return false;
 
             return _databaseService.InsertStop(stop);
@@ -220,7 +218,7 @@ namespace WayMatcherBL.Services
         /// <summary>
         /// Creates a new event.
         /// </summary>
-        /// <param name="newEventDto">The event DTO.</param>
+        /// <param name="eventDto">The event DTO.</param>
         /// <param name="user">The user DTO.</param>
         /// <returns>The created event DTO.</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
@@ -283,29 +281,28 @@ namespace WayMatcherBL.Services
         /// <summary>
         /// Creates a new event.
         /// </summary>
-        /// <param name="newEventDto">The event DTO.</param>
+        /// <param name="eventDto">The event DTO.</param>
         /// <param name="user">The user DTO.</param>
         /// <returns>The created event DTO.</returns>
         /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the schedule/event could not be created.</exception>
-        public EventDto CreateEvent(EventDto newEventDto, UserDto user)
+        public EventDto CreateEvent(EventDto eventDto, UserDto user)
         {
-            if (newEventDto == null || user == null || newEventDto.StopList.IsNullOrEmpty() || newEventDto.Schedule == null)
+            if (eventDto == null || user == null || eventDto.StopList.IsNullOrEmpty() || eventDto.Schedule == null)
                 throw new ArgumentNullException("Objects cannot be null");
 
-            if (!PlanSchedule(newEventDto.Schedule))
-                throw new ArgumentNullException("Schedule could not be planned");
+            eventDto.Schedule = GetSchedule(eventDto.Schedule);
+            eventDto.Owner = user;
 
-            newEventDto.ScheduleId = newEventDto.Schedule.ScheduleId;
-            newEventDto.Owner = user;
-
-            var eventDb = _databaseService.InsertEvent(newEventDto);
+            var eventDb = _databaseService.InsertEvent(eventDto);
             if (eventDb == null)
                 throw new ArgumentNullException("Event could not be created");
 
+
+            AddStopsToEvent(eventDto.StopList, eventDb.EventId ?? -1);
+            AddEventOwnerAsMember(eventDb.EventId ?? -1, user, eventDto.EventTypeId);
+
             eventDb = _databaseService.GetEvent(eventDb);
 
-            AddStopsToEvent(eventDb.StopList, eventDb.EventId ?? -1);
-            AddEventOwnerAsMember(eventDb.EventId ?? -1, user, eventDb.EventTypeId);
             SendEventCreationEmail(user, eventDb.EventId ?? -1);
 
             return eventDb;
