@@ -201,16 +201,16 @@ namespace WayMatcherBL.Services
 
             var email = new EmailDto()
             {
-                Subject = $"Way: {eventDto.EventId} created",
+                Subject = $"Way: {eventDb.EventId} created",
                 Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Confirmation</h1><h5 class=""text-teal-700"">Your Way has been successfully set up!</h5><hr><div class=""space-y-3"">
 <p class=""text-gray-700"">Dear {user.Username},</p>
-<p class=""text-gray-700"">We are pleased to inform you that your Way has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr>        <a class=""btn btn-primary"" href=""#"" target=""_blank"">View Way Details</a></div></div></div></body></html>",
+<p class=""text-gray-700"">We are pleased to inform you that your Way has been successfully set up. If you need to make any changes or require further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
             };
             _emailService.SendEmail(email);
 
-            return eventDto;
+            return eventDb;
         }
 
         /// <summary>
