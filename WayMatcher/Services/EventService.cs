@@ -280,10 +280,8 @@ namespace WayMatcherBL.Services
             if (user == null)
                 throw new ArgumentNullException("User cannot be null");
 
-            return _databaseService.GetEventMemberList(new EventDto { EventId = user.UserId ?? -1 })
-                .Select(eventMember => _databaseService.GetEvent(new EventDto { EventId = eventMember.EventId }))
-                .Where(eventDto => eventDto != null)
-                .ToList();
+            user = _databaseService.GetUser(user);
+            return _databaseService.GetEventUserList(user);
         }
 
         /// <summary>

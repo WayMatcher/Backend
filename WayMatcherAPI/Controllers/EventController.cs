@@ -187,11 +187,15 @@ namespace WayMatcherAPI.Controllers
         /// </summary>
         /// <param name="user">The user DTO.</param>
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
-        [HttpPost("GetUserEvent")]
-        public IActionResult GetUserEvent([FromBody] UserDto user)
+        [HttpGet("GetUserEventList")]
+        public IActionResult GetUserEventList([FromBody] int userId)
         {
             return HandleRequest(() =>
             {
+                var user = new UserDto
+                {
+                    UserId = userId
+                };
                 var result = _eventService.GetUserEventList(user);
                 return result != null ? Ok(result) : NotFound("Event not found or invalid input.");
             });

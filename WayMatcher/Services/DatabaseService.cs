@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
 using WayMatcherBL.Interfaces;
@@ -160,6 +161,22 @@ namespace WayMatcherBL.Services
             return eventList;
         }
 
+        /// <summary>
+        /// Gets the list of events.
+        /// </summary>
+        /// <param name="isPilot">Indicates if the events are for pilots.</param>
+        /// <returns>A list of <see cref="EventDto"/>.</returns>
+        public List<EventDto> GetEventUserList(UserDto user)
+        {
+            var eventList = new List<EventDto>();
+
+            foreach(var eventMember in _dbContext.EventMembers.Where(em => em.UserId.Equals(user.UserId)).ToList())
+            {
+                eventList.Add(GetEvent(new EventDto() { EventId = eventMember.EventId }));
+            }
+
+            return eventList;
+        }
 
         /// <summary>
         /// Gets the list of event members.

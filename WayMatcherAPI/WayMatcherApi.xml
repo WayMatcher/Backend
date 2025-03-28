@@ -74,7 +74,7 @@
             <param name="isPilot">The filter to apply to the event list.</param>
             <returns>An <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/> representing the result of the operation.</returns>
         </member>
-        <member name="M:WayMatcherAPI.Controllers.EventController.GetUserEvent(WayMatcherBL.LogicModels.UserDto)">
+        <member name="M:WayMatcherAPI.Controllers.EventController.GetUserEventList(System.Int32)">
             <summary>
             Gets the list of events associated with a user.
             </summary>
