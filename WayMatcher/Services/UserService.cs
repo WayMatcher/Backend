@@ -238,6 +238,8 @@ namespace WayMatcherBL.Services
             if (user == null)
                 throw new ArgumentNullException("User cannot be null");
 
+            user = GetUser(user);
+
             user.Address.AddressId = GetAddressId(user.Address);
             user.StatusId = (int)State.Inactive;
             return _databaseService.UpdateUser(user);

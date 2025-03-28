@@ -211,7 +211,7 @@
             <param name="userEdit">The user edit request model.</param>
             <returns>An <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/> representing the result of the operation.</returns>
         </member>
-        <member name="M:WayMatcherAPI.Controllers.UserController.DeleteUser(WayMatcherBL.LogicModels.UserDto)">
+        <member name="M:WayMatcherAPI.Controllers.UserController.DeleteUser(WayMatcherAPI.Models.RequestUser)">
             <summary>
             Deletes the user.
             </summary>

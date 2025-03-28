@@ -64,11 +64,17 @@ namespace WayMatcherAPI.Controllers
         /// <param name="user">The user DTO.</param>
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
         [HttpPost("DeleteUser")]
-        public IActionResult DeleteUser([FromBody] UserDto user)
+        public IActionResult DeleteUser([FromBody] RequestUser user)
         {
             return HandleRequest(() =>
             {
-                var result = _userService.DeleteUser(user);
+                var userDto = new UserDto
+                {
+                    UserId = user.UserId ?? -1,
+                    Username = user.Username,
+                    Email = user.Email
+                };
+                var result = _userService.DeleteUser(userDto);
                 return result ? Ok(result) : StatusCode(500, "An error occurred while deleting the user.");
             });
         }
