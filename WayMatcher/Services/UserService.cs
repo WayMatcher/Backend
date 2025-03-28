@@ -39,11 +39,10 @@ namespace WayMatcherBL.Services
         /// <returns>The hashed MFA code.</returns>
         private string GenerateMfA(UserDto user)
         {
-            Random random = new Random();
-            int randomNumber = random.Next(1000, 10000); // 4 digit number
-            byte[] numberBytes = Encoding.UTF8.GetBytes(randomNumber.ToString());
+            var randomNumber = new Random().Next(1000, 10000); // 4 digit number
+            var numberBytes = Encoding.UTF8.GetBytes(randomNumber.ToString());
 
-            EmailDto email = new EmailDto()
+            var email = new EmailDto()
             {
                 Subject = "WayMatcher | MFA Code for User: " + GetUser(user).Username,
                 Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Multi-Factor Authentication (MFA) Verification</h1><h5 class=""text-teal-700"">Secure your account with an extra layer of protection</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">To complete your login process, please enter the verification code below:</p>
@@ -69,10 +68,10 @@ namespace WayMatcherBL.Services
 
             var claims = new[]
             {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
             var token = new JwtSecurityToken(
                 issuer: "yourdomain.com",
@@ -202,29 +201,27 @@ namespace WayMatcherBL.Services
             if (user == null || vehicleList == null)
                 throw new ArgumentNullException("User or vehicle cannot be null");
 
-            foreach (var vehicle in vehicleList)
+            var dbUser = GetUser(user);
+            var vehicleListDb = _databaseService.GetUserVehicles(dbUser);
+
+            vehicleList.ForEach(vehicle =>
             {
                 vehicle.VehicleId = GetVehicleId(vehicle);
 
-                var dbUser = GetUser(user);
-
-                var vehicleListDb = _databaseService.GetUserVehicles(dbUser);
-                for (int i = 0; i < vehicleListDb.Count; i++)
+                vehicleListDb.Where(v => v.VehicleId != vehicle.VehicleId).ToList().ForEach(v =>
                 {
-                    if (vehicleListDb[i].VehicleId != vehicle.VehicleId)
+                    var vehicleMapping = new VehicleMappingDto()
                     {
-                        var vehicleMapping = new VehicleMappingDto()
-                        {
-                            UserId = dbUser.UserId,
-                            VehicleId = vehicle.VehicleId,
-                            FuelMilage = vehicleMappingList[i].FuelMilage,
-                            AdditionalInfo = vehicleMappingList[i].AdditionalInfo,
-                            LicensePlate = vehicleMappingList[i].LicensePlate
-                        };
-                        _databaseService.InsertVehicleMapping(vehicleMapping);
-                    }
-                }
-            }
+                        UserId = dbUser.UserId,
+                        VehicleId = vehicle.VehicleId,
+                        FuelMilage = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).FuelMilage,
+                        AdditionalInfo = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).AdditionalInfo,
+                        LicensePlate = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).LicensePlate
+                    };
+                    _databaseService.InsertVehicleMapping(vehicleMapping);
+                });
+            });
+
             return true;
         }
 
@@ -361,22 +358,22 @@ namespace WayMatcherBL.Services
                     throw new Exception("User already exists and is active");
             }
 
-            else if (_databaseService.InsertUser(user))
+            if (_databaseService.InsertUser(user))
             {
                 var userId = GetUser(user).UserId;
 
-                for (int i = 0; i < vehicleList.Count; i++)
+                vehicleList.ForEach(vehicle =>
                 {
                     var vehicleMapping = new VehicleMappingDto()
                     {
                         UserId = userId,
-                        VehicleId = GetVehicleId(vehicleList[i]),
-                        FuelMilage = vehicleMappingList[i].FuelMilage,
-                        AdditionalInfo = vehicleMappingList[i].AdditionalInfo,
-                        LicensePlate = vehicleMappingList[i].LicensePlate
+                        VehicleId = GetVehicleId(vehicle),
+                        FuelMilage = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).FuelMilage,
+                        AdditionalInfo = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).AdditionalInfo,
+                        LicensePlate = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).LicensePlate
                     };
                     _databaseService.InsertVehicleMapping(vehicleMapping);
-                }
+                });
 
                 return true;
             }
@@ -393,10 +390,9 @@ namespace WayMatcherBL.Services
             if (rate == null)
                 throw new ArgumentNullException("Rating cannot be null");
 
-            if (_databaseService.GetRating(rate) != null)
-                return _databaseService.UpdateRating(rate);
-            else
-                return _databaseService.InsertRating(rate);
+            return _databaseService.GetRating(rate) != null
+                ? _databaseService.UpdateRating(rate)
+                : _databaseService.InsertRating(rate);
         }
 
         /// <summary>
@@ -404,22 +400,16 @@ namespace WayMatcherBL.Services
         /// </summary>
         /// <param name="rate">The rating DTO.</param>
         /// <returns>The average rating value.</returns>
+
         public double UserRating(RatingDto rate)
         {
             if (rate == null)
                 throw new ArgumentNullException("Rating cannot be null");
 
-            UserDto user = new UserDto()
-            {
-                UserId = rate.RatedUserId
-            };
+            var ratings = _databaseService.GetRatingList(new UserDto() { UserId = rate.RatedUserId });
 
-            var ratings = _databaseService.GetRatingList(user);
-            if(ratings.Count == 0)
+            if (ratings == null || ratings.Count == 0)
                 return 0;
-
-            if (ratings == null)
-                throw new ArgumentNullException("No ratings found for user");
 
             return ratings.Average(r => r.RatingValue);
         }

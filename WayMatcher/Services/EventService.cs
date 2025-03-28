@@ -37,13 +37,8 @@ namespace WayMatcherBL.Services
             if (schedule == null)
                 throw new ArgumentNullException(nameof(schedule));
 
-            var existingSchedule = _databaseService.GetUserSchedules(new UserDto { UserId = schedule.UserId }).FirstOrDefault(s => s.CronSchedule == schedule.CronSchedule);
-
-            if (existingSchedule != null)
-                return existingSchedule;
-
-
-            return _databaseService.InsertSchedule(schedule);
+            return _databaseService.GetUserSchedules(new UserDto { UserId = schedule.UserId })
+                .FirstOrDefault(s => s.CronSchedule == schedule.CronSchedule) ?? _databaseService.InsertSchedule(schedule);
         }
 
         /// <summary>
@@ -53,15 +48,12 @@ namespace WayMatcherBL.Services
         /// <returns>The address identifier.</returns>
         private int GetAddressId(AddressDto address)
         {
-            address.AddressId = _databaseService.GetAddress(address).AddressId;
+            var existingAddress = _databaseService.GetAddress(address);
+            if (existingAddress.AddressId != -1)
+                return existingAddress.AddressId;
 
-            if (address.AddressId == -1)
-            {
-                _databaseService.InsertAddress(address);
-                return _databaseService.GetAddress(address).AddressId;
-            }
-
-            return address.AddressId;
+            _databaseService.InsertAddress(address);
+            return _databaseService.GetAddress(address).AddressId;
         }
 
         /// <summary>
@@ -71,12 +63,12 @@ namespace WayMatcherBL.Services
         /// <param name="eventId">The event ID.</param>
         private void AddStopsToEvent(List<StopDto> stops, int eventId)
         {
-            foreach (var stop in stops)
+            stops.ForEach(stop =>
             {
                 stop.Address.AddressId = GetAddressId(stop.Address);
                 stop.EventId = eventId;
                 AddStop(stop);
-            }
+            });
         }
 
         /// <summary>
@@ -87,9 +79,7 @@ namespace WayMatcherBL.Services
         /// <param name="eventTypeId">The event type ID.</param>
         private void AddEventOwnerAsMember(int eventId, UserDto user, int? eventTypeId)
         {
-            var retrievedUser = _databaseService.GetUser(user);
-            if (retrievedUser == null)
-                throw new ArgumentNullException("User could not be retrieved from the database");
+            var retrievedUser = _databaseService.GetUser(user) ?? throw new ArgumentNullException("User could not be retrieved from the database");
 
             var eventMember = new EventMemberDto()
             {
@@ -132,12 +122,7 @@ namespace WayMatcherBL.Services
             if (stop == null)
                 throw new ArgumentNullException("Stop cannot be null");
 
-            var eventDto = new EventDto()
-            {
-                EventId = stop.EventId,
-            };
-
-            var stopList = _databaseService.GetStopList(eventDto);
+            var stopList = _databaseService.GetStopList(new EventDto() { EventId = stop.EventId });
 
             if (stopList.Contains(stop))
                 return false;
@@ -186,13 +171,13 @@ namespace WayMatcherBL.Services
             eventDto = _databaseService.GetEvent(eventDto);
             eventDto.Status.StatusId = (int)State.Cancelled;
 
-            foreach (var stop in _databaseService.GetStopList(eventDto))
+            _databaseService.GetStopList(eventDto).ForEach(stop =>
             {
                 if (!_databaseService.DeleteStop(stop))
                     throw new ArgumentNullException($"Stop {stop.StopId} could not be removed");
-            }
+            });
 
-            foreach (var member in _databaseService.GetEventMemberList(eventDto))
+            _databaseService.GetEventMemberList(eventDto).ForEach(member =>
             {
                 var user = _databaseService.GetUser(new UserDto() { UserId = member.User.UserId });
                 var email = new EmailDto()
@@ -211,10 +196,11 @@ namespace WayMatcherBL.Services
                     throw new ArgumentNullException($"Member {member.User.UserId} could not be removed");
 
                 _emailService.SendEmail(email);
-            }
+            });
 
             return _databaseService.UpdateEvent(eventDto);
         }
+
 
         /// <summary>
         /// Creates a new event.
@@ -231,9 +217,7 @@ namespace WayMatcherBL.Services
             eventDto.Schedule = GetSchedule(eventDto.Schedule);
             eventDto.Owner = user;
 
-            var eventDb = _databaseService.InsertEvent(eventDto);
-            if (eventDb == null)
-                throw new ArgumentNullException("Event could not be created");
+            var eventDb = _databaseService.InsertEvent(eventDto) ?? throw new ArgumentNullException("Event could not be created");
 
             AddStopsToEvent(eventDto.StopList, eventDb.EventId ?? -1);
             AddEventOwnerAsMember(eventDb.EventId ?? -1, user, eventDto.EventTypeId);
@@ -274,13 +258,13 @@ namespace WayMatcherBL.Services
         public List<EventDto> GetEventList(bool? isPilot)
         {
             var eventList = _databaseService.GetEventList(isPilot);
-            foreach (var eventDto in eventList)
+            eventList.ForEach(eventDto =>
             {
                 eventDto.StopList = _databaseService.GetStopList(eventDto);
                 eventDto.EventMembers = _databaseService.GetEventMemberList(eventDto);
                 eventDto.Schedule = _databaseService.GetScheduleById(eventDto.ScheduleId ?? -1);
                 eventDto.Owner = _databaseService.GetEventOwner(eventDto);
-            }
+            });
 
             return eventList;
         }
@@ -296,19 +280,10 @@ namespace WayMatcherBL.Services
             if (user == null)
                 throw new ArgumentNullException("User cannot be null");
 
-            var userEvents = new List<EventDto>();
-            var eventMembers = _databaseService.GetEventMemberList(new EventDto { EventId = user.UserId ?? -1 });
-
-            foreach (var eventMember in eventMembers)
-            {
-                var eventDto = _databaseService.GetEvent(new EventDto { EventId = eventMember.EventId });
-                if (eventDto != null)
-                {
-                    userEvents.Add(eventDto);
-                }
-            }
-
-            return userEvents;
+            return _databaseService.GetEventMemberList(new EventDto { EventId = user.UserId ?? -1 })
+                .Select(eventMember => _databaseService.GetEvent(new EventDto { EventId = eventMember.EventId }))
+                .Where(eventDto => eventDto != null)
+                .ToList();
         }
 
         /// <summary>
@@ -319,36 +294,31 @@ namespace WayMatcherBL.Services
         /// <exception cref="ArgumentNullException">Thrown when the invite or user is null.</exception>
         public bool EventInvite(InviteDto invite)
         {
-            var email = new EmailDto()
-            {
-                IsHtml = true
-            };
-
             if (invite == null || invite.User == null)
                 throw new ArgumentNullException("Invite cannot be null");
 
             invite.StatusId = (int)State.Pending;
             invite.User = _databaseService.GetUser(invite.User);
 
-            if (!invite.IsRequest)
+            var email = new EmailDto()
             {
-                email.Subject = $"You have been Invited to a Way: {invite.EventId} as a {invite.eventRole.GetDescription()}!";
-                email.Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">You're Invited!</h1><h5 class=""text-teal-700"">You have been invited to a Way!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">We are excited to inform you that you have been invited to join us for a Way </p><p class=""text-gray-700"">Please click the link below to confirm your attendance.</p><p class=""text-gray-700"">We hope to see you there!</p></div><hr>
-<a class=""btn btn-primary"" href=""http://localhost:4000/requests/accept?userId={invite.User.UserId}&eventId={invite.EventId}&eventRole={(int)invite.eventRole}"" target=""_blank"">Confirm Your Attendance</a>
-</div></div></div></body></html>";
-                //TODO: localhost should be replaced with the actual domain
-                email.To = invite.User.Email;
-            }
-            else
-            {
-                email.Subject = $"Way ({invite.EventId}) Request from User: {invite.User.Username} as a {invite.eventRole.GetDescription()}";
-                email.Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Request to Join the Way</h1><h5 class=""text-teal-700"">A user has requested to join the Way!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">A user has expressed interest in joining the Way. Please review their request and consider granting access.</p><p class=""text-gray-700"">Here is the message from the user:</p>
+                IsHtml = true,
+                Subject = invite.IsRequest
+                    ? $"Way ({invite.EventId}) Request from User: {invite.User.Username} as a {invite.eventRole.GetDescription()}"
+                    : $"You have been Invited to a Way: {invite.EventId} as a {invite.eventRole.GetDescription()}!",
+                Body = invite.IsRequest
+                    ? $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Request to Join the Way</h1><h5 class=""text-teal-700"">A user has requested to join the Way!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">A user has expressed interest in joining the Way. Please review their request and consider granting access.</p><p class=""text-gray-700"">Here is the message from the user:</p>
 <blockquote class=""text-gray-700 bg-gray-100 p-3 rounded"">{invite.Message}</blockquote><p class=""text-gray-700"">To accept or decline this request, please follow the link below.</p></div><hr>
 <a class=""btn btn-primary"" href=""http://localhost:4000/invites/accept?userId={invite.User.UserId}&eventId={invite.EventId}&eventRole={(int)invite.eventRole}"" target=""_blank"">Review Request</a>
-</div></div></div></body></html>";
-                //TODO: localhost should be replaced with the actual domain
-                email.To = _databaseService.GetEventOwner(new EventDto() { EventId = invite.EventId ?? -1 }).Email;
-            }
+</div></div></div></body></html>"
+                    : $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">You're Invited!</h1><h5 class=""text-teal-700"">You have been invited to a Way!</h5><hr><div class=""space-y-3""><p class=""text-gray-700"">Hello,</p><p class=""text-gray-700"">We are excited to inform you that you have been invited to join us for a Way </p><p class=""text-gray-700"">Please click the link below to confirm your attendance.</p><p class=""text-gray-700"">We hope to see you there!</p></div><hr>
+<a class=""btn btn-primary"" href=""http://localhost:4000/requests/accept?userId={invite.User.UserId}&eventId={invite.EventId}&eventRole={(int)invite.eventRole}"" target=""_blank"">Confirm Your Attendance</a>
+</div></div></div></body></html>",
+                To = invite.IsRequest
+                    ? _databaseService.GetEventOwner(new EventDto() { EventId = invite.EventId ?? -1 }).Email
+                    : invite.User.Email
+            };
+
             _emailService.SendEmail(email);
 
             return _databaseService.InsertToInvite(invite);
@@ -376,17 +346,14 @@ namespace WayMatcherBL.Services
                 _databaseService.UpdateEvent(new EventDto() { EventId = eventMemberDto.EventId });
             }
 
-            // Retrieve the user after inserting the event member
-            var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.User.UserId });
-            if (user == null)
-                throw new ArgumentNullException("User could not be retrieved from the database");
+            var user = _databaseService.GetUser(new UserDto() { UserId = eventMemberDto.User.UserId }) ?? throw new ArgumentNullException("User could not be retrieved from the database");
 
             var email = new EmailDto()
             {
                 Subject = $"Way: {eventMemberDto.EventId} joined",
                 Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Join Confirmation</h1><h5 class=""text-teal-700"">You've successfully joined the Way!</h5><hr><div class=""space-y-3"">
-        <p class=""text-gray-700"">Dear {eventMemberDto.User.Username},</p>
-        <p class=""text-gray-700"">We are excited to inform you that you've successfully joined the Way. We look forward to your participation and hope you have a great experience.</p></div><hr></div></div></div></body></html>",
+<p class=""text-gray-700"">Dear {eventMemberDto.User.Username},</p>
+<p class=""text-gray-700"">We are excited to inform you that you've successfully joined the Way. We look forward to your participation and hope you have a great experience.</p></div><hr></div></div></div></body></html>",
                 To = user.Email,
                 IsHtml = true
             };
@@ -454,7 +421,7 @@ namespace WayMatcherBL.Services
             if (!_databaseService.UpdateEvent(eventDto))
                 throw new ArgumentNullException("Event could not be updated");
 
-            foreach (var member in _databaseService.GetEventMemberList(eventDto))
+            _databaseService.GetEventMemberList(eventDto).ForEach(member =>
             {
                 var user = _databaseService.GetUser(new UserDto() { UserId = member.User.UserId });
 
@@ -469,7 +436,7 @@ namespace WayMatcherBL.Services
                     IsHtml = true
                 };
                 _emailService.SendEmail(email);
-            }
+            });
             return eventDto;
         }
 
@@ -509,13 +476,11 @@ namespace WayMatcherBL.Services
         {
             if (eventDto == null)
                 throw new ArgumentNullException("Event cannot be null");
+
             var userList = _databaseService.GetActiveUsers();
             var eventMembers = _databaseService.GetEventMemberList(eventDto);
-            foreach (var member in eventMembers)
-            {
-                userList.RemoveAll(u => u.UserId.Equals(member.User.UserId));
-            }
-            return userList;
+
+            return userList.Where(u => !eventMembers.Any(m => m.User.UserId == u.UserId)).ToList();
         }
     }
 }
