@@ -24,6 +24,7 @@ namespace WayMatcherBL.Mapper
                 cfg.CreateMap<Event, EventDto>();
                 cfg.CreateMap<VwPilotEvent, EventDto>();
                 cfg.CreateMap<VwPassengerEvent, EventDto>();
+                cfg.CreateMap<FN_GetEventsByMemberUserIdResult, EventDto>();
                 cfg.CreateMap<EventDto, Event>();
                 cfg.CreateMap<Schedule, ScheduleDto>();
                 cfg.CreateMap<ScheduleDto, Schedule>();
@@ -105,6 +106,16 @@ namespace WayMatcherBL.Mapper
         public EventDto ConvertVwPassengerEventToDto(VwPassengerEvent vwPassenger)
         {
             return _mapper.Map<EventDto>(vwPassenger);
+        }
+
+        /// <summary>
+        /// Converts a <see cref="VwPassengerEvent"/> entity to an <see cref="EventDto"/>.
+        /// </summary>
+        /// <param name="vwPassenger">The passenger event entity to convert.</param>
+        /// <returns>The converted event DTO.</returns>
+        public EventDto ConvertFNUserEventToDto(FN_GetEventsByMemberUserIdResult FNUserEvent)
+        {
+            return _mapper.Map<EventDto>(FNUserEvent);
         }
 
         /// <summary>

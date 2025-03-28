@@ -281,7 +281,7 @@ namespace WayMatcherBL.Services
                 throw new ArgumentNullException("User cannot be null");
 
             user = _databaseService.GetUser(user);
-            return _databaseService.GetEventUserList(user);
+            return _databaseService.GetUserEventList(user);
         }
 
         /// <summary>

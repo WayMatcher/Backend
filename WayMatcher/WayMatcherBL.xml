@@ -859,7 +859,7 @@
             <param name="isPilot">The filter to apply to the event list.</param>
             <returns>The list of event DTOs.</returns>
         </member>
-        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetEventUserList(WayMatcherBL.LogicModels.UserDto)">
+        <member name="M:WayMatcherBL.Interfaces.IDatabaseService.GetUserEventList(WayMatcherBL.LogicModels.UserDto)">
             <summary>
             Gets the list of all user events from the database.
             </summary>
@@ -1583,7 +1583,7 @@
             <param name="isPilot">Indicates if the events are for pilots.</param>
             <returns>A list of <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.</returns>
         </member>
-        <member name="M:WayMatcherBL.Services.DatabaseService.GetEventUserList(WayMatcherBL.LogicModels.UserDto)">
+        <member name="M:WayMatcherBL.Services.DatabaseService.GetUserEventList(WayMatcherBL.LogicModels.UserDto)">
             <summary>
             Gets the list of events.
             </summary>

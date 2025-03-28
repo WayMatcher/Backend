@@ -188,7 +188,7 @@ namespace WayMatcherAPI.Controllers
         /// <param name="user">The user DTO.</param>
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
         [HttpGet("GetUserEventList")]
-        public IActionResult GetUserEventList([FromBody] int userId)
+        public IActionResult GetUserEventList([FromQuery] int userId)
         {
             return HandleRequest(() =>
             {

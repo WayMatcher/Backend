@@ -164,16 +164,19 @@ namespace WayMatcherBL.Services
         /// <summary>
         /// Gets the list of events.
         /// </summary>
-        /// <param name="isPilot">Indicates if the events are for pilots.</param>
+        /// <param name="user">Indicates if the events are for pilots.</param>
         /// <returns>A list of <see cref="EventDto"/>.</returns>
-        public List<EventDto> GetEventUserList(UserDto user)
+        public List<EventDto> GetUserEventList(UserDto user)
         {
-            var eventList = new List<EventDto>();
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
 
-            foreach(var eventMember in _dbContext.EventMembers.Where(em => em.UserId.Equals(user.UserId)).ToList())
-            {
-                eventList.Add(GetEvent(new EventDto() { EventId = eventMember.EventId }));
-            }
+            if (user.UserId == null)
+                throw new ArgumentNullException(nameof(user.UserId));
+
+            var events = _dbContext.FN_GetEventsByMemberUserId(user.UserId).ToList();
+
+            var eventList = events.Select(e => _mapper.ConvertFNUserEventToDto(e)).ToList();
 
             return eventList;
         }

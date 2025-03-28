@@ -480,6 +480,7 @@ public partial class WayMatcherContext : DbContext
             entity.Property(e => e.StatusId).HasColumnName("Status_ID");
         });
 
+        OnModelCreatingGeneratedFunctions(modelBuilder);
         OnModelCreatingPartial(modelBuilder);
     }
 

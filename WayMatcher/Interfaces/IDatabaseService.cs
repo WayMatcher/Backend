@@ -171,7 +171,7 @@ namespace WayMatcherBL.Interfaces
         /// </summary>
         /// <param name="user">The filter to apply to the event list.</param>
         /// <returns>The list of event DTOs.</returns>
-        public List<EventDto> GetEventUserList(UserDto user);
+        public List<EventDto> GetUserEventList(UserDto user);
 
         /// <summary>
         /// Gets the ID of an event from the database.
