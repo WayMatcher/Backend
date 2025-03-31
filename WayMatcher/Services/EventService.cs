@@ -431,32 +431,40 @@ namespace WayMatcherBL.Services
             if (eventDto == null || user == null || eventDto.StopList.IsNullOrEmpty() || eventDto.Schedule == null)
                 throw new ArgumentNullException("Objects cannot be null");
 
-            eventDto.Schedule = GetSchedule(eventDto.Schedule);
-            eventDto.Owner = user;
-
-            if (!_databaseService.UpdateEvent(eventDto))
-                throw new ArgumentNullException("Event could not be updated");
-
             // Update stops
-            var existingStops = _databaseService.GetStopList(eventDto);
-            var newStops = eventDto.StopList.Except(existingStops).ToList();
-            var removedStops = existingStops.Except(eventDto.StopList).ToList();
-
-            removedStops.ForEach(stop => _databaseService.DeleteStop(stop));
-            AddStopsToEvent(newStops, eventDto.EventId ?? -1);
+            
+            // Fetch all stops from the database for the event
+            var existingStopList = _databaseService.GetStopList(eventDto);
+            
+            // Find newly added stops (in eventDto.StopList but NOT in the database)
+            var newStopList = eventDto.StopList.Where(stop => !existingStopList.Any(existing => existing.StopId == stop.StopId)).ToList();
+            
+            // Find removed stops (in the database but NOT in eventDto.StopList)
+            var removedStopList = existingStopList.Where(existing => !eventDto.StopList.Any(stop => stop.StopId == existing.StopId)).ToList();
+           
+            removedStopList.ForEach(stop => _databaseService.DeleteStop(stop));
+            AddStopsToEvent(newStopList, eventDto.EventId ?? -1);
 
             // Update event members
-            var existingMembers = _databaseService.GetEventMemberList(eventDto);
-            var newMembers = eventDto.EventMembers.Except(existingMembers).ToList();
-            var removedMembers = existingMembers.Except(eventDto.EventMembers).ToList();
+            var existingMemberList = _databaseService.GetEventMemberList(eventDto);
+            var newMemberList = eventDto.EventMembers.Except(existingMemberList).ToList();
+            var removedMemberList = existingMemberList.Except(eventDto.EventMembers).ToList();
 
-            removedMembers.ForEach(member => _databaseService.UpdateEventMember(new EventMemberDto
+            removedMemberList.ForEach(member => _databaseService.UpdateEventMember(new EventMemberDto
             {
                 EventId = member.EventId,
                 User = member.User,
                 Status = new StatusDto { StatusId = (int)State.Cancelled }
             }));
-            newMembers.ForEach(member => AddEventMember(member));
+            newMemberList.ForEach(member => AddEventMember(member));
+
+            eventDto.Schedule = GetSchedule(eventDto.Schedule);
+            eventDto.Owner = user;
+            eventDto.Status = new StatusDto();
+            eventDto.Status.StatusId = -1;
+
+            if (!_databaseService.UpdateEvent(eventDto))
+                throw new ArgumentNullException("Event could not be updated");
 
             // Send update email to all members
             _databaseService.GetEventMemberList(eventDto).ForEach(member =>

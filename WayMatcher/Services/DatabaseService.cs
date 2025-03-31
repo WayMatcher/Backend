@@ -665,6 +665,7 @@ namespace WayMatcherBL.Services
 
             stopEntity.Address = null;
             stopEntity.Event = null;
+            stopEntity.StopId = 0;
             stopEntity.AddressId = stop.Address.AddressId;
             stopEntity.EventId = stop.EventId;
 
@@ -849,7 +850,10 @@ namespace WayMatcherBL.Services
             if (!string.IsNullOrEmpty(eventModel.Description) && eventModel.Description != eventEntity.Description)
                 eventEntity.Description = eventModel.Description;
 
-            if((int)eventModel.Status.StatusId != -1 && (int)eventModel.Status.StatusId != eventEntity.StatusId)
+            if (eventModel.StartTimestamp.HasValue && eventModel.StartTimestamp != eventEntity.StartTimestamp)
+                eventEntity.StartTimestamp = eventModel.StartTimestamp;
+
+            if ((int)eventModel.Status.StatusId != -1 && (int)eventModel.Status.StatusId != eventEntity.StatusId)
                 eventEntity.StatusId = eventModel.Status.StatusId;
 
             return _dbContext.SaveChanges() > 0;
