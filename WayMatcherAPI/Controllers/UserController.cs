@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using WayMatcherAPI.Models;
 using WayMatcherBL.DtoModels;
 using WayMatcherBL.Enums;
@@ -32,27 +33,36 @@ namespace WayMatcherAPI.Controllers
         {
             return HandleRequest(() =>
             {
-                var vehicleList = userEdit.VehicleList.Select(vehicle => new VehicleDto
+                var isVehicleConfigurated = false;
+
+                if (userEdit.VehicleList != null)
                 {
-                    VehicleId = vehicle.VehicleId ?? -1,
-                    Model = vehicle.Model,
-                    Seats = vehicle.Seats,
-                    YearOfManufacture = vehicle.YearOfManufacture,
-                    ManufacturerName = vehicle.ManufacturerName
-                }).ToList();
+                    var vehicleList = userEdit.VehicleList.Select(vehicle => new VehicleDto
+                    {
+                        VehicleId = vehicle.VehicleId ?? -1,
+                        Model = vehicle.Model,
+                        Seats = vehicle.Seats,
+                        YearOfManufacture = vehicle.YearOfManufacture,
+                        ManufacturerName = vehicle.ManufacturerName
+                    }).ToList();
 
-                var vehicleMappingList = userEdit.VehicleList.Select(vehicle => new VehicleMappingDto
-                {
-                    VehicleId = vehicle.VehicleId ?? -1,
-                    FuelMilage = vehicle.FuelMilage,
-                    AdditionalInfo = vehicle.AdditionalInfo,
-                    LicensePlate = vehicle.LicensePlate,
-                }).ToList();
+                    var vehicleMappingList = userEdit.VehicleList.Select(vehicle => new VehicleMappingDto
+                    {
+                        VehicleId = vehicle.VehicleId ?? -1,
+                        FuelMilage = vehicle.FuelMilage,
+                        AdditionalInfo = vehicle.AdditionalInfo,
+                        LicensePlate = vehicle.LicensePlate,
+                    }).ToList();
 
-                userEdit.User.Password = userEdit.Password;
+                    isVehicleConfigurated = _userService.ConfigurateVehicle(userEdit.User, vehicleList, vehicleMappingList);
+                }
+                else
+                    isVehicleConfigurated = true;
 
-                var result = _userService.ConfigurateVehicle(userEdit.User, vehicleList, vehicleMappingList) &&
-                             _userService.ConfigurateUser(userEdit.User);
+                if(!userEdit.Password.IsNullOrEmpty())
+                    userEdit.User.Password = userEdit.Password;
+
+                var result =  isVehicleConfigurated && _userService.ConfigurateUser(userEdit.User);
 
                 return result ? Ok(result) : StatusCode(500, "An error occurred while editing the user.");
             });
