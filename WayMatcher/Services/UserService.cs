@@ -366,15 +366,19 @@ namespace WayMatcherBL.Services
 
                 vehicleList.ForEach(vehicle =>
                 {
-                    var vehicleMapping = new VehicleMappingDto()
+                    var vehicleMapping = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId);
+                    var vehicleId = GetVehicleId(vehicle);
+                    vehicleMapping.VehicleId = vehicleId;
+
+                    var newVehicleMapping = new VehicleMappingDto()
                     {
                         UserId = userId,
-                        VehicleId = GetVehicleId(vehicle),
-                        FuelMilage = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).FuelMilage,
-                        AdditionalInfo = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).AdditionalInfo,
-                        LicensePlate = vehicleMappingList.First(vm => vm.VehicleId == vehicle.VehicleId).LicensePlate
+                        VehicleId = vehicleId,
+                        FuelMilage = vehicleMapping.FuelMilage,
+                        AdditionalInfo = vehicleMapping.AdditionalInfo,
+                        LicensePlate = vehicleMapping.LicensePlate
                     };
-                    _databaseService.InsertVehicleMapping(vehicleMapping);
+                    _databaseService.InsertVehicleMapping(newVehicleMapping);
                 });
 
                 return true;

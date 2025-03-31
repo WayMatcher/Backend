@@ -32,6 +32,12 @@ namespace WayMatcherAPI.Controllers
         {
             return HandleRequest(() =>
             {
+                var vehicleCounter = 0;
+                foreach (var vehicle in user.VehicleList)
+                {
+                    vehicle.VehicleId = vehicleCounter++;
+                }
+
                 var vehicleList = MapToVehicleDtoList(user.VehicleList);
                 var vehicleMappingList = MapToVehicleMappingDtoList(user.VehicleList);
 
