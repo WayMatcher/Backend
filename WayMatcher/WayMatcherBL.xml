@@ -1044,7 +1044,7 @@
             <param name="user">The user creating the event.</param>
             <returns>The created event DTO.</returns>
         </member>
-        <member name="M:WayMatcherBL.Interfaces.IEventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto)">
+        <member name="M:WayMatcherBL.Interfaces.IEventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.UserDto)">
             <summary>
             Updates an existing event.
             </summary>
@@ -1321,6 +1321,13 @@
             <param name="vwPassenger">The passenger event entity to convert.</param>
             <returns>The converted event DTO.</returns>
         </member>
+        <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertFNUserEventToDto(WayMatcherBL.Models.FN_GetEventsByMemberUserIdResult)">
+            <summary>
+            Converts a <see cref="T:WayMatcherBL.Models.VwPassengerEvent"/> entity to an <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.
+            </summary>
+            <param name="vwPassenger">The passenger event entity to convert.</param>
+            <returns>The converted event DTO.</returns>
+        </member>
         <member name="M:WayMatcherBL.Mapper.ModelMapper.ConvertEventDtoToEntity(WayMatcherBL.LogicModels.EventDto)">
             <summary>
             Converts an <see cref="T:WayMatcherBL.LogicModels.EventDto"/> to an <see cref="T:WayMatcherBL.Models.Event"/> entity.
@@ -1587,7 +1594,7 @@
             <summary>
             Gets the list of events.
             </summary>
-            <param name="isPilot">Indicates if the events are for pilots.</param>
+            <param name="user">Indicates if the events are for pilots.</param>
             <returns>A list of <see cref="T:WayMatcherBL.LogicModels.EventDto"/>.</returns>
         </member>
         <member name="M:WayMatcherBL.Services.DatabaseService.GetEventMemberList(WayMatcherBL.LogicModels.EventDto)">
@@ -1974,8 +1981,9 @@
             Cancels an event.
             </summary>
             <param name="eventDto">The event DTO.</param>
+            <param name="user">The user DTO.</param>
             <returns><c>true</c> if the event was successfully cancelled; otherwise, <c>false</c>.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when the event is null or a stop/member could not be removed.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when any of the parameters are null or the event could not be cancelled.</exception>
         </member>
         <member name="M:WayMatcherBL.Services.EventService.CreateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.UserDto)">
             <summary>
@@ -2041,13 +2049,14 @@
             <returns><c>true</c> if the stop was successfully removed; otherwise, <c>false</c>.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown when the stop is null.</exception>
         </member>
-        <member name="M:WayMatcherBL.Services.EventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto)">
+        <member name="M:WayMatcherBL.Services.EventService.UpdateEvent(WayMatcherBL.LogicModels.EventDto,WayMatcherBL.LogicModels.UserDto)">
             <summary>
-            Updates an event with a new schedule.
+            Updates an existing event.
             </summary>
             <param name="eventDto">The event DTO.</param>
+            <param name="user">The user DTO.</param>
             <returns>The updated event DTO.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when the event or schedule is null.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when any of the parameters are null or the event could not be updated.</exception>
         </member>
         <member name="M:WayMatcherBL.Services.EventService.SendChatMessage(WayMatcherBL.DtoModels.ChatMessageDto)">
             <summary>

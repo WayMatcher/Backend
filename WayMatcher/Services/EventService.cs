@@ -161,44 +161,60 @@ namespace WayMatcherBL.Services
         /// Cancels an event.
         /// </summary>
         /// <param name="eventDto">The event DTO.</param>
+        /// <param name="user">The user DTO.</param>
         /// <returns><c>true</c> if the event was successfully cancelled; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when the event is null or a stop/member could not be removed.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the event could not be cancelled.</exception>
         public bool CancelEvent(EventDto eventDto)
         {
             if (eventDto == null)
-                throw new ArgumentNullException("Event cannot be null");
+                throw new ArgumentNullException("Objects cannot be null");
 
             eventDto = _databaseService.GetEvent(eventDto);
-            eventDto.Status.StatusId = (int)State.Cancelled;
 
-            _databaseService.GetStopList(eventDto).ForEach(stop =>
+            // Remove stops
+            var stops = _databaseService.GetStopList(eventDto);
+            stops.ForEach(stop =>
             {
                 if (!_databaseService.DeleteStop(stop))
                     throw new ArgumentNullException($"Stop {stop.StopId} could not be removed");
             });
 
-            _databaseService.GetEventMemberList(eventDto).ForEach(member =>
+            // Update event members
+            var members = _databaseService.GetEventMemberList(eventDto);
+            members.ForEach(member =>
             {
-                var user = _databaseService.GetUser(new UserDto() { UserId = member.User.UserId });
-                var email = new EmailDto()
+                if (member.Status.StatusId != (int)State.Inactive)
+                {
+                    member.Status.StatusId = (int)State.Inactive;
+
+                    if (!_databaseService.UpdateEventMember(member) && member.Status.StatusId != (int)State.Inactive)
+                        throw new ArgumentNullException($"Member {member.User.UserId} could not be updated");
+
+                }
+
+                var memberUser = _databaseService.GetUser(new UserDto { UserId = member.User.UserId });
+                var email = new EmailDto
                 {
                     Subject = $"Way: {eventDto.EventId} cancelled",
                     Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Cancellation</h1><h5 class=""text-teal-700"">Your Way has been cancelled</h5><hr>
-<div class=""space-y-3""><p class=""text-gray-700"">Dear {eventDto.EventId},</p>
-<p class=""text-gray-700"">We regret to inform you that your Way has been cancelled. If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
-                    To = user.Email,
+        <div class=""space-y-3""><p class=""text-gray-700"">Dear {memberUser.Username},</p>
+        <p class=""text-gray-700"">We regret to inform you that your Way has been cancelled. If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
+                    To = memberUser.Email,
                     IsHtml = true
                 };
-
-                member.Status.StatusId = (int)State.Cancelled;
-
-                if (!_databaseService.UpdateEventMember(member))
-                    throw new ArgumentNullException($"Member {member.User.UserId} could not be removed");
-
                 _emailService.SendEmail(email);
             });
 
-            return _databaseService.UpdateEvent(eventDto);
+            // Update the event status
+            if (eventDto.Status.StatusId != (int)State.Cancelled)
+            {
+                eventDto.Status.StatusId = (int)State.Cancelled;
+
+                if (!_databaseService.UpdateEvent(eventDto))
+                    throw new ArgumentNullException("Event could not be updated");
+            }
+
+            return true;
         }
 
 
@@ -404,37 +420,62 @@ namespace WayMatcherBL.Services
         }
 
         /// <summary>
-        /// Updates an event with a new schedule.
+        /// Updates an existing event.
         /// </summary>
         /// <param name="eventDto">The event DTO.</param>
+        /// <param name="user">The user DTO.</param>
         /// <returns>The updated event DTO.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when the event or schedule is null.</exception>
-        public EventDto UpdateEvent(EventDto eventDto)
+        /// <exception cref="ArgumentNullException">Thrown when any of the parameters are null or the event could not be updated.</exception>
+        public EventDto UpdateEvent(EventDto eventDto, UserDto user)
         {
-            if (eventDto == null || eventDto.Schedule == null)
+            if (eventDto == null || user == null || eventDto.StopList.IsNullOrEmpty() || eventDto.Schedule == null)
                 throw new ArgumentNullException("Objects cannot be null");
 
-            eventDto.ScheduleId = _databaseService.GetScheduleId(eventDto.Schedule);
+            eventDto.Schedule = GetSchedule(eventDto.Schedule);
+            eventDto.Owner = user;
 
             if (!_databaseService.UpdateEvent(eventDto))
                 throw new ArgumentNullException("Event could not be updated");
 
+            // Update stops
+            var existingStops = _databaseService.GetStopList(eventDto);
+            var newStops = eventDto.StopList.Except(existingStops).ToList();
+            var removedStops = existingStops.Except(eventDto.StopList).ToList();
+
+            removedStops.ForEach(stop => _databaseService.DeleteStop(stop));
+            AddStopsToEvent(newStops, eventDto.EventId ?? -1);
+
+            // Update event members
+            var existingMembers = _databaseService.GetEventMemberList(eventDto);
+            var newMembers = eventDto.EventMembers.Except(existingMembers).ToList();
+            var removedMembers = existingMembers.Except(eventDto.EventMembers).ToList();
+
+            removedMembers.ForEach(member => _databaseService.UpdateEventMember(new EventMemberDto
+            {
+                EventId = member.EventId,
+                User = member.User,
+                Status = new StatusDto { StatusId = (int)State.Cancelled }
+            }));
+            newMembers.ForEach(member => AddEventMember(member));
+
+            // Send update email to all members
             _databaseService.GetEventMemberList(eventDto).ForEach(member =>
             {
-                var user = _databaseService.GetUser(new UserDto() { UserId = member.User.UserId });
+                var user = _databaseService.GetUser(new UserDto { UserId = member.User.UserId });
 
-                var email = new EmailDto()
+                var email = new EmailDto
                 {
-                    Subject = $"Way: {eventDto.EventId} changed",
-                    Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Update</h1><h5 class=""text-teal-700"">Your Way details have changed</h5><hr><div class=""space-y-3"">
-<p class=""text-gray-700"">Dear {user.Username},</p>
-<p class=""text-gray-700"">We wanted to inform you that there has been a change to your Way {eventDto.EventId}. Please review the updated information to ensure everything meets your expectations.</p>
-<p class=""text-gray-700"">If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body</html>",
+                    Subject = $"Way: {eventDto.EventId} updated",
+                    Body = $@"<html><head><meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" /></head><body class=""bg-light""><div class=""container""><div class=""card my-10""><div class=""card-body""><h1 class=""h3 mb-2"">Way Update</h1><h5 class=""text-teal-700"">Your Way details have been updated</h5><hr><div class=""space-y-3"">
+        <p class=""text-gray-700"">Dear {user.Username},</p>
+        <p class=""text-gray-700"">We wanted to inform you that there has been a change to your Way {eventDto.EventId}. Please review the updated information to ensure everything meets your expectations.</p>
+        <p class=""text-gray-700"">If you have any questions or need further assistance, feel free to reach out to us.</p></div><hr></div></div></div></body></html>",
                     To = user.Email,
                     IsHtml = true
                 };
                 _emailService.SendEmail(email);
             });
+
             return eventDto;
         }
 

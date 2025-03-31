@@ -840,17 +840,17 @@ namespace WayMatcherBL.Services
             if (eventEntity == null)
                 return false;
 
-            if (eventModel.EventTypeId.HasValue)
+            if (eventModel.EventTypeId.HasValue && eventModel.EventTypeId != eventEntity.EventTypeId)
                 eventEntity.EventTypeId = eventModel.EventTypeId;
 
-            if (eventModel.FreeSeats.HasValue)
+            if (eventModel.FreeSeats.HasValue && eventModel.FreeSeats != eventEntity.FreeSeats)
                 eventEntity.FreeSeats = eventModel.FreeSeats;
 
-            if (!string.IsNullOrEmpty(eventModel.Description))
+            if (!string.IsNullOrEmpty(eventModel.Description) && eventModel.Description != eventEntity.Description)
                 eventEntity.Description = eventModel.Description;
 
-            if (eventModel.StartTimestamp.HasValue)
-                eventEntity.StartTimestamp = eventModel.StartTimestamp;
+            if((int)eventModel.Status.StatusId != -1 && (int)eventModel.Status.StatusId != eventEntity.StatusId)
+                eventEntity.StatusId = eventModel.Status.StatusId;
 
             return _dbContext.SaveChanges() > 0;
         }

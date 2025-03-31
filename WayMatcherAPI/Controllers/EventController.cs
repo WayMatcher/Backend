@@ -50,7 +50,7 @@ namespace WayMatcherAPI.Controllers
         {
             return HandleRequest(() =>
             {
-                var result = _eventService.UpdateEvent(requestEvent.Event);
+                var result = _eventService.UpdateEvent(requestEvent.Event, requestEvent.User);
                 return result != null ? Ok(result) : NotFound("Event not found or invalid input.");
             });
         }

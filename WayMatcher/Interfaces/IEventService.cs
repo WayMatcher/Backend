@@ -21,7 +21,7 @@ namespace WayMatcherBL.Interfaces
         /// </summary>
         /// <param name="eventDto">The event DTO to update.</param>
         /// <returns>The updated event DTO.</returns>
-        public EventDto UpdateEvent(EventDto eventDto);
+        public EventDto UpdateEvent(EventDto eventDto, UserDto user);
 
         /// <summary>
         /// Cancels an event.
