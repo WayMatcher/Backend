@@ -445,19 +445,6 @@ namespace WayMatcherBL.Services
             removedStopList.ForEach(stop => _databaseService.DeleteStop(stop));
             AddStopsToEvent(newStopList, eventDto.EventId ?? -1);
 
-            // Update event members
-            var existingMemberList = _databaseService.GetEventMemberList(eventDto);
-            var newMemberList = eventDto.EventMembers.Except(existingMemberList).ToList();
-            var removedMemberList = existingMemberList.Except(eventDto.EventMembers).ToList();
-
-            removedMemberList.ForEach(member => _databaseService.UpdateEventMember(new EventMemberDto
-            {
-                EventId = member.EventId,
-                User = member.User,
-                Status = new StatusDto { StatusId = (int)State.Cancelled }
-            }));
-            newMemberList.ForEach(member => AddEventMember(member));
-
             eventDto.Schedule = GetSchedule(eventDto.Schedule);
             eventDto.Owner = user;
             eventDto.Status = new StatusDto();
