@@ -278,6 +278,8 @@ namespace WayMatcherBL.Services
         /// <returns>A list of vehicle DTOs.</returns>
         public List<VehicleDto> GetUserVehicleList(UserDto user)
         {
+            user = GetUser(user);
+
             return _databaseService.GetUserVehicles(user);
         }
 
