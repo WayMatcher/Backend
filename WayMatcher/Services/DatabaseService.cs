@@ -175,14 +175,26 @@ namespace WayMatcherBL.Services
                 throw new ArgumentNullException(nameof(user.UserId));
 
             var events = _dbContext.FN_GetEventsByMemberUserId(user.UserId).ToList();
+            var eventList = new List<EventDto>();
 
-            var eventList = events.Select(e => _mapper.ConvertFNUserEventToDto(e)).ToList();
+            foreach (var eventItem in events)
+            {
+                var eventDto = _mapper.ConvertFNUserEventToDto(eventItem);
+                if (eventDto != null)
+                {
+                    eventDto.Status = GetStatus(eventItem.Status_ID ?? -1);
+                    eventDto.Owner = GetEventOwner(eventDto);
+                    eventDto.StopList = GetStopList(eventDto);
+                    eventDto.EventMembers = GetEventMemberList(eventDto);
+                    eventList.Add(eventDto);
+                }
+            }
 
             return eventList;
         }
 
         /// <summary>
-        /// Gets the list of event members.
+        /// Gets the list of event membersge.
         /// </summary>
         /// <param name="eventDto">The event.</param>
         /// <returns>A list of <see cref="EventMemberDto"/>.</returns>

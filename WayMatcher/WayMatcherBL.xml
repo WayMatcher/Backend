@@ -1599,7 +1599,7 @@
         </member>
         <member name="M:WayMatcherBL.Services.DatabaseService.GetEventMemberList(WayMatcherBL.LogicModels.EventDto)">
             <summary>
-            Gets the list of event members.
+            Gets the list of event membersge.
             </summary>
             <param name="eventDto">The event.</param>
             <returns>A list of <see cref="T:WayMatcherBL.DtoModels.EventMemberDto"/>.</returns>

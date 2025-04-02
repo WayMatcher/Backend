@@ -113,9 +113,19 @@ namespace WayMatcherBL.Mapper
         /// </summary>
         /// <param name="vwPassenger">The passenger event entity to convert.</param>
         /// <returns>The converted event DTO.</returns>
-        public EventDto ConvertFNUserEventToDto(FN_GetEventsByMemberUserIdResult FNUserEvent)
+        public EventDto ConvertFNUserEventToDto(FN_GetEventsByMemberUserIdResult fNUserEvent)
         {
-            return _mapper.Map<EventDto>(FNUserEvent);
+            return new EventDto
+            {
+                EventId = fNUserEvent.Event_ID,
+                EventTypeId = fNUserEvent.EventType_ID,
+                Owner = new UserDto { UserId = fNUserEvent.EventOwner_ID },
+                Status = new StatusDto { StatusId = fNUserEvent.Status_ID ?? -1 },
+                Schedule = new ScheduleDto { ScheduleId = fNUserEvent.Schedule_ID ?? -1 },
+                Description = fNUserEvent.Description,
+                StartTimestamp = fNUserEvent.Start_Timestamp,
+                FreeSeats = fNUserEvent.Free_Seats
+            };
         }
 
         /// <summary>
