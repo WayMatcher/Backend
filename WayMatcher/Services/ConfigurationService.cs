@@ -24,13 +24,13 @@ namespace WayMatcherBL.Services
                 throw new FileNotFoundException("appsettings.json not found.");
             }
 
-            Console.WriteLine($"AppSettings path: {appSettingsPath}"); 
+            Console.WriteLine($"AppSettings path: {appSettingsPath}");
 
             _configuration = new ConfigurationBuilder()
                 .SetBasePath(Path.GetDirectoryName(appSettingsPath))
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
-            Console.WriteLine($"Configuration loaded: {_configuration != null}"); 
+            Console.WriteLine($"Configuration loaded: {_configuration != null}");
         }
 
         /// <summary>
@@ -105,4 +105,4 @@ namespace WayMatcherBL.Services
             return _configuration["Kestrel:Endpoints:Https:Certificate:Path"];
         }
     }
-}   
+}
